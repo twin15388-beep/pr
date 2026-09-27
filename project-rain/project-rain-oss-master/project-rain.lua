@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 18:35:07 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 18:36:16 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 18:35:07 UTC";
+BUILD.id = "2026-09-27 18:36:16 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -43556,7 +43556,8 @@ if hasnt_accepted_tos then
         writefile("NZL Studio Deep/inquired_about_default_config.txt", "true");
         require(LPH_ENCSTR("@src/ui/choice_frame")).set(nil,
             function()
-	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "nzs://offline" -- [nzl studio] upstream premade-config endpoint is offline in oss);
+	    	    -- [nzl studio] upstream premade-config endpoint is offline in oss; fetch stays a harmless miss
+	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "nzs://offline");
                 if config_fetch_success then
                     writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\default_conf.json", config_content);
                     writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");

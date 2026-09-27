@@ -253,7 +253,8 @@ if hasnt_accepted_tos then
         writefile("NZL Studio Deep/inquired_about_default_config.txt", "true");
         require(LPH_ENCSTR("@src/ui/choice_frame")).set(nil,
             function()
-	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "nzs://offline" -- [nzl studio] upstream premade-config endpoint is offline in oss);
+	    	    -- [nzl studio] upstream premade-config endpoint is offline in oss; fetch stays a harmless miss
+	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "nzs://offline");
                 if config_fetch_success then
                     writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\default_conf.json", config_content);
                     writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
