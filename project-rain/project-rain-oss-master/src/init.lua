@@ -253,8 +253,13 @@ if hasnt_accepted_tos then
         writefile("NZL Studio Deep/inquired_about_default_config.txt", "true");
         require(LPH_ENCSTR("@src/ui/choice_frame")).set(nil,
             function()
-	    	    -- [nzl studio] upstream premade-config endpoint is offline in oss; fetch stays a harmless miss
-	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "nzs://offline");
+	    	    -- [nzl studio] premade config is hosted in this repo itself; on any
+	    	    -- fetch failure fall back to the pristine default, so YES always lands
+	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "https://raw.githubusercontent.com/twin15388-beep/pr/arena/01a0e209-pr/project-rain/project-rain-oss-master/configs/premade.json");
+	    	    if not config_fetch_success or type(config_content) ~= "string" or #config_content < 10 then
+	    	    	config_fetch_success = true;
+	    	    	config_content = '{"objects":[]}';
+	    	    end;
                 if config_fetch_success then
                     writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\default_conf.json", config_content);
                     writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");

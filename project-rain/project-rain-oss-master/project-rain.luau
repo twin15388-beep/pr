@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 18:36:16 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 18:43:08 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 18:36:16 UTC";
+BUILD.id = "2026-09-27 18:43:08 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -43556,8 +43556,13 @@ if hasnt_accepted_tos then
         writefile("NZL Studio Deep/inquired_about_default_config.txt", "true");
         require(LPH_ENCSTR("@src/ui/choice_frame")).set(nil,
             function()
-	    	    -- [nzl studio] upstream premade-config endpoint is offline in oss; fetch stays a harmless miss
-	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "nzs://offline");
+	    	    -- [nzl studio] premade config is hosted in this repo itself; on any
+	    	    -- fetch failure fall back to the pristine default, so YES always lands
+	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "https://raw.githubusercontent.com/twin15388-beep/pr/arena/01a0e209-pr/project-rain/project-rain-oss-master/configs/premade.json");
+	    	    if not config_fetch_success or type(config_content) ~= "string" or #config_content < 10 then
+	    	    	config_fetch_success = true;
+	    	    	config_content = '{"objects":[]}';
+	    	    end;
                 if config_fetch_success then
                     writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\default_conf.json", config_content);
                     writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
@@ -53708,7 +53713,7 @@ local ThemeManager = {} do
 
 	ThemeManager.Library = nil
 	ThemeManager.BuiltInThemes = {
-		['NZL']            = { 1, httpService:JSONDecode('{"FontColor":"e8e0cc","MainColor":"202316","AccentColor":"c8bea0","BackgroundColor":"181b12","OutlineColor":"474a3a"}')},
+		['NZL']            = { 1, httpService:JSONDecode('{"FontColor":"d8dee9","MainColor":"1b2b34","AccentColor":"6699cc","BackgroundColor":"16232a","OutlineColor":"343d46"}')},
 
 		['Old NZL 1']      = { 2, httpService:JSONDecode('{"MainColor":"24273a","AccentColor":"7dc4e4","OutlineColor":"363a4f","BackgroundColor":"1e2030","FontColor":"e9edfa"}')},
 		['Old NZL 2']      = { 3, httpService:JSONDecode('{"MainColor":"181825","AccentColor":"03b2fd","OutlineColor":"323232","BackgroundColor":"181825","FontColor":"ffe3e3"}') },
@@ -54038,12 +54043,11 @@ local Library = {
 
 	HudRegistry = {};
 
-	-- [nzl studio] default theme tinted to deepwoken's ui (dark olive, beige)
-	FontColor = Color3.fromHex("e8e0cc");
-	MainColor = Color3.fromHex("202316");
-	BackgroundColor = Color3.fromHex("181b12");
-	AccentColor = Color3.fromHex("c8bea0");
-	OutlineColor = Color3.fromHex("474a3a");
+	FontColor = Color3.fromHex("d8dee9");
+	MainColor = Color3.fromHex("1b2b34");
+	BackgroundColor = Color3.fromHex("16232a");
+	AccentColor = Color3.fromHex("6699cc");
+	OutlineColor = Color3.fromHex("343d46");
 	RiskColor = Color3.fromRGB(255, 50, 50),
 
 	Black = Color3.new(0, 0, 0);

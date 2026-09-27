@@ -32,12 +32,11 @@ local Library = {
 
 	HudRegistry = {};
 
-	-- [nzl studio] default theme tinted to deepwoken's ui (dark olive, beige)
-	FontColor = Color3.fromHex("e8e0cc");
-	MainColor = Color3.fromHex("202316");
-	BackgroundColor = Color3.fromHex("181b12");
-	AccentColor = Color3.fromHex("c8bea0");
-	OutlineColor = Color3.fromHex("474a3a");
+	FontColor = Color3.fromHex("d8dee9");
+	MainColor = Color3.fromHex("1b2b34");
+	BackgroundColor = Color3.fromHex("16232a");
+	AccentColor = Color3.fromHex("6699cc");
+	OutlineColor = Color3.fromHex("343d46");
 	RiskColor = Color3.fromRGB(255, 50, 50),
 
 	Black = Color3.new(0, 0, 0);
