@@ -1,5 +1,52 @@
 
-local data_replication = require(services.ReplicatedStorage.Info.DataReplication);
+-- [project rain oss] ReplicatedStorage.Info only exists in deepwoken and the
+-- original line hard-errored at require time, killing init at init:298 before
+-- the UI could load. expose an inert builder instead so startup continues;
+-- every method call answers with a notice and `false`.
+local info_folder = services.ReplicatedStorage:FindFirstChild("Info");
+
+local function unavailable_stub()
+    local stub = {
+        loaded_url = nil,
+        url_override = nil,
+        build_config = nil,
+        running = false,
+        points_running = false,
+        shrined = false,
+        logged_targets = false,
+    };
+
+    return setmetatable(stub, {
+        __index = function()
+            return function()
+                if Library and Library.Notify then
+                    Library:Notify("auto builder is only available in deepwoken", 5);
+                end;
+                return false;
+            end;
+        end,
+    });
+end;
+
+if not info_folder then
+    xpcall(function()
+        Logger.log_for_devs("[auto_builder] not in deepwoken - disabled");
+    end, warn);
+
+    return unavailable_stub();
+end;
+
+local data_replication_instance = info_folder:WaitForChild("DataReplication", 20);
+if not data_replication_instance then
+    warn("[auto_builder] DataReplication did not replicate in time - disabled");
+    return unavailable_stub();
+end;
+
+local ok, data_replication = pcall(require, data_replication_instance);
+if not ok then
+    warn("[auto_builder] failed to require DataReplication: " .. tostring(data_replication));
+    return unavailable_stub();
+end;
 
 local builder = {
     loaded_url = nil,

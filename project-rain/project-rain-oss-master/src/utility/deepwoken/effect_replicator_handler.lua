@@ -69,7 +69,20 @@ task.spawn(pcall, function()
 end);
 
 task.spawn(pcall, function()
-    local update = game:GetService("ReplicatedStorage"):WaitForChild("Requests"):WaitForChild("EffectReplication"):WaitForChild("_update");
+    -- [project rain oss] instant check first so non-deepwoken places exit
+    -- quietly instead of spamming infinite-yield warnings
+    local requests = game:GetService("ReplicatedStorage"):FindFirstChild("Requests")
+        or game:GetService("ReplicatedStorage"):WaitForChild("Requests", 30);
+    if not requests then
+        return;
+    end;
+
+    local replication = requests:WaitForChild("EffectReplication", 30);
+    local update = replication and replication:WaitForChild("_update", 30);
+    if not update then
+        return;
+    end;
+
     update.OnClientEvent:Connect(function(effect)
         if effect.updateType == "clear" or effect.updateType == "updatecontainer" then
             EffectReplicatorHandler:connect();  

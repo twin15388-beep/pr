@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 13:50:06 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 14:03:28 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 13:50:06 UTC";
+BUILD.id = "2026-09-27 14:03:28 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -11231,7 +11231,54 @@ return automation_struct;
 ]=];
 modules["@src/features/auto-builder/auto_builder"] = [[
 
-local data_replication = require(services.ReplicatedStorage.Info.DataReplication);
+-- [project rain oss] ReplicatedStorage.Info only exists in deepwoken and the
+-- original line hard-errored at require time, killing init at init:298 before
+-- the UI could load. expose an inert builder instead so startup continues;
+-- every method call answers with a notice and `false`.
+local info_folder = services.ReplicatedStorage:FindFirstChild("Info");
+
+local function unavailable_stub()
+    local stub = {
+        loaded_url = nil,
+        url_override = nil,
+        build_config = nil,
+        running = false,
+        points_running = false,
+        shrined = false,
+        logged_targets = false,
+    };
+
+    return setmetatable(stub, {
+        __index = function()
+            return function()
+                if Library and Library.Notify then
+                    Library:Notify("auto builder is only available in deepwoken", 5);
+                end;
+                return false;
+            end;
+        end,
+    });
+end;
+
+if not info_folder then
+    xpcall(function()
+        Logger.log_for_devs("[auto_builder] not in deepwoken - disabled");
+    end, warn);
+
+    return unavailable_stub();
+end;
+
+local data_replication_instance = info_folder:WaitForChild("DataReplication", 20);
+if not data_replication_instance then
+    warn("[auto_builder] DataReplication did not replicate in time - disabled");
+    return unavailable_stub();
+end;
+
+local ok, data_replication = pcall(require, data_replication_instance);
+if not ok then
+    warn("[auto_builder] failed to require DataReplication: " .. tostring(data_replication));
+    return unavailable_stub();
+end;
 
 local builder = {
     loaded_url = nil,
@@ -47553,7 +47600,20 @@ task.spawn(pcall, function()
 end);
 
 task.spawn(pcall, function()
-    local update = game:GetService("ReplicatedStorage"):WaitForChild("Requests"):WaitForChild("EffectReplication"):WaitForChild("_update");
+    -- [project rain oss] instant check first so non-deepwoken places exit
+    -- quietly instead of spamming infinite-yield warnings
+    local requests = game:GetService("ReplicatedStorage"):FindFirstChild("Requests")
+        or game:GetService("ReplicatedStorage"):WaitForChild("Requests", 30);
+    if not requests then
+        return;
+    end;
+
+    local replication = requests:WaitForChild("EffectReplication", 30);
+    local update = replication and replication:WaitForChild("_update", 30);
+    if not update then
+        return;
+    end;
+
     update.OnClientEvent:Connect(function(effect)
         if effect.updateType == "clear" or effect.updateType == "updatecontainer" then
             EffectReplicatorHandler:connect();  
