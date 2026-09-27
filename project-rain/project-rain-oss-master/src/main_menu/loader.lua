@@ -275,12 +275,7 @@ end;
 -- gather small square images (the icon strip: coat / sword / bell / skull)
 local tiny_icons = {};
 local function refresh_icons()
-	for i = #tiny_icons, 1, -1 do
-		local icon = tiny_icons[i];
-		if not icon.Parent then
-			table.remove(tiny_icons, i);
-		end;
-	end;
+	table.clear(tiny_icons);
 
 	local ok = pcall(function()
 		for _, descendant in ipairs(player_gui:GetDescendants()) do
@@ -298,12 +293,19 @@ local function refresh_icons()
 	end;
 end;
 
-local purples = {}; -- card frame -> purple button
+local purples = {}; -- card frame -> purple badge
 
 task.spawn(function()
+	local last_debug = 0;
+
 	while true do
+		local diag_frames = 0;
+		local diag_candidates = 0;
+		local diag_icons = 0;
+
 		local scan_ok = pcall(function()
 			refresh_icons();
+			diag_icons = #tiny_icons;
 
 			local seen_cards = {};
 
@@ -311,6 +313,8 @@ task.spawn(function()
 				if not frame:IsA("GuiObject") then
 					continue;
 				end;
+
+				diag_frames += 1;
 
 				local fsize = frame.AbsoluteSize;
 				if fsize.X < 180 or fsize.Y < 50 then
@@ -321,6 +325,8 @@ task.spawn(function()
 				if not letter or not name then
 					continue;
 				end;
+
+				diag_candidates += 1;
 
 				local pos = frame.AbsolutePosition;
 
@@ -350,8 +356,21 @@ task.spawn(function()
 					end;
 				end
 
-				-- cards always carry their icon strip; skip impostor frames
-				if #card_icons == 0 then
+				-- badge centered on the strip column, 6px under the red skull;
+				-- if the game's icons can't be picked up, fall back to the
+				-- estimated strip column derived from the slot letter position
+				local badge_x;
+				local badge_y;
+				local anchor_icon;
+
+				if skull then
+					anchor_icon = skull;
+					badge_x = skull.AbsolutePosition.X + skull.AbsoluteSize.X * 0.5 - 15;
+					badge_y = skull.AbsolutePosition.Y + skull.AbsoluteSize.Y + 6;
+				elseif letter_x then
+					badge_x = letter_x + 2;
+					badge_y = (letter_y or pos.Y + 20) + 84;
+				else
 					continue;
 				end;
 
@@ -380,10 +399,8 @@ task.spawn(function()
 					badge_icon.Size = UDim2.fromOffset(18, 18);
 					badge_icon.Position = UDim2.fromOffset(6, 4);
 					badge_icon.BackgroundTransparency = 1;
-					badge_icon.Image = skull.Image;
+					badge_icon.Image = anchor_icon and anchor_icon.Image or "";
 					badge_icon.ImageColor3 = PURPLE;
-					badge_icon.ImageTransparency = skull.ImageTransparency;
-					badge_icon.ScaleType = skull.ScaleType;
 					badge_icon.ZIndex = 21;
 
 					purple = badge;
@@ -416,25 +433,34 @@ task.spawn(function()
 					end);
 
 					purples[frame] = badge;
-					status("purple skull attached: " .. tostring(name) .. " (slot " .. letter .. ")");
+					status("purple skull attached: " .. tostring(name) .. " (slot " .. letter .. ")" .. (anchor_icon and "" or " [letter fallback]"));
 				end;
-
-				-- badge centered on the strip column, 6px under the red skull
-				local badge_x = skull.AbsolutePosition.X + skull.AbsoluteSize.X * 0.5 - 15;
-				local badge_y = skull.AbsolutePosition.Y + skull.AbsoluteSize.Y + 6;
 
 				purple.Position = UDim2.fromOffset(badge_x, badge_y);
 
 				local viewport = services.Workspace.CurrentCamera and services.Workspace.CurrentCamera.ViewportSize or Vector2.new(1e9, 1e9);
-				purple.Visible = frame.Visible and skull.Visible and badge_x > -40 and badge_y > -40 and badge_x < viewport.X and badge_y < viewport.Y;
+				purple.Visible = frame.Visible and badge_x > -40 and badge_y > -40 and badge_x < viewport.X and badge_y < viewport.Y;
 			end;
 
-			-- drop buttons whose card is gone
+			-- drop badges whose card is gone
+			local badge_count = 0;
 			for frame, purple in pairs(purples) do
 				if not seen_cards[frame] or not frame.Parent then
 					purple:Destroy();
 					purples[frame] = nil;
+				else
+					badge_count += 1;
 				end;
+			end;
+
+			if tick() - last_debug > 5 then
+				last_debug = tick();
+				local debug_line = string.format(
+					"[pr menu] scan: frames=%d candidates=%d icons=%d badges=%d",
+					diag_frames, diag_candidates, diag_icons, badge_count
+				);
+				status(debug_line:sub(11));
+				pcall(writefile, "Project Rain/menu_debug.txt", debug_line);
 			end;
 		end);
 
