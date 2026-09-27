@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 17:49:12 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 18:03:07 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 17:49:12 UTC";
+BUILD.id = "2026-09-27 18:03:07 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -43955,7 +43955,7 @@ task.spawn(function()
 			end);
 		end);
 	end;
-end)();
+end);
 
 --#endregion
 
