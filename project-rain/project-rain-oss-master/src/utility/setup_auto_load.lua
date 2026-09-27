@@ -9,7 +9,9 @@
 	depths, layers, server hops - so the script must re-arm itself each time).
 ]]
 
-local queue = getgenv().queue_on_teleport;
+local queue = getgenv().queue_on_teleport
+	or getgenv().queueonteleport
+	or (getgenv().syn and getgenv().syn.queue_on_teleport);
 if not queue then
 	warn("[auto load] executor does not expose queue_on_teleport - auto load unavailable");
 	return false;

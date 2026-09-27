@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 16:43:02 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 16:52:34 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 16:43:02 UTC";
+BUILD.id = "2026-09-27 16:52:34 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -44054,52 +44054,78 @@ task.spawn(function()
 					continue;
 				end;
 
-				local anchor_x = skull.AbsolutePosition.X;
-				local anchor_y = skull.AbsolutePosition.Y + skull.AbsoluteSize.Y + 4;
-
 				local purple = purples[frame];
 				if not purple then
-					-- clone the strip icon image tinted purple (the "pink claw"
-					-- look from the tests) - sits right under the red skull
-					purple = Instance.new("ImageButton");
-					purple.Name = "PRPurpleSkull";
-					purple.Size = UDim2.fromOffset(skull.AbsoluteSize.X, skull.AbsoluteSize.Y);
-					purple.BackgroundTransparency = 1;
-					purple.Image = skull.Image;
-					purple.ImageColor3 = PURPLE;
-					purple.ImageTransparency = skull.ImageTransparency;
-					purple.ScaleType = skull.ScaleType;
-					purple.ZIndex = 20;
-					purple.Parent = overlay;
+					-- tidy clickable badge under the strip: dark rounded pad with
+					-- the purple-tinted icon inside; centered on the strip column
+					local badge = Instance.new("TextButton");
+					badge.Name = "PRPurpleSkull";
+					badge.Size = UDim2.fromOffset(30, 26);
+					badge.BackgroundColor3 = BG;
+					badge.BackgroundTransparency = 0.15;
+					badge.Text = "";
+					badge.AutoButtonColor = false;
+					badge.ZIndex = 20;
+					badge.Parent = overlay;
+
+					Instance.new("UICorner", badge).CornerRadius = UDim.new(0, 5);
+
+					local badge_stroke = Instance.new("UIStroke", badge);
+					badge_stroke.Color = Color3.fromRGB(200, 190, 160);
+					badge_stroke.Transparency = 0.55;
+					badge_stroke.Thickness = 1;
+
+					local badge_icon = Instance.new("ImageLabel", badge);
+					badge_icon.Size = UDim2.fromOffset(18, 18);
+					badge_icon.Position = UDim2.fromOffset(6, 4);
+					badge_icon.BackgroundTransparency = 1;
+					badge_icon.Image = skull.Image;
+					badge_icon.ImageColor3 = PURPLE;
+					badge_icon.ImageTransparency = skull.ImageTransparency;
+					badge_icon.ScaleType = skull.ScaleType;
+					badge_icon.ZIndex = 21;
+
+					purple = badge;
 
 					local card_letter = letter;
 					local card_name = name;
-
 					local armed_until = 0;
-					purple.MouseButton1Click:Connect(function()
+
+					badge.MouseButton1Click:Connect(function()
 						if tick() < armed_until then
 							armed_until = 0;
-							purple.ImageColor3 = PURPLE;
+							badge_icon.ImageColor3 = PURPLE;
+							badge_stroke.Transparency = 0.55;
 							status("wiping " .. tostring(card_name) .. " (slot " .. card_letter .. ")...");
 							task.spawn(wipe_slot, card_letter);
 							return;
 						end;
 
 						armed_until = tick() + 4;
-						purple.ImageColor3 = Color3.fromRGB(255, 120, 255);
+						badge_icon.ImageColor3 = Color3.fromRGB(255, 120, 255);
+						badge_stroke.Color = Color3.fromRGB(255, 120, 255);
+						badge_stroke.Transparency = 0.1;
 						task.delay(4.2, function()
 							if tick() >= armed_until then
-								purple.ImageColor3 = PURPLE;
+								badge_icon.ImageColor3 = PURPLE;
+								badge_stroke.Color = Color3.fromRGB(200, 190, 160);
+								badge_stroke.Transparency = 0.55;
 							end;
 						end);
 					end);
 
-					purples[frame] = purple;
+					purples[frame] = badge;
 					status("purple skull attached: " .. tostring(name) .. " (slot " .. letter .. ")");
 				end;
 
-				purple.Position = UDim2.fromOffset(anchor_x, anchor_y);
-				purple.Visible = frame.Visible;
+				-- badge centered on the strip column, 6px under the red skull
+				local badge_x = skull.AbsolutePosition.X + skull.AbsoluteSize.X * 0.5 - 15;
+				local badge_y = skull.AbsolutePosition.Y + skull.AbsoluteSize.Y + 6;
+
+				purple.Position = UDim2.fromOffset(badge_x, badge_y);
+
+				local viewport = services.Workspace.CurrentCamera and services.Workspace.CurrentCamera.ViewportSize or Vector2.new(1e9, 1e9);
+				purple.Visible = frame.Visible and skull.Visible and badge_x > -40 and badge_y > -40 and badge_x < viewport.X and badge_y < viewport.Y;
 			end;
 
 			-- drop buttons whose card is gone
@@ -44115,7 +44141,7 @@ task.spawn(function()
 			-- retry next pass
 		end;
 
-		task.wait(0.6);
+		task.wait(0.35);
 	end;
 end);
 
@@ -48765,6 +48791,19 @@ end;
 modules["@src/utility/deepwoken/servers"] = [=[
 local servers = {};
 
+-- [project rain oss] every queued teleport script also re-executes the menu
+-- + cheat afterwards - otherwise queue_on_teleport (single-slot on most
+-- executors) would overwrite the auto-load queue each hop/snipe/rejoin
+local REEXEC_PREFIX = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/twin15388-beep/pr/arena/01a0e209-pr/project-rain/project-rain-oss-master/project-rain.luau"))()\ntask.wait(1)\n';
+local function queue_script(code)
+	local queue_fn = getgenv().queue_on_teleport or getgenv().queueonteleport or (getgenv().syn and getgenv().syn.queue_on_teleport);
+	if queue_fn then
+		queue_fn(REEXEC_PREFIX .. code);
+	else
+		warn("[servers] no queue_on_teleport available");
+	end;
+end;
+
 local function decode_asset(asset)
     local decoded = services.EncodingService:Base64Decode(buffer.fromstring(asset));
     local decompress = services.EncodingService:DecompressBuffer(decoded, Enum.CompressionAlgorithm.Zstd);
@@ -48818,7 +48857,7 @@ return {
             end, warn);
 
             writefile("hopper.lua", hop_script);
-            queue_on_teleport(hop_script);
+            queue_script(hop_script);
             kick_window("Serverhopping...");
         end;
     end,
@@ -48845,7 +48884,7 @@ return {
         end;
         ]], id, slot or "A");
         if game.PlaceId ~= 4111023553 then  
-            queue_on_teleport(rejoin_script); 
+            queue_script(rejoin_script); 
             
             kick_window("rejoining...")
             return        
@@ -48856,7 +48895,7 @@ else
     obliteration = function(_, slot, small, sound)
         local obl_script = string.format(hop_script, slot or "A", small ~= nil and tostring(small) or 'false', tostring(sound), 'true')
         if game.PlaceId ~= 4111023553 then 
-            queue_on_teleport(obl_script);
+            queue_script(obl_script);
             kick_window("wiping...");
             return        
 else
@@ -57460,7 +57499,9 @@ modules["@src/utility/setup_auto_load"] = [=[
 	depths, layers, server hops - so the script must re-arm itself each time).
 ]]
 
-local queue = getgenv().queue_on_teleport;
+local queue = getgenv().queue_on_teleport
+	or getgenv().queueonteleport
+	or (getgenv().syn and getgenv().syn.queue_on_teleport);
 if not queue then
 	warn("[auto load] executor does not expose queue_on_teleport - auto load unavailable");
 	return false;

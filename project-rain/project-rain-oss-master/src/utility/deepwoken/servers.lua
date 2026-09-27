@@ -1,5 +1,18 @@
 local servers = {};
 
+-- [project rain oss] every queued teleport script also re-executes the menu
+-- + cheat afterwards - otherwise queue_on_teleport (single-slot on most
+-- executors) would overwrite the auto-load queue each hop/snipe/rejoin
+local REEXEC_PREFIX = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/twin15388-beep/pr/arena/01a0e209-pr/project-rain/project-rain-oss-master/project-rain.luau"))()\ntask.wait(1)\n';
+local function queue_script(code)
+	local queue_fn = getgenv().queue_on_teleport or getgenv().queueonteleport or (getgenv().syn and getgenv().syn.queue_on_teleport);
+	if queue_fn then
+		queue_fn(REEXEC_PREFIX .. code);
+	else
+		warn("[servers] no queue_on_teleport available");
+	end;
+end;
+
 local function decode_asset(asset)
     local decoded = services.EncodingService:Base64Decode(buffer.fromstring(asset));
     local decompress = services.EncodingService:DecompressBuffer(decoded, Enum.CompressionAlgorithm.Zstd);
@@ -53,7 +66,7 @@ return {
             end, warn);
 
             writefile("hopper.lua", hop_script);
-            queue_on_teleport(hop_script);
+            queue_script(hop_script);
             kick_window("Serverhopping...");
         end;
     end,
@@ -80,7 +93,7 @@ return {
         end;
         ]], id, slot or "A");
         if game.PlaceId ~= 4111023553 then  
-            queue_on_teleport(rejoin_script); 
+            queue_script(rejoin_script); 
             
             kick_window("rejoining...")
             return        
@@ -91,7 +104,7 @@ else
     obliteration = function(_, slot, small, sound)
         local obl_script = string.format(hop_script, slot or "A", small ~= nil and tostring(small) or 'false', tostring(sound), 'true')
         if game.PlaceId ~= 4111023553 then 
-            queue_on_teleport(obl_script);
+            queue_script(obl_script);
             kick_window("wiping...");
             return        
 else
