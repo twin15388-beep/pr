@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 10:24:24 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 13:50:06 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 10:24:24 UTC";
+BUILD.id = "2026-09-27 13:50:06 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -36434,25 +36434,50 @@ end;
 		end)
 	end
 
-	InstanceWatcher.new(workspace:WaitForChild("Thrown"), function(entity)
+	-- [project rain oss] resolve deepwoken workspace folders in parallel bounded
+	-- workers instead of serial unbounded WaitForChild calls (which hung init
+	-- outside deepwoken); watcher blocks below just no-op when a folder is absent
+	local pr_folders = {};
+	do
+		local names = { "Thrown", "Destructibles", "Mechanisms", "Shops", "Live", "NPCs" };
+		local done = 0;
+		for _, name in ipairs(names) do
+			task.spawn(function()
+				pr_folders[name] = workspace:WaitForChild(name, 15);
+				done += 1;
+			end);
+		end;
+		local start = tick();
+		repeat task.wait() until done >= #names or tick() - start > 15;
+	end
+
+	local function watch_folder(name, ...)
+		local folder = pr_folders[name];
+		if not folder then
+			return;
+		end;
+		return InstanceWatcher.new(folder, ...);
+	end
+
+	watch_folder("Thrown", function(entity)
 		return entity.Name == "BigArtifact" and #entity:GetChildren() > 0
 	end, function(entity)
 		esp.new(entity, "artifact_esp")
 	end, true)
 	
-	InstanceWatcher.new(workspace:WaitForChild("Thrown"), function(entity)
+	watch_folder("Thrown", function(entity)
 		return entity.Name == "EventFeatherRef"
 	end, function(entity)
 		esp.new(entity, "owl_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Thrown"), function(entity)
+	watch_folder("Thrown", function(entity)
 		return entity.Name == "Chest" or entity:WaitForChild("Lid", 2.5)
 	end, function(entity)
 		esp.new(entity, "chest_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Thrown"), function(entity)
+	watch_folder("Thrown", function(entity)
 		local names = { "BagDrop", "ExplodeCrate", "MinistryCacheIndicator", "Campfire", "BellMeteor" }
 		return table.find(names, entity.Name) ~= nil
 	end, function(entity)
@@ -36466,19 +36491,19 @@ end;
 		esp.new(entity, flags[entity.Name])
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Destructibles"), function(entity)
+	watch_folder("Destructibles", function(entity)
 		return entity.Name == "Campfire"
 	end, function(entity)
 		esp.new(entity, "campfire_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Mechanisms"), function(entity)
+	watch_folder("Mechanisms", function(entity)
 		return entity.Name == "JettyPost"
 	end, function(entity)
 		esp.new(entity, "jetty_post_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Shops"), function(entity)
+	watch_folder("Shops", function(entity)
 		return entity:IsA("BasePart")
 	end, function(entity)
 		esp.new(entity, "shop_esp")
@@ -36490,13 +36515,13 @@ end;
 		esp.new(entity, "banner_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Live"), function(entity)
+	watch_folder("Live", function(entity)
 		return entity.Name:sub(1, 1) == "." and not entity.Name:match("watcher")
 	end, function(entity)
 		esp.new(entity, "mob_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("NPCs", 9e9), function(entity)
+	watch_folder("NPCs", function(entity)
 		return true
 	end, function(entity)
 		esp.new(entity, "npc_esp")
@@ -36563,13 +36588,18 @@ end;
 		end)
 	end
 
-	for _, v in
-		pairs(services.ReplicatedStorage:WaitForChild("MarkerWorkspace"):WaitForChild("AreaMarkers"):GetChildren())
-	do
-		if v.Name:match("'s Base") or not v:FindFirstChild("AreaMarker") then
-			continue
+	-- [project rain oss] bounded lookup; area markers only exist in deepwoken
+	local marker_workspace = services.ReplicatedStorage:WaitForChild("MarkerWorkspace", 15);
+	local area_markers = marker_workspace and marker_workspace:WaitForChild("AreaMarkers", 15);
+
+	if area_markers then
+		for _, v in pairs(area_markers:GetChildren())
+		do
+			if v.Name:match("'s Base") or not v:FindFirstChild("AreaMarker") then
+				continue
+			end
+			esp.new(v:FindFirstChild("AreaMarker"), "area_esp")
 		end
-		esp.new(v:FindFirstChild("AreaMarker"), "area_esp")
 	end
 
 
@@ -38278,19 +38308,23 @@ end;
     
 
     
-    InstanceWatcher.new(workspace:WaitForChild("Live"), function(entity)
-        return entity.Name:sub(1,1) ~= "." and entity.Name ~= services.Players.LocalPlayer.Name
-    end, function(entity)   
-        local player;
-        player = services.Players:GetPlayerFromCharacter(entity);
-        if not player then
-            repeat
-                task.wait(0.1);
-                player = services.Players:GetPlayerFromCharacter(entity);
-            until player or not entity.Parent;
-        end;
-        task.spawn(PlayerESP.new, entity, player);
-    end);
+    -- [project rain oss] bounded lookup; "Live" only exists in deepwoken
+    local live_folder = workspace:WaitForChild("Live", 15);
+    if live_folder then
+        InstanceWatcher.new(live_folder, function(entity)
+            return entity.Name:sub(1,1) ~= "." and entity.Name ~= services.Players.LocalPlayer.Name
+        end, function(entity)   
+            local player;
+            player = services.Players:GetPlayerFromCharacter(entity);
+            if not player then
+                repeat
+                    task.wait(0.1);
+                    player = services.Players:GetPlayerFromCharacter(entity);
+                until player or not entity.Parent;
+            end;
+            task.spawn(PlayerESP.new, entity, player);
+        end);
+    end;
 
     
     aztup.maid:give_task(function()
@@ -47856,7 +47890,32 @@ end;
     return false
 end;
 
-local Keybinds = base_require(game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds"..""));
+-- [project rain oss] bounded lookup + stub outside deepwoken (was an unbounded
+-- WaitForChild that froze init in any other place)
+local Keybinds;
+do
+    local keybinds_instance = game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds".."", 15);
+    if keybinds_instance then
+        local ok, result = pcall(function()
+            return base_require(keybinds_instance);
+        end);
+        if ok and result then
+            Keybinds = result;
+        end;
+    end;
+
+    if not Keybinds then
+        Keybinds = {
+            IsActionHeld = function()
+                return false;
+            end,
+        };
+
+        xpcall(function()
+            Logger.log_for_devs("[general] KeyBinds unavailable (not deepwoken?) - using stub");
+        end, warn);
+    end;
+end;
 function general:generic_parry_ap_task(entity: Model)
     if aztup_options.filters.Value["Dont Parry If Holding Block"] and Keybinds.IsActionHeld("Block") then
         return pcall(function()

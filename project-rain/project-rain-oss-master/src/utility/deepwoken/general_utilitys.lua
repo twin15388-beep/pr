@@ -323,7 +323,32 @@ end;
     return false
 end;
 
-local Keybinds = base_require(game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds"..""));
+-- [project rain oss] bounded lookup + stub outside deepwoken (was an unbounded
+-- WaitForChild that froze init in any other place)
+local Keybinds;
+do
+    local keybinds_instance = game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds".."", 15);
+    if keybinds_instance then
+        local ok, result = pcall(function()
+            return base_require(keybinds_instance);
+        end);
+        if ok and result then
+            Keybinds = result;
+        end;
+    end;
+
+    if not Keybinds then
+        Keybinds = {
+            IsActionHeld = function()
+                return false;
+            end,
+        };
+
+        xpcall(function()
+            Logger.log_for_devs("[general] KeyBinds unavailable (not deepwoken?) - using stub");
+        end, warn);
+    end;
+end;
 function general:generic_parry_ap_task(entity: Model)
     if aztup_options.filters.Value["Dont Parry If Holding Block"] and Keybinds.IsActionHeld("Block") then
         return pcall(function()

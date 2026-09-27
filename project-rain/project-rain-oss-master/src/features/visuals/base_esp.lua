@@ -842,25 +842,50 @@ end;
 		end)
 	end
 
-	InstanceWatcher.new(workspace:WaitForChild("Thrown"), function(entity)
+	-- [project rain oss] resolve deepwoken workspace folders in parallel bounded
+	-- workers instead of serial unbounded WaitForChild calls (which hung init
+	-- outside deepwoken); watcher blocks below just no-op when a folder is absent
+	local pr_folders = {};
+	do
+		local names = { "Thrown", "Destructibles", "Mechanisms", "Shops", "Live", "NPCs" };
+		local done = 0;
+		for _, name in ipairs(names) do
+			task.spawn(function()
+				pr_folders[name] = workspace:WaitForChild(name, 15);
+				done += 1;
+			end);
+		end;
+		local start = tick();
+		repeat task.wait() until done >= #names or tick() - start > 15;
+	end
+
+	local function watch_folder(name, ...)
+		local folder = pr_folders[name];
+		if not folder then
+			return;
+		end;
+		return InstanceWatcher.new(folder, ...);
+	end
+
+	watch_folder("Thrown", function(entity)
 		return entity.Name == "BigArtifact" and #entity:GetChildren() > 0
 	end, function(entity)
 		esp.new(entity, "artifact_esp")
 	end, true)
 	
-	InstanceWatcher.new(workspace:WaitForChild("Thrown"), function(entity)
+	watch_folder("Thrown", function(entity)
 		return entity.Name == "EventFeatherRef"
 	end, function(entity)
 		esp.new(entity, "owl_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Thrown"), function(entity)
+	watch_folder("Thrown", function(entity)
 		return entity.Name == "Chest" or entity:WaitForChild("Lid", 2.5)
 	end, function(entity)
 		esp.new(entity, "chest_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Thrown"), function(entity)
+	watch_folder("Thrown", function(entity)
 		local names = { "BagDrop", "ExplodeCrate", "MinistryCacheIndicator", "Campfire", "BellMeteor" }
 		return table.find(names, entity.Name) ~= nil
 	end, function(entity)
@@ -874,19 +899,19 @@ end;
 		esp.new(entity, flags[entity.Name])
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Destructibles"), function(entity)
+	watch_folder("Destructibles", function(entity)
 		return entity.Name == "Campfire"
 	end, function(entity)
 		esp.new(entity, "campfire_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Mechanisms"), function(entity)
+	watch_folder("Mechanisms", function(entity)
 		return entity.Name == "JettyPost"
 	end, function(entity)
 		esp.new(entity, "jetty_post_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Shops"), function(entity)
+	watch_folder("Shops", function(entity)
 		return entity:IsA("BasePart")
 	end, function(entity)
 		esp.new(entity, "shop_esp")
@@ -898,13 +923,13 @@ end;
 		esp.new(entity, "banner_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("Live"), function(entity)
+	watch_folder("Live", function(entity)
 		return entity.Name:sub(1, 1) == "." and not entity.Name:match("watcher")
 	end, function(entity)
 		esp.new(entity, "mob_esp")
 	end, true)
 
-	InstanceWatcher.new(workspace:WaitForChild("NPCs", 9e9), function(entity)
+	watch_folder("NPCs", function(entity)
 		return true
 	end, function(entity)
 		esp.new(entity, "npc_esp")
@@ -971,13 +996,18 @@ end;
 		end)
 	end
 
-	for _, v in
-		pairs(services.ReplicatedStorage:WaitForChild("MarkerWorkspace"):WaitForChild("AreaMarkers"):GetChildren())
-	do
-		if v.Name:match("'s Base") or not v:FindFirstChild("AreaMarker") then
-			continue
+	-- [project rain oss] bounded lookup; area markers only exist in deepwoken
+	local marker_workspace = services.ReplicatedStorage:WaitForChild("MarkerWorkspace", 15);
+	local area_markers = marker_workspace and marker_workspace:WaitForChild("AreaMarkers", 15);
+
+	if area_markers then
+		for _, v in pairs(area_markers:GetChildren())
+		do
+			if v.Name:match("'s Base") or not v:FindFirstChild("AreaMarker") then
+				continue
+			end
+			esp.new(v:FindFirstChild("AreaMarker"), "area_esp")
 		end
-		esp.new(v:FindFirstChild("AreaMarker"), "area_esp")
 	end
 
 

@@ -813,19 +813,23 @@ end;
     
 
     
-    InstanceWatcher.new(workspace:WaitForChild("Live"), function(entity)
-        return entity.Name:sub(1,1) ~= "." and entity.Name ~= services.Players.LocalPlayer.Name
-    end, function(entity)   
-        local player;
-        player = services.Players:GetPlayerFromCharacter(entity);
-        if not player then
-            repeat
-                task.wait(0.1);
-                player = services.Players:GetPlayerFromCharacter(entity);
-            until player or not entity.Parent;
-        end;
-        task.spawn(PlayerESP.new, entity, player);
-    end);
+    -- [project rain oss] bounded lookup; "Live" only exists in deepwoken
+    local live_folder = workspace:WaitForChild("Live", 15);
+    if live_folder then
+        InstanceWatcher.new(live_folder, function(entity)
+            return entity.Name:sub(1,1) ~= "." and entity.Name ~= services.Players.LocalPlayer.Name
+        end, function(entity)   
+            local player;
+            player = services.Players:GetPlayerFromCharacter(entity);
+            if not player then
+                repeat
+                    task.wait(0.1);
+                    player = services.Players:GetPlayerFromCharacter(entity);
+                until player or not entity.Parent;
+            end;
+            task.spawn(PlayerESP.new, entity, player);
+        end);
+    end;
 
     
     aztup.maid:give_task(function()

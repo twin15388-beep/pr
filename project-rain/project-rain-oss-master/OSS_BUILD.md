@@ -30,7 +30,9 @@ logic when the game actually provides those objects:
 | `STR_TBL_SF_INVOKE` | stripped global -> `hooking.lua:17 attempt to call a nil value` kick | passthrough in `globals.lua` (identity, like other obf macros) |
 | `base_require` | stripped global used to require Deepwoken `ModuleScript`s (`CollisionUtils`, `EffectReplicator`, `KeyBinds`, camera Popper, ...) | provided by the bundle runtime as the pristine `require` for instances |
 | `utility/custom_font.lua` | wrong-case asset path + unbounded font prewarm could hang init | both case paths tried, everything pcall'd, 5s cap, Gotham fallback |
-| `utility/deepwoken/general_utilitys.lua` | `WaitForChild("Modules")` hung init outside Deepwoken | 15s bounded lookup, inert `collision_utils` placeholder otherwise |
+| `utility/deepwoken/general_utilitys.lua` | `WaitForChild("Modules")` **and** `WaitForChild("KeyBinds")` hung init outside Deepwoken | bounded lookups, inert placeholders otherwise (`IsActionHeld -> false`, stubbed collision utils) |
+| `features/visuals/base_esp.lua` | 9 unbounded `WaitForChild` folders (`Thrown`, `Live`, `NPCs`, `Shops`, ...) + `MarkerWorkspace` chain hung init after the UI showed | all resolved once in parallel bounded workers; watcher blocks no-op when the folder is absent |
+| `features/visuals/player_esp.lua` | unbounded `WaitForChild("Live")` hung init | 15s bounded lookup, watcher skipped when absent |
 | `features/loader.lua` (reimplemented) | a single feature hard-waiting at load would freeze startup | every feature require runs in a worker thread, cancelled after 8s (20s for entry points) with a warn instead of a hang |
 | `automation/loader.lua` | farm modules loading serialized; any hard-wait froze startup | parallel workers, one 12s global budget, late/skipped farms reported |
 | bundle runtime | plain sequential `require` | in-flight dedup so parallel workers never double-load a module (cycle-tolerant) |
