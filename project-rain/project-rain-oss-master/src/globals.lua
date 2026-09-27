@@ -48,6 +48,13 @@ env["PROT_OBF" .. "_" .. "STR_SAFE_MACRO"] = function(...)
     return ...
 end 
 
+-- [project rain oss] stripped upstream; obfuscation string-table accessor.
+-- in the closed build this mapped readable strings to obfuscated table keys;
+-- for the OSS build a plain passthrough is exactly right.
+env["STR_TBL" .. "_" .. "SF" .. "_" .. "INVOKE"] = function(...)
+    return ...
+end
+
 
 local is_eastern = game.PlaceId == 6473861193;
 local is_depths = game.PlaceId == 5735553160;
