@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 14:40:28 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 15:07:08 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 14:40:28 UTC";
+BUILD.id = "2026-09-27 15:07:08 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -43471,7 +43471,9 @@ env.Logger = require(LPH_ENCSTR("@src/utility/logger"));
 aztup.automation = require(LPH_ENCSTR("@src/automation/loader"));
 env.fflags = require("@src/utility/fflags");
 
-if fflags:get("auto_load") and script_key then
+-- [project rain oss] no Luarmor key in the OSS build; auto load just queues
+-- a re-execution of the same url (see setup_auto_load)
+if fflags:get("auto_load") then
     require("@src/utility/setup_auto_load");
 end
 
@@ -57019,10 +57021,24 @@ modules["@src/utility/setup_auto_load"] = [=[
 	This module was stripped from the public release.
 	Upstream it registered the Luarmor script for auto-execution on teleport.
 
-	The OSS build has no remote loader to re-fetch, so this is a no-op stub.
-	If you want auto-load, queue your own copy, e.g.:
-		queue_on_teleport('loadstring(game:HttpGet("<your paste url>"))()')
+	OSS reimplementation: queue a re-execution of this exact build through the
+	executor's `queue_on_teleport` (deepwoken teleports a lot - start menu,
+	depths, layers, server hops - so the script must re-arm itself each time).
 ]]
+
+local queue = getgenv().queue_on_teleport;
+if not queue then
+	warn("[auto load] executor does not expose queue_on_teleport - auto load unavailable");
+	return false;
+end;
+
+queue(
+	'loadstring(game:HttpGet("https://raw.githubusercontent.com/twin15388-beep/pr/arena/01a0e209-pr/project-rain/project-rain-oss-master/project-rain.luau"))()'
+);
+
+xpcall(function()
+	Logger.log_for_devs("[auto load] queued re-execution for teleports");
+end, warn);
 
 return true;
 

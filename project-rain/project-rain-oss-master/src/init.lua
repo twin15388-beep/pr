@@ -168,7 +168,9 @@ env.Logger = require(LPH_ENCSTR("@src/utility/logger"));
 aztup.automation = require(LPH_ENCSTR("@src/automation/loader"));
 env.fflags = require("@src/utility/fflags");
 
-if fflags:get("auto_load") and script_key then
+-- [project rain oss] no Luarmor key in the OSS build; auto load just queues
+-- a re-execution of the same url (see setup_auto_load)
+if fflags:get("auto_load") then
     require("@src/utility/setup_auto_load");
 end
 
