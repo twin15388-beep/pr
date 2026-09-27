@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 19:16:53 UTC by tools/build.py (273 modules, 17 assets)
+-- generated 2026-09-27 19:21:10 UTC by tools/build.py (273 modules, 17 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 19:16:53 UTC";
+BUILD.id = "2026-09-27 19:21:10 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -52297,8 +52297,8 @@ return function(Library, context)
 		})
 
 		local ToggleInner = Library:Create('Frame', {
-			BackgroundColor3 = Library.BackgroundColor;
-			BorderColor3 = Library.AccentColor;
+			BackgroundColor3 = Library.MainColor;
+			BorderColor3 = Library.OutlineColor;
 			BorderMode = Enum.BorderMode.Inset;
 			Size = UDim2.new(1, 0, 1, 0);
 			ZIndex = 6;
@@ -52306,8 +52306,8 @@ return function(Library, context)
 		})
 
 		Library:AddToRegistry(ToggleInner, {
-			BackgroundColor3 = 'BackgroundColor';
-			BorderColor3 = 'AccentColor';
+			BackgroundColor3 = 'MainColor';
+			BorderColor3 = 'OutlineColor';
 		})
 
 		-- [nzl studio] keep the dot perfectly round
@@ -52355,11 +52355,11 @@ return function(Library, context)
 		end
 
 		function Toggle:Display()
-			ToggleInner.BackgroundColor3 = Toggle.Value and Library.AccentColor or Library.BackgroundColor;
-			ToggleInner.BorderColor3 = Toggle.Value and Library.AccentColorDark or Library.AccentColor;
+			ToggleInner.BackgroundColor3 = Toggle.Value and Library.AccentColor or Library.MainColor;
+			ToggleInner.BorderColor3 = Toggle.Value and Library.AccentColorDark or Library.OutlineColor;
 
-			Library.RegistryMap[ToggleInner].Properties.BackgroundColor3 = Toggle.Value and 'AccentColor' or 'BackgroundColor';
-			Library.RegistryMap[ToggleInner].Properties.BorderColor3 = Toggle.Value and 'AccentColorDark' or 'AccentColor';
+			Library.RegistryMap[ToggleInner].Properties.BackgroundColor3 = Toggle.Value and 'AccentColor' or 'MainColor';
+			Library.RegistryMap[ToggleInner].Properties.BorderColor3 = Toggle.Value and 'AccentColorDark' or 'OutlineColor';
 		end;
 		Toggle.__internal = signal.new();
 
