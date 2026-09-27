@@ -19,7 +19,19 @@ local loader = {};
 local Feature = {};
 Feature.__index = Feature;
 
-function Feature.new(id, conn, update)
+-- feature modules use BOTH call styles in the wild: `Feature.new("id", ...)`
+-- and `Feature:new("id", ...)` (passing the class/global table as self).
+-- normalize here so every style registers correctly.
+function Feature.new(...)
+	local args = {...};
+
+	local id, conn, update;
+	if typeof(args[1]) == "table" then
+		id, conn, update = args[2], args[3], args[4];
+	else
+		id, conn, update = args[1], args[2], args[3];
+	end;
+
 	assert(typeof(id) == "string", "Feature.new: id must be a string");
 
 	local self = setmetatable({

@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 14:18:56 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 14:22:34 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 14:18:56 UTC";
+BUILD.id = "2026-09-27 14:22:34 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -28568,7 +28568,19 @@ local loader = {};
 local Feature = {};
 Feature.__index = Feature;
 
-function Feature.new(id, conn, update)
+-- feature modules use BOTH call styles in the wild: `Feature.new("id", ...)`
+-- and `Feature:new("id", ...)` (passing the class/global table as self).
+-- normalize here so every style registers correctly.
+function Feature.new(...)
+	local args = {...};
+
+	local id, conn, update;
+	if typeof(args[1]) == "table" then
+		id, conn, update = args[2], args[3], args[4];
+	else
+		id, conn, update = args[1], args[2], args[3];
+	end;
+
 	assert(typeof(id) == "string", "Feature.new: id must be a string");
 
 	local self = setmetatable({
