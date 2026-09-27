@@ -51,6 +51,14 @@ logic when the game actually provides those objects:
 | `src/security/user_service.lua` | offline user service (everything ungated, nobody is staff) |
 | `src/main_menu/loader.lua` | notify-only stub |
 | `src/utility/setup_auto_load.lua` | no-op stub (Luarmor-only upstream) |
+
+> Reimplemented (2026-09-27): `main_menu/loader.lua` is now a full start-screen
+> window (PlaceId 4111023553): draggable frame, A/B/C slot picker, **rejoin**,
+> **server hop**, **server snipe** (paste any JobId), **copy current JobId** —
+> driving the original `utility/deepwoken/servers.lua` primitives.
+> `setup_auto_load.lua` now queues re-execution of this build's raw GitHub url
+> through `queue_on_teleport` (no script_key needed), so the UI tab's
+> "auto load" toggle actually re-arms the script after Deepwoken teleports.
 | `src/features/auto-parry/builder.lua` | **working reimplementation**: draggable Timing Builder GUI — loads tracks clicked in the "Timing Logger", timeline with per-action markers, action add/cycle/nudge/delete, saves `rw_timings/<name>.json` in exactly the animator-handler's format and hot-reloads via `getgenv().load_timings()` |
 | `src/features/auto-parry/data/custom_timings.lua` | working reimplementation: reads `.json`/`.lua` timing files from `rw_timings` / `Project Rain/Timings`, `:sync()` iterator + `:lookup(id)` |
 | `src/features/buttons/refresh.lua` | working reimplementation (respawn in place, per the button's own tooltip) |
