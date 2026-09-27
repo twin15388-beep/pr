@@ -1,5 +1,5 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This file was stripped from the public release ("Omitted. Do this yourself. <3").
 	Community reimplementation of the feature loader.
@@ -121,7 +121,7 @@ local SEARCH = {
 	"features/auto-loot/*",
 };
 
--- [project rain oss] a feature module that hard-waits on deepwoken-only
+-- [nzl studio] a feature module that hard-waits on deepwoken-only
 -- instances at load time (WaitForChild without a timeout) must never hang the
 -- whole loader: run each require in its own thread and cancel it after a
 -- timeout. in deepwoken loading is instant, so nothing is cancelled there.

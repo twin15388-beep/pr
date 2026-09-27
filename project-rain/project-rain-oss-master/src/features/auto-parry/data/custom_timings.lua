@@ -1,5 +1,5 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This data module was stripped from the public release.
 	Upstream it managed user-made auto-parry timing definitions (produced by the
@@ -13,7 +13,7 @@
 	                                     where timing.ids contains `id`
 
 	Timing files live in `rw_timings` (builder output, per upstream) or
-	`Project Rain/Timings`. Each file may be:
+	`NZL Studio/Timings`. Each file may be:
 	  * .json  -> { "name": "...", "ids": ["rbxassetid://123", ...], ... }
 	  * .lua   -> chunk returning the same table
 	Extra fields are passed straight through to the auto-parry, which consumes
@@ -24,7 +24,7 @@ local HttpService = game:GetService("HttpService");
 
 local FOLDERS = {
 	"rw_timings",
-	"Project Rain/Timings",
+	"NZL Studio/Timings",
 };
 
 local RESCAN_INTERVAL = 2; -- seconds

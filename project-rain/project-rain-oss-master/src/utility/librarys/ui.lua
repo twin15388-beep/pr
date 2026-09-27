@@ -195,7 +195,7 @@ end;
 
 function Library:MakeUIDraggable(inst, Cutoff, Limit)
 
-	-- [project rain oss] "thx for all" banner shown while the main window
+	-- [nzl studio] "thx for all" banner shown while the main window
 	-- (the only caller passing Limit=true) is being dragged
 	local thanks_label;
 	if Limit == true then

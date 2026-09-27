@@ -1,8 +1,8 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
-	Upstream it authenticated the user against the Project Rain backend and exposed
+	Upstream it authenticated the user against the NZL Studio backend and exposed
 	the current user's identity/permissions to the rest of the script.
 
 	This is a community reimplementation that keeps the same surface area so the

@@ -54,48 +54,48 @@ if not LPH_OBFUSCATED then
 end; 
 
 xpcall(function()
-    if not isfolder("Project Rain") then
-        makefolder("Project Rain");
+    if not isfolder("NZL Studio") then
+        makefolder("NZL Studio");
     end;
     
-    if not isfolder("Project Rain/Assets") then
-        makefolder("Project Rain/Assets");
+    if not isfolder("NZL Studio/Assets") then
+        makefolder("NZL Studio/Assets");
     end;
 
-    if not isfolder("Project Rain/Assets/Hit Sounds") then
-        makefolder("Project Rain/Assets/Hit Sounds");
+    if not isfolder("NZL Studio/Assets/Hit Sounds") then
+        makefolder("NZL Studio/Assets/Hit Sounds");
     end;
 
-    if not isfolder("Project Rain/Assets/Parry Sounds") then
-        makefolder("Project Rain/Assets/Parry Sounds");
+    if not isfolder("NZL Studio/Assets/Parry Sounds") then
+        makefolder("NZL Studio/Assets/Parry Sounds");
     end;
 
-    if not isfolder("Project Rain/Fonts") then
-        makefolder("Project Rain/Fonts");
+    if not isfolder("NZL Studio/Fonts") then
+        makefolder("NZL Studio/Fonts");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config") then
-        makefolder("Project Rain/Deepwoken-Config");
+    if not isfolder("NZL Studio/Deepwoken-Config") then
+        makefolder("NZL Studio/Deepwoken-Config");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config/CustomGlobalOrnaments") then
-        makefolder("Project Rain/Deepwoken-Config/CustomGlobalOrnaments");
+    if not isfolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments") then
+        makefolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config/CustomRaces") then
-        makefolder("Project Rain/Deepwoken-Config/CustomRaces");
+    if not isfolder("NZL Studio/Deepwoken-Config/CustomRaces") then
+        makefolder("NZL Studio/Deepwoken-Config/CustomRaces");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config/Preferences") then
-        makefolder("Project Rain/Deepwoken-Config/Preferences");
+    if not isfolder("NZL Studio/Deepwoken-Config/Preferences") then
+        makefolder("NZL Studio/Deepwoken-Config/Preferences");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config/CustomEnchantments") then
-        makefolder("Project Rain/Deepwoken-Config/CustomEnchantments");
+    if not isfolder("NZL Studio/Deepwoken-Config/CustomEnchantments") then
+        makefolder("NZL Studio/Deepwoken-Config/CustomEnchantments");
     end;
 
-    if not isfile("Project Rain/script_state") then
-        writefile("Project Rain/script_state", game:GetService("HttpService"):JSONEncode({
+    if not isfile("NZL Studio/script_state") then
+        writefile("NZL Studio/script_state", game:GetService("HttpService"):JSONEncode({
             ["last_executed"] = tick(),
             ["last_executed_version"] = LPH_ENCSTR("__BUILD__"),
             ["build_id"] = game:GetService("HttpService"):GenerateGUID(false)
@@ -145,7 +145,7 @@ env.aztup = {
     tabs = {},
 };
 
--- [project rain oss] global deepwoken detector: whitelisted place ids OR the
+-- [nzl studio] global deepwoken detector: whitelisted place ids OR the
 -- game's signature folders. modules use it to skip deepwoken-only waits
 -- INSTANTLY outside the game instead of burning their require timeouts.
 aztup.is_deepwoken = (function()
@@ -161,21 +161,21 @@ aztup.is_deepwoken = (function()
         or game:GetService("ReplicatedStorage"):FindFirstChild("Modules") ~= nil;
 end)();
 
-local hasnt_accepted_tos = not isfile("Project Rain/tos_accepted_82126_0822UTC0.txt");
+local hasnt_accepted_tos = not isfile("NZL Studio/tos_accepted_82126_0822UTC0.txt");
 
 env.persistent_data = require("@src/utility/persistent_data");
 env.Logger = require(LPH_ENCSTR("@src/utility/logger"));   
 aztup.automation = require(LPH_ENCSTR("@src/automation/loader"));
 env.fflags = require("@src/utility/fflags");
 
--- [project rain oss] no Luarmor key in the OSS build; auto load just queues
+-- [nzl studio] no Luarmor key in the OSS build; auto load just queues
 -- a re-execution of the same url (see setup_auto_load)
 if fflags:get("auto_load") then
     require("@src/utility/setup_auto_load");
 end
 
 if aztup.automation:should_auto_start() and aztup.is_deepwoken then
-    -- [project rain oss] deepwoken-only autostart; skip silently elsewhere
+    -- [nzl studio] deepwoken-only autostart; skip silently elsewhere
     local requests = services.ReplicatedStorage:FindFirstChild("Requests")
         or services.ReplicatedStorage:WaitForChild("Requests", 20);
     if requests then
@@ -208,33 +208,33 @@ do
 end;
         
         task.spawn(pcall, function()  
-            if not isfile("Project Rain/Assets/proximity.mp3") then
-                writefile("Project Rain/Assets/proximity.mp3", decode_asset(inline_asset_b96("@assets/proximity.mp3")));
+            if not isfile("NZL Studio/Assets/proximity.mp3") then
+                writefile("NZL Studio/Assets/proximity.mp3", decode_asset(inline_asset_b96("@assets/proximity.mp3")));
             end;
 
-            if not isfile("Project Rain/Assets/Parry Sounds/Ultrakill Parry.mp3") then
-                writefile("Project Rain/Assets/Parry Sounds/Ultrakill Parry.mp3", decode_asset(inline_asset_b96("@assets/Ultrakill Parry.mp3")));
+            if not isfile("NZL Studio/Assets/Parry Sounds/Ultrakill Parry.mp3") then
+                writefile("NZL Studio/Assets/Parry Sounds/Ultrakill Parry.mp3", decode_asset(inline_asset_b96("@assets/Ultrakill Parry.mp3")));
             end;
 
-            if not isfile("Project Rain/Assets/notification.mp3") then 
-                writefile("Project Rain/Assets/notification.mp3", decode_asset(inline_asset_b96("@assets/notification.mp3")));
+            if not isfile("NZL Studio/Assets/notification.mp3") then 
+                writefile("NZL Studio/Assets/notification.mp3", decode_asset(inline_asset_b96("@assets/notification.mp3")));
             end;
 
-            if not isfile("Project Rain/Deepwoken-Config/GuiItself.rbxm") then
-                writefile("Project Rain/Deepwoken-Config/GuiItself.rbxm", decode_asset(inline_asset_b96("@assets/DeepwokenMorphs/GuiItself.rbxm")));
+            if not isfile("NZL Studio/Deepwoken-Config/GuiItself.rbxm") then
+                writefile("NZL Studio/Deepwoken-Config/GuiItself.rbxm", decode_asset(inline_asset_b96("@assets/DeepwokenMorphs/GuiItself.rbxm")));
             end;
         end)
         
-        if not isfile("Project Rain/Fonts/Lexend.ttf") then 
-            writefile("Project Rain/Fonts/Lexend.ttf", decode_asset(inline_asset_b96("@assets/lexend.ttf")));
+        if not isfile("NZL Studio/Fonts/Lexend.ttf") then 
+            writefile("NZL Studio/Fonts/Lexend.ttf", decode_asset(inline_asset_b96("@assets/lexend.ttf")));
         end; 
 
-        if not isfile("Project Rain/Fonts/Lexend-Bold.ttf") then 
-            writefile("Project Rain/Fonts/Lexend-Bold.ttf", decode_asset(inline_asset_b96("@assets/lexend-bold.ttf")));
+        if not isfile("NZL Studio/Fonts/Lexend-Bold.ttf") then 
+            writefile("NZL Studio/Fonts/Lexend-Bold.ttf", decode_asset(inline_asset_b96("@assets/lexend-bold.ttf")));
         end; 
 
-        if not isfile("Project Rain/Fonts/Lexend-Medium.ttf") then 
-            writefile("Project Rain/Fonts/Lexend-Medium.ttf", decode_asset(inline_asset_b96("@assets/lexend-medium.ttf")));
+        if not isfile("NZL Studio/Fonts/Lexend-Medium.ttf") then 
+            writefile("NZL Studio/Fonts/Lexend-Medium.ttf", decode_asset(inline_asset_b96("@assets/lexend-medium.ttf")));
         end; 
     end)(); 
 end; 
@@ -250,14 +250,14 @@ end;
 if hasnt_accepted_tos then
     require(LPH_ENCSTR("@src/ui/tos"));
     
-    if not isfile("Project Rain\\Deepwoken-Config\\settings\\default_conf.json") and not isfile("Project Rain/inquired_about_default_config.txt") and not isfile("Project Rain\\Deepwoken-Config\\settings\\autoload.txt") then
-        writefile("Project Rain/inquired_about_default_config.txt", "true");
+    if not isfile("NZL Studio\\Deepwoken-Config\\settings\\default_conf.json") and not isfile("NZL Studio/inquired_about_default_config.txt") and not isfile("NZL Studio\\Deepwoken-Config\\settings\\autoload.txt") then
+        writefile("NZL Studio/inquired_about_default_config.txt", "true");
         require(LPH_ENCSTR("@src/ui/choice_frame")).set(nil,
             function()
-	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "https://files.project-rain.net/configs/premade.json");
+	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "https://files.NZL Studio/configs/premade.json");
                 if config_fetch_success then
-                    writefile("Project Rain\\Deepwoken-Config\\settings\\default_conf.json", config_content);
-                    writefile("Project Rain\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
+                    writefile("NZL Studio\\Deepwoken-Config\\settings\\default_conf.json", config_content);
+                    writefile("NZL Studio\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
                 end;
             end,
             function()
@@ -300,7 +300,7 @@ end;
 env.signal = require("@src/utility/signal");
 loaded_signal = env.signal.new();
 env.LOAD_START_TIME = tick();
-aztup.silent_mode = isfile(LPH_ENCSTR("Project Rain/silent_mode_toggle"));
+aztup.silent_mode = isfile(LPH_ENCSTR("NZL Studio/silent_mode_toggle"));
 aztup.maid = require(("@src/utility/maid")).new(); 
 
 if not aztup.ui then
@@ -337,7 +337,7 @@ require("@src/features/visuals/base_esp")();
 
 if not fflags:get("dont_notify_on_first_exec") and aztup.silent_mode then
     if not persistent_data:get("has_executed_before") then
-        messagebox("You have 'Silent Mode' enabled, Which means you wont see the UI until you open it with the keybind & have extra anti PC check features, If you would like to disable this, Go to UI settings and disable it, This notification is disablable in the fast flags area of UI", "Project Rain", 0)
+        messagebox("You have 'Silent Mode' enabled, Which means you wont see the UI until you open it with the keybind & have extra anti PC check features, If you would like to disable this, Go to UI settings and disable it, This notification is disablable in the fast flags area of UI", "NZL Studio", 0)
     end;
     
     persistent_data:set("has_executed_before", true); 

@@ -9,7 +9,7 @@
 local feature = Feature:new("show_stored_damage");
 local stored_damage_registry = require("@src/utility/stored_damage_registry");
 
--- [project rain oss] deepwoken's Info.DataReplication only; keep the toggle
+-- [nzl studio] deepwoken's Info.DataReplication only; keep the toggle
 -- registered but inert outside the game (auto_builder pattern)
 local info_folder = services.ReplicatedStorage:FindFirstChild("Info");
 if not info_folder and aztup and aztup.is_deepwoken then

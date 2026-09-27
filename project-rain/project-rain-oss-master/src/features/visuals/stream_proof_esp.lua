@@ -1,11 +1,11 @@
 
 if identifyexecutor() ~= "Volt" then return end
 local self = Feature:new("stream_proof_esp");
-self.font = DrawFont.Register(readfile("Project Rain/fonts/lexend.ttf"), {
+self.font = DrawFont.Register(readfile("NZL Studio/fonts/lexend.ttf"), {
     PixelSize = 16
 });
 
--- [project rain oss] workspace.Live is deepwoken-only; bounded lookup, draw
+-- [nzl studio] workspace.Live is deepwoken-only; bounded lookup, draw
 -- simply skips when absent
 local live: Folder = workspace:FindFirstChild("Live") or workspace:WaitForChild("Live", 15);
 self.draw = LPH_NO_VIRTUALIZE(function()

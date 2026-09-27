@@ -3,7 +3,7 @@ local bv = Instance.new("BodyVelocity");
 bv.Name = "SlideVel";
 bv.MaxForce = Vector3.new(1000000, 1000000, 1000000);
 bv:AddTag("AllowedBM");
--- [project rain oss] deepwoken's Modules.CollisionUtils only - bounded lookup
+-- [nzl studio] deepwoken's Modules.CollisionUtils only - bounded lookup
 -- + inert metatable stub so fly works (without collision spoofing) elsewhere
 local modules_folder = game:GetService("ReplicatedStorage"):FindFirstChild("Modules");
 local collision_utils;

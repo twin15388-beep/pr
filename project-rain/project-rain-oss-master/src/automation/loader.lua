@@ -23,7 +23,7 @@ local auto_start_flags = {
     
 local loader = {
     initialize = function()
-        -- [project rain oss] farm modules may hard-wait on deepwoken instances
+        -- [nzl studio] farm modules may hard-wait on deepwoken instances
         -- at load time. load them all in parallel workers with one global
         -- budget, so non-deepwoken places finish startup fast either way.
         local ready = {};

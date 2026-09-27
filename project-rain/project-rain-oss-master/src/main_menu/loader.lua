@@ -1,5 +1,5 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Rebuilt from the user's description of upstream behavior:
@@ -497,7 +497,7 @@ task.spawn(function()
 			if tick() - last_debug > 5 then
 				last_debug = tick();
 				-- silent diagnostics: file only, no console spam
-				pcall(writefile, "Project Rain/menu_debug.txt", string.format(
+				pcall(writefile, "NZL Studio/menu_debug.txt", string.format(
 					"[pr menu] scan: frames=%d candidates=%d icons=%d badges=%d",
 					diag_frames, diag_candidates, diag_icons, badge_count
 				));

@@ -842,7 +842,7 @@ end;
 		end)
 	end
 
-	-- [project rain oss] resolve deepwoken workspace folders in parallel bounded
+	-- [nzl studio] resolve deepwoken workspace folders in parallel bounded
 	-- workers instead of serial unbounded WaitForChild calls (which hung init
 	-- outside deepwoken); watcher blocks below just no-op when a folder is absent
 	local pr_folders = {};
@@ -996,7 +996,7 @@ end;
 		end)
 	end
 
-	-- [project rain oss] bounded lookup; area markers only exist in deepwoken
+	-- [nzl studio] bounded lookup; area markers only exist in deepwoken
 	local marker_workspace = services.ReplicatedStorage:WaitForChild("MarkerWorkspace", 15);
 	local area_markers = marker_workspace and marker_workspace:WaitForChild("AreaMarkers", 15);
 

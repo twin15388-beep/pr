@@ -1,5 +1,5 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This data module was stripped from the public release.
 	Upstream it mapped obfuscated/"mystery" mantra choice-card names to the real

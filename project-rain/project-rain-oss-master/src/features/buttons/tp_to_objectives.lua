@@ -2,7 +2,7 @@ local ingredients = workspace:FindFirstChild("Ingredients");
 local npcs = workspace:FindFirstChild("NPCs");
 local live = workspace:FindFirstChild("Live");
 
--- [project rain oss] deepwoken-only remotes; bounded lookups so require time
+-- [nzl studio] deepwoken-only remotes; bounded lookups so require time
 -- never blocks outside the game
 local requests = services.ReplicatedStorage:FindFirstChild("Requests");
 if not requests and aztup and aztup.is_deepwoken then

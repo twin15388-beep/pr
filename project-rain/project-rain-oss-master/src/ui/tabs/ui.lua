@@ -65,7 +65,7 @@ function tabs:create_ally_system(tab)
 end
 
 function tabs:create_spotify_section(tab)
-	-- [project rain oss] section for the reimplemented spotify widget
+	-- [nzl studio] section for the reimplemented spotify widget
 	local groupbox = tab:newGroupBox("Spotify", true);
 
 	groupbox:newToggle("spotify_widget", "Spotify Widget", false, "Shows the now-playing widget. Requires a local bridge, see OSS_BUILD.md.", function(enabled)

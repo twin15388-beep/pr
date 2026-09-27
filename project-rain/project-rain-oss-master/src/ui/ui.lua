@@ -41,8 +41,8 @@ end;
             "spotify_redirect_url",
             
         })
-        SaveManager:SetFolder('Project Rain/Deepwoken-Config')
-        ThemeManager:SetFolder('Project Rain/Deepwoken-Config')
+        SaveManager:SetFolder('NZL Studio/Deepwoken-Config')
+        ThemeManager:SetFolder('NZL Studio/Deepwoken-Config')
         SaveManager:BuildConfigSection(aztup.tabs.UI.Tab);
         ThemeManager:ApplyToTab(aztup.tabs.UI.Tab);
 

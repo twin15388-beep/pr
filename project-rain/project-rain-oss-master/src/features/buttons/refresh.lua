@@ -1,5 +1,5 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Upstream the "Refresh" button sat on the Wipe button and respawned you in

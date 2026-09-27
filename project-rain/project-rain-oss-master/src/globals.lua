@@ -48,7 +48,7 @@ env["PROT_OBF" .. "_" .. "STR_SAFE_MACRO"] = function(...)
     return ...
 end 
 
--- [project rain oss] stripped upstream; obfuscation string-table accessor.
+-- [nzl studio] stripped upstream; obfuscation string-table accessor.
 -- in the closed build this mapped readable strings to obfuscated table keys;
 -- for the OSS build a plain passthrough is exactly right.
 env["STR_TBL" .. "_" .. "SF" .. "_" .. "INVOKE"] = function(...)
@@ -76,7 +76,7 @@ local ap_breaker_tbl;
 local chance_store;
 local loaded_signal;
 
-local is_regular = LRM_ScriptName == "Project Rain"
+local is_regular = LRM_ScriptName == "NZL Studio"
 local old_fpp = fireproximityprompt;
 local fireproximityprompt = function(...)
     local prompt = ...;

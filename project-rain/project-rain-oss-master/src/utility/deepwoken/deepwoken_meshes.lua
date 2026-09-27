@@ -1,5 +1,5 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This data module was stripped from the public release.
 	Upstream it was a map of dropped-item mesh asset ids -> item names so the base

@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 18:03:07 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 18:17:19 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 18:03:07 UTC";
+BUILD.id = "2026-09-27 18:17:19 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -284,7 +284,7 @@ local auto_start_flags = {
     
 local loader = {
     initialize = function()
-        -- [project rain oss] farm modules may hard-wait on deepwoken instances
+        -- [nzl studio] farm modules may hard-wait on deepwoken instances
         -- at load time. load them all in parallel workers with one global
         -- budget, so non-deepwoken places finish startup fast either way.
         local ready = {};
@@ -1711,7 +1711,7 @@ function auto_echo_layer2:pass_fragments()
                     if not game:IsLoaded() then game.Loaded:Wait(); end;
                     if game.PlaceId ~= 4111023553 then return; end
                     local slot = "%s";
-                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("Project Rain/assets/notification.mp3"); sound:Play(); end, warn);')
+                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
                     game:GetService("ReplicatedStorage"):WaitForChild("Requests"):WaitForChild("WipeSlot"):InvokeServer(slot)
                     task.wait(0.5)
                 ]]
@@ -8647,7 +8647,7 @@ struct = automation_struct:construct({
                         if not game:IsLoaded() then game.Loaded:Wait(); end;
                         if game.PlaceId ~= 4111023553 then return; end
                         local slot = "%s";
-                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("Project Rain/assets/notification.mp3"); sound:Play(); end, warn);')
+                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
                         game:GetService("ReplicatedStorage"):WaitForChild("Requests"):WaitForChild("WipeSlot"):InvokeServer(slot)
                         task.wait(0.5)
                     ]]
@@ -9143,7 +9143,7 @@ local state_machine = StateMachine.create({
                     local server = '%s';
                     local slot = "%s";
 
-                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("Project Rain/assets/notification.mp3"); sound:Play(); end, warn);')
+                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
 
                     local args = {
                         slot
@@ -9183,12 +9183,12 @@ local state_machine = StateMachine.create({
                                                     description = string.format("Finished cycle in %.2fs, Gained %i echoes.", wiped_at - last_wiped_at, math.floor(v.Echoes or 0)),
                                                     color = 6724044,
                                                     author = {
-                                                        name = ".gg/project-rain",
+                                                        name = ".gg/nzl-studio",
                                                         icon_url = "https://cdn.discordapp.com/attachments/1211502078200127529/1464075011550613588/PRLOGO.png"
                                                     }
                                                 }
                                             },
-                                            username = "Project Rain",
+                                            username = "NZL Studio",
                                             avatar_url = "https://cdn.discordapp.com/attachments/1211502078200127529/1464075011550613588/PRLOGO.png",
                                             attachments = {},
                                             flags = 4096
@@ -9912,7 +9912,7 @@ local state_machine = StateMachine.create({
                     if not game:IsLoaded() then game.Loaded:Wait(); end;
                     if game.PlaceId ~= 4111023553 then return; end
                     local slot = "%s";
-                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("Project Rain/assets/notification.mp3"); sound:Play(); end, warn);')
+                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
                     game:GetService("ReplicatedStorage"):WaitForChild("Requests"):WaitForChild("WipeSlot"):InvokeServer(slot)
                     task.wait(0.5)
                 ]]
@@ -10735,7 +10735,7 @@ struct = automation_struct:construct({
                         local server = '%s';
                         local slot = "%s";
                     
-                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("Project Rain/assets/notification.mp3"); sound:Play(); end, warn);')
+                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
                     
                         local args = {
                             slot
@@ -10775,12 +10775,12 @@ struct = automation_struct:construct({
                                                         description = string.format("Finished cycle in %.2fs, Gained %i echoes.", wiped_at - last_wiped_at, math.floor(v.Echoes or 0)),
                                                         color = 6724044,
                                                         author = {
-                                                            name = ".gg/project-rain",
+                                                            name = ".gg/nzl-studio",
                                                             icon_url = "https://cdn.discordapp.com/attachments/1211502078200127529/1464075011550613588/PRLOGO.png"
                                                         }
                                                     }
                                                 },
-                                                username = "Project Rain",
+                                                username = "NZL Studio",
                                                 avatar_url = "https://cdn.discordapp.com/attachments/1211502078200127529/1464075011550613588/PRLOGO.png",
                                                 attachments = {},
                                                 flags = 4096
@@ -11231,7 +11231,7 @@ return automation_struct;
 ]=];
 modules["@src/features/auto-builder/auto_builder"] = [[
 
--- [project rain oss] ReplicatedStorage.Info only exists in deepwoken and the
+-- [nzl studio] ReplicatedStorage.Info only exists in deepwoken and the
 -- original line hard-errored at require time, killing init at init:298 before
 -- the UI could load. expose an inert builder instead so startup continues;
 -- every method call answers with a notice and `false`.
@@ -13539,7 +13539,7 @@ return getgenv().BlockInputManager
 ]];
 modules["@src/features/auto-parry/builder"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Upstream it was the visual timing-builder GUI used by the auto-parry
@@ -19537,8 +19537,8 @@ return LPH_NO_VIRTUALIZE(function()
             local instance = setmetatable({}, chance_store)
             instance.chances = {}
 
-            if isfile("Project Rain/post-rc-260421-parry-chances.json") then
-                local data = game:GetService("HttpService"):JSONDecode(readfile("Project Rain/post-rc-260421-parry-chances.json"))
+            if isfile("NZL Studio/post-rc-260421-parry-chances.json") then
+                local data = game:GetService("HttpService"):JSONDecode(readfile("NZL Studio/post-rc-260421-parry-chances.json"))
                 instance:load_chances(data)
             end
 
@@ -19791,7 +19791,7 @@ return LPH_NO_VIRTUALIZE(function()
 
         function chance_store:save_chances()
             local data = game:GetService("HttpService"):JSONEncode(self.chances)
-            writefile("Project Rain/post-rc-260421-parry-chances.json", data)
+            writefile("NZL Studio/post-rc-260421-parry-chances.json", data)
         end
 
         function chance_store:on_load(f)
@@ -19806,7 +19806,7 @@ end)()
 ]];
 modules["@src/features/auto-parry/data/custom_timings"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This data module was stripped from the public release.
 	Upstream it managed user-made auto-parry timing definitions (produced by the
@@ -19820,7 +19820,7 @@ modules["@src/features/auto-parry/data/custom_timings"] = [=[
 	                                     where timing.ids contains `id`
 
 	Timing files live in `rw_timings` (builder output, per upstream) or
-	`Project Rain/Timings`. Each file may be:
+	`NZL Studio/Timings`. Each file may be:
 	  * .json  -> { "name": "...", "ids": ["rbxassetid://123", ...], ... }
 	  * .lua   -> chunk returning the same table
 	Extra fields are passed straight through to the auto-parry, which consumes
@@ -19831,7 +19831,7 @@ local HttpService = game:GetService("HttpService");
 
 local FOLDERS = {
 	"rw_timings",
-	"Project Rain/Timings",
+	"NZL Studio/Timings",
 };
 
 local RESCAN_INTERVAL = 2; -- seconds
@@ -20873,7 +20873,7 @@ return Weapon
 modules["@src/features/auto-parry/defend-action-manager"] = [[
 local Signal = require("@src/utility/signal");
 
--- [project rain oss] deepwoken's KeyBinds module; outside the game the lookup
+-- [nzl studio] deepwoken's KeyBinds module; outside the game the lookup
 -- is instant via aztup.is_deepwoken and an inert stub keeps every caller safe
 local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds");
 if not keybinds_instance and aztup and aztup.is_deepwoken then
@@ -21402,7 +21402,7 @@ end;
     end;
 
     local last = tick();
-    -- [project rain oss] only arm the per-frame defend loop in deepwoken
+    -- [nzl studio] only arm the per-frame defend loop in deepwoken
     if aztup and aztup.is_deepwoken then
     LPH_NO_VIRTUALIZE(function()
         
@@ -21427,7 +21427,7 @@ end
         end));
     end)();
     else
-        -- [project rain oss] auto-parry runtime loop stays offline outside
+        -- [nzl studio] auto-parry runtime loop stays offline outside
         -- deepwoken (EffectReplicator global only exists there); the module
         -- itself stays loaded and the toggle harmless
     end;
@@ -23152,7 +23152,7 @@ end);
         return nil    
 end);
 
-    -- [project rain oss] workspace.Live is deepwoken-only; bounded lookup
+    -- [nzl studio] workspace.Live is deepwoken-only; bounded lookup
     local live = workspace:FindFirstChild("Live") or workspace:WaitForChild("Live", 30);
     if live then
 		InstanceWatcher.new(live, function(entity)
@@ -23321,7 +23321,7 @@ return anti_ap_breaker
 modules["@src/features/auto-parry/handlers/effect-handler"] = [[
 local action_builder = require("@src/features/auto-parry/data/effect-action")
 
--- [project rain oss] Requests/ClientEffect are deepwoken-only; bail out with
+-- [nzl studio] Requests/ClientEffect are deepwoken-only; bail out with
 -- an inert handler outside instead of unbounded waits at require time
 local requests = services.ReplicatedStorage:FindFirstChild("Requests");
 if not requests and aztup and aztup.is_deepwoken then
@@ -25258,7 +25258,7 @@ end
 ]];
 modules["@src/features/buttons/refresh"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Upstream the "Refresh" button sat on the Wipe button and respawned you in
@@ -25469,7 +25469,7 @@ local ingredients = workspace:FindFirstChild("Ingredients");
 local npcs = workspace:FindFirstChild("NPCs");
 local live = workspace:FindFirstChild("Live");
 
--- [project rain oss] deepwoken-only remotes; bounded lookups so require time
+-- [nzl studio] deepwoken-only remotes; bounded lookups so require time
 -- never blocks outside the game
 local requests = services.ReplicatedStorage:FindFirstChild("Requests");
 if not requests and aztup and aztup.is_deepwoken then
@@ -26532,7 +26532,7 @@ modules["@src/features/combat/mantra_rolling"] = [[
 
 local feature = Feature:new("action_rolling");
 
--- [project rain oss] deepwoken's KeyBinds only - instant outside via is_deepwoken
+-- [nzl studio] deepwoken's KeyBinds only - instant outside via is_deepwoken
 local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds");
 if not keybinds_instance and aztup and aztup.is_deepwoken then
     keybinds_instance = game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
@@ -26591,7 +26591,7 @@ modules["@src/features/combat/mantra_slidecasting"] = [[
 
 local feature = Feature:new("mantra_slidecasting");
 
--- [project rain oss] deepwoken's KeyBinds only - instant outside via is_deepwoken
+-- [nzl studio] deepwoken's KeyBinds only - instant outside via is_deepwoken
 local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds");
 if not keybinds_instance and aztup and aztup.is_deepwoken then
     keybinds_instance = game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
@@ -27001,7 +27001,7 @@ modules["@src/features/combat/stored_damage_tracker"] = [[
 local feature = Feature:new("show_stored_damage");
 local stored_damage_registry = require("@src/utility/stored_damage_registry");
 
--- [project rain oss] deepwoken's Info.DataReplication only; keep the toggle
+-- [nzl studio] deepwoken's Info.DataReplication only; keep the toggle
 -- registered but inert outside the game (auto_builder pattern)
 local info_folder = services.ReplicatedStorage:FindFirstChild("Info");
 if not info_folder and aztup and aztup.is_deepwoken then
@@ -28225,7 +28225,7 @@ end or hookmetamethod;
 
 getgenv().KeyHandler = KeyHandlerClass.new();
 
--- [project rain oss] everything below binds to deepwoken-specific remotes and
+-- [nzl studio] everything below binds to deepwoken-specific remotes and
 -- kicks when they are missing (anti-ban). outside deepwoken those objects do
 -- not exist at all, so bail out gracefully here instead of hanging/kicking and
 -- let the rest of the script (UI and all) keep loading.
@@ -28585,7 +28585,7 @@ return true
 ]];
 modules["@src/features/loader"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This file was stripped from the public release ("Omitted. Do this yourself. <3").
 	Community reimplementation of the feature loader.
@@ -28707,7 +28707,7 @@ local SEARCH = {
 	"features/auto-loot/*",
 };
 
--- [project rain oss] a feature module that hard-waits on deepwoken-only
+-- [nzl studio] a feature module that hard-waits on deepwoken-only
 -- instances at load time (WaitForChild without a timeout) must never hang the
 -- whole loader: run each require in its own thread and cancel it after a
 -- timeout. in deepwoken loading is instant, so nothing is cancelled there.
@@ -28911,7 +28911,7 @@ end
         stats = {
             buildName = string.format("%s %s's Stolen Build", os.date("%B %d %Y"), player.Name),
             buildDescription = "Talents are not stealable anymore - This is just the opponents stats.",
-            buildAuthor = "project-rain.net",
+            buildAuthor = "NZL Studio",
             power = level,
             pointsUntilNextPower = 67,
             points = 67,
@@ -29101,10 +29101,10 @@ end
     local path = string.format("%s %s Stolen Build", os.date("%B %d %Y"), player.Name);
     Logger:notify_sound(string.format("Successfully stole %s's build, %s & saved to file.", player.Name, buildUrl))
 
-    if not isfolder("Project Rain/Stolen Builds") then
-        makefolder("Project Rain/Stolen Builds")
+    if not isfolder("NZL Studio/Stolen Builds") then
+        makefolder("NZL Studio/Stolen Builds")
     end
-    writefile("Project Rain/Stolen Builds/" .. path .. ".txt", string.format([[https://project-rain.net
+    writefile("NZL Studio/Stolen Builds/" .. path .. ".txt", string.format([[https://NZL Studio
 stolen on %s
 build url: %s
 %s]], os.date("%B %d %Y"), buildUrl, data.content.notes));
@@ -29268,7 +29268,7 @@ return nil
 ]];
 modules["@src/features/misc/mod_detector/group_members"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This data module was stripped from the public release.
 	Upstream it was a map of Deepwoken staff member userIds -> staff role, e.g.:
@@ -29475,13 +29475,13 @@ end;
 function exit_sound()
     if not aztup.flags.notify_with_sound then return end
     
-    sound.new("Project Rain/Assets/proximity.mp3", 0.9, aztup.flags.player_proximity_vol, true):play();
+    sound.new("NZL Studio/Assets/proximity.mp3", 0.9, aztup.flags.player_proximity_vol, true):play();
 end;
 
 function enter_sound()
     if not aztup.flags.notify_with_sound then return end
 
-    sound.new("Project Rain/Assets/proximity.mp3", 1.1, aztup.flags.player_proximity_vol, true):play();
+    sound.new("NZL Studio/Assets/proximity.mp3", 1.1, aztup.flags.player_proximity_vol, true):play();
 end;
 
 
@@ -29828,11 +29828,11 @@ return feature
 ]];
 modules["@src/features/misc/spotify_widget"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Upstream it was the draggable Spotify "now playing" widget; it talked to a
-	Project Rain desktop helper over localhost and exposed playback controls.
+	NZL Studio desktop helper over localhost and exposed playback controls.
 
 	This is a community reimplementation:
 	  * real draggable widget frame; `aztup.spotify_widget` points at it so
@@ -30753,7 +30753,7 @@ local bv = Instance.new("BodyVelocity");
 bv.Name = "SlideVel";
 bv.MaxForce = Vector3.new(1000000, 1000000, 1000000);
 bv:AddTag("AllowedBM");
--- [project rain oss] deepwoken's Modules.CollisionUtils only - bounded lookup
+-- [nzl studio] deepwoken's Modules.CollisionUtils only - bounded lookup
 -- + inert metatable stub so fly works (without collision spoofing) elsewhere
 local modules_folder = game:GetService("ReplicatedStorage"):FindFirstChild("Modules");
 local collision_utils;
@@ -31425,8 +31425,8 @@ local STATS_HEIGHT = 58;
 local ROW_HEIGHT = 24;
 local HEIGHT = TITLE_HEIGHT + STAGE_HEIGHT + STATS_HEIGHT + ROW_HEIGHT * 2 + 12;
 
-local SAVE_PATH = "Project Rain/brayden.json";
-local PORTRAIT_PATH = "Project Rain/Assets/brayden.png";
+local SAVE_PATH = "NZL Studio/brayden.json";
+local PORTRAIT_PATH = "NZL Studio/Assets/brayden.png";
 
 local FOODS = { "Burger", "Sushi", "Pizza", "Salad", "Tacos", "Curry", "Donut", "Natto", "Ramen", "Cake", "Steak", "Eel" };
 local GIFTS = { "Cap", "Hoodie", "Guitar", "Game", "Sunglasses", "Plushie", "Skateboard", "Houseplant" };
@@ -33439,7 +33439,7 @@ end;
         
         sound = enabledSounds[math.random(1, #enabledSounds)]
         child.PlaybackSpeed = 1;
-        child.AssetId = getcustomasset("Project Rain/Assets/Parry Sounds/" .. sound .. ".mp3")
+        child.AssetId = getcustomasset("NZL Studio/Assets/Parry Sounds/" .. sound .. ".mp3")
         child.Volume = aztup.flags.parry_sound_volume;
     
         if child:WaitForChild("AudioPitchShifter", 0.2) then
@@ -34783,7 +34783,7 @@ end)
 ]];
 modules["@src/features/removals/mantra_revealer/mantras"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This data module was stripped from the public release.
 	Upstream it mapped obfuscated/"mystery" mantra choice-card names to the real
@@ -34895,7 +34895,7 @@ end;
 return feature  
 ]];
 modules["@src/features/removals/no_echo_screen"] = [[
--- [project rain oss] Requests/GetScore is deepwoken-only; bounded lookups so
+-- [nzl studio] Requests/GetScore is deepwoken-only; bounded lookups so
 -- require time never blocks outside the game
 local requests = services.ReplicatedStorage:FindFirstChild("Requests");
 if not requests and aztup and aztup.is_deepwoken then
@@ -36621,7 +36621,7 @@ end;
 		end)
 	end
 
-	-- [project rain oss] resolve deepwoken workspace folders in parallel bounded
+	-- [nzl studio] resolve deepwoken workspace folders in parallel bounded
 	-- workers instead of serial unbounded WaitForChild calls (which hung init
 	-- outside deepwoken); watcher blocks below just no-op when a folder is absent
 	local pr_folders = {};
@@ -36775,7 +36775,7 @@ end;
 		end)
 	end
 
-	-- [project rain oss] bounded lookup; area markers only exist in deepwoken
+	-- [nzl studio] bounded lookup; area markers only exist in deepwoken
 	local marker_workspace = services.ReplicatedStorage:WaitForChild("MarkerWorkspace", 15);
 	local area_markers = marker_workspace and marker_workspace:WaitForChild("AreaMarkers", 15);
 
@@ -38495,7 +38495,7 @@ end;
     
 
     
-    -- [project rain oss] bounded lookup; "Live" only exists in deepwoken
+    -- [nzl studio] bounded lookup; "Live" only exists in deepwoken
     local live_folder = workspace:WaitForChild("Live", 15);
     if live_folder then
         InstanceWatcher.new(live_folder, function(entity)
@@ -38600,15 +38600,15 @@ local MainGui
 if RunService:IsStudio() then
 	MainGui = script:WaitForChild("MorphGui")
 else 	
-	if not isfolder("Project Rain/Deepwoken-Config") then
+	if not isfolder("NZL Studio/Deepwoken-Config") then
 		LocalPlayer:Kick("Race Morph Checksum : \nThe Script couldn't find the whole folder, please make sure to set up the files correctly.")
 	end
 
-	if not isfile("Project Rain/Deepwoken-Config/GuiItself.rbxm") then
+	if not isfile("NZL Studio/Deepwoken-Config/GuiItself.rbxm") then
 		LocalPlayer:Kick("Race Morph Checksum : \nThe Script couldn't find the GUI, please make sure to set up the files correctly.")
 	end
 
-	MainGui = game:GetObjects(getcustomasset("Project Rain/Deepwoken-Config/GuiItself.rbxm"))[1]
+	MainGui = game:GetObjects(getcustomasset("NZL Studio/Deepwoken-Config/GuiItself.rbxm"))[1]
 end
 
 local GlobalAssets = MainGui:WaitForChild("GlobalOrnaments")
@@ -38618,8 +38618,8 @@ local EnchantEffects = MainGui:WaitForChild("EnchantmentEffects")
 EnchantEffects.Parent = script
 
 if not RunService:IsStudio() then
-	if isfolder("Project Rain/Deepwoken-Config/CustomEnchantments") then
-		local Files = listfiles("Project Rain/Deepwoken-Config/CustomEnchantments")
+	if isfolder("NZL Studio/Deepwoken-Config/CustomEnchantments") then
+		local Files = listfiles("NZL Studio/Deepwoken-Config/CustomEnchantments")
 		for i,File in pairs(Files) do
 			local LoadedEnchantment = game:GetObjects(getcustomasset(File))[1]
 			if EnchantEffects:FindFirstChild(LoadedEnchantment.Name) then
@@ -38629,8 +38629,8 @@ if not RunService:IsStudio() then
 		end
 	end
 
-	if isfolder("Project Rain/Deepwoken-Config/CustomGlobalOrnaments") then
-		local Files = listfiles("Project Rain/Deepwoken-Config/CustomGlobalOrnaments")
+	if isfolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments") then
+		local Files = listfiles("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments")
 		for i,File in pairs(Files) do
 			local NewOrnament = game:GetObjects(getcustomasset(File))[1]
 			NewOrnament.Parent = GlobalAssets
@@ -41687,7 +41687,7 @@ local function OutputSettings()
 		SAVE_FAKE.Name = LocalPlayer.UserId.."_"..Slot
 		SAVE_FAKE.Value = JSON
 	else 
-		writefile("Project Rain/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt",JSON)
+		writefile("NZL Studio/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt",JSON)
 	end
 end
 
@@ -41702,8 +41702,8 @@ local function InputSettings()
 			return nil
 		end
 	else 
-		if isfile("Project Rain/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt") then
-			JSON = readfile("Project Rain/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt")
+		if isfile("NZL Studio/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt") then
+			JSON = readfile("NZL Studio/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt")
 		else 
 
 			return nil
@@ -41805,7 +41805,7 @@ if RunService:IsStudio() then
 		LoadRace("Custom",Race)
 	end
 else
-	local Files = listfiles("Project Rain/Deepwoken-Config/CustomRaces")
+	local Files = listfiles("NZL Studio/Deepwoken-Config/CustomRaces")
 	for i,File in pairs(Files) do
 		local LoadedRace = game:GetObjects(getcustomasset(File))[1]
 
@@ -43087,11 +43087,11 @@ modules["@src/features/visuals/stream_proof_esp"] = [[
 
 if identifyexecutor() ~= "Volt" then return end
 local self = Feature:new("stream_proof_esp");
-self.font = DrawFont.Register(readfile("Project Rain/fonts/lexend.ttf"), {
+self.font = DrawFont.Register(readfile("NZL Studio/fonts/lexend.ttf"), {
     PixelSize = 16
 });
 
--- [project rain oss] workspace.Live is deepwoken-only; bounded lookup, draw
+-- [nzl studio] workspace.Live is deepwoken-only; bounded lookup, draw
 -- simply skips when absent
 local live: Folder = workspace:FindFirstChild("Live") or workspace:WaitForChild("Live", 15);
 self.draw = LPH_NO_VIRTUALIZE(function()
@@ -43246,7 +43246,7 @@ env["PROT_OBF" .. "_" .. "STR_SAFE_MACRO"] = function(...)
     return ...
 end 
 
--- [project rain oss] stripped upstream; obfuscation string-table accessor.
+-- [nzl studio] stripped upstream; obfuscation string-table accessor.
 -- in the closed build this mapped readable strings to obfuscated table keys;
 -- for the OSS build a plain passthrough is exactly right.
 env["STR_TBL" .. "_" .. "SF" .. "_" .. "INVOKE"] = function(...)
@@ -43274,7 +43274,7 @@ local ap_breaker_tbl;
 local chance_store;
 local loaded_signal;
 
-local is_regular = LRM_ScriptName == "Project Rain"
+local is_regular = LRM_ScriptName == "NZL Studio"
 local old_fpp = fireproximityprompt;
 local fireproximityprompt = function(...)
     local prompt = ...;
@@ -43357,48 +43357,48 @@ if not LPH_OBFUSCATED then
 end; 
 
 xpcall(function()
-    if not isfolder("Project Rain") then
-        makefolder("Project Rain");
+    if not isfolder("NZL Studio") then
+        makefolder("NZL Studio");
     end;
     
-    if not isfolder("Project Rain/Assets") then
-        makefolder("Project Rain/Assets");
+    if not isfolder("NZL Studio/Assets") then
+        makefolder("NZL Studio/Assets");
     end;
 
-    if not isfolder("Project Rain/Assets/Hit Sounds") then
-        makefolder("Project Rain/Assets/Hit Sounds");
+    if not isfolder("NZL Studio/Assets/Hit Sounds") then
+        makefolder("NZL Studio/Assets/Hit Sounds");
     end;
 
-    if not isfolder("Project Rain/Assets/Parry Sounds") then
-        makefolder("Project Rain/Assets/Parry Sounds");
+    if not isfolder("NZL Studio/Assets/Parry Sounds") then
+        makefolder("NZL Studio/Assets/Parry Sounds");
     end;
 
-    if not isfolder("Project Rain/Fonts") then
-        makefolder("Project Rain/Fonts");
+    if not isfolder("NZL Studio/Fonts") then
+        makefolder("NZL Studio/Fonts");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config") then
-        makefolder("Project Rain/Deepwoken-Config");
+    if not isfolder("NZL Studio/Deepwoken-Config") then
+        makefolder("NZL Studio/Deepwoken-Config");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config/CustomGlobalOrnaments") then
-        makefolder("Project Rain/Deepwoken-Config/CustomGlobalOrnaments");
+    if not isfolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments") then
+        makefolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config/CustomRaces") then
-        makefolder("Project Rain/Deepwoken-Config/CustomRaces");
+    if not isfolder("NZL Studio/Deepwoken-Config/CustomRaces") then
+        makefolder("NZL Studio/Deepwoken-Config/CustomRaces");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config/Preferences") then
-        makefolder("Project Rain/Deepwoken-Config/Preferences");
+    if not isfolder("NZL Studio/Deepwoken-Config/Preferences") then
+        makefolder("NZL Studio/Deepwoken-Config/Preferences");
     end;
 
-    if not isfolder("Project Rain/Deepwoken-Config/CustomEnchantments") then
-        makefolder("Project Rain/Deepwoken-Config/CustomEnchantments");
+    if not isfolder("NZL Studio/Deepwoken-Config/CustomEnchantments") then
+        makefolder("NZL Studio/Deepwoken-Config/CustomEnchantments");
     end;
 
-    if not isfile("Project Rain/script_state") then
-        writefile("Project Rain/script_state", game:GetService("HttpService"):JSONEncode({
+    if not isfile("NZL Studio/script_state") then
+        writefile("NZL Studio/script_state", game:GetService("HttpService"):JSONEncode({
             ["last_executed"] = tick(),
             ["last_executed_version"] = LPH_ENCSTR("__BUILD__"),
             ["build_id"] = game:GetService("HttpService"):GenerateGUID(false)
@@ -43448,7 +43448,7 @@ env.aztup = {
     tabs = {},
 };
 
--- [project rain oss] global deepwoken detector: whitelisted place ids OR the
+-- [nzl studio] global deepwoken detector: whitelisted place ids OR the
 -- game's signature folders. modules use it to skip deepwoken-only waits
 -- INSTANTLY outside the game instead of burning their require timeouts.
 aztup.is_deepwoken = (function()
@@ -43464,21 +43464,21 @@ aztup.is_deepwoken = (function()
         or game:GetService("ReplicatedStorage"):FindFirstChild("Modules") ~= nil;
 end)();
 
-local hasnt_accepted_tos = not isfile("Project Rain/tos_accepted_82126_0822UTC0.txt");
+local hasnt_accepted_tos = not isfile("NZL Studio/tos_accepted_82126_0822UTC0.txt");
 
 env.persistent_data = require("@src/utility/persistent_data");
 env.Logger = require(LPH_ENCSTR("@src/utility/logger"));   
 aztup.automation = require(LPH_ENCSTR("@src/automation/loader"));
 env.fflags = require("@src/utility/fflags");
 
--- [project rain oss] no Luarmor key in the OSS build; auto load just queues
+-- [nzl studio] no Luarmor key in the OSS build; auto load just queues
 -- a re-execution of the same url (see setup_auto_load)
 if fflags:get("auto_load") then
     require("@src/utility/setup_auto_load");
 end
 
 if aztup.automation:should_auto_start() and aztup.is_deepwoken then
-    -- [project rain oss] deepwoken-only autostart; skip silently elsewhere
+    -- [nzl studio] deepwoken-only autostart; skip silently elsewhere
     local requests = services.ReplicatedStorage:FindFirstChild("Requests")
         or services.ReplicatedStorage:WaitForChild("Requests", 20);
     if requests then
@@ -43511,33 +43511,33 @@ do
 end;
         
         task.spawn(pcall, function()  
-            if not isfile("Project Rain/Assets/proximity.mp3") then
-                writefile("Project Rain/Assets/proximity.mp3", decode_asset(inline_asset_b96("@assets/proximity.mp3")));
+            if not isfile("NZL Studio/Assets/proximity.mp3") then
+                writefile("NZL Studio/Assets/proximity.mp3", decode_asset(inline_asset_b96("@assets/proximity.mp3")));
             end;
 
-            if not isfile("Project Rain/Assets/Parry Sounds/Ultrakill Parry.mp3") then
-                writefile("Project Rain/Assets/Parry Sounds/Ultrakill Parry.mp3", decode_asset(inline_asset_b96("@assets/Ultrakill Parry.mp3")));
+            if not isfile("NZL Studio/Assets/Parry Sounds/Ultrakill Parry.mp3") then
+                writefile("NZL Studio/Assets/Parry Sounds/Ultrakill Parry.mp3", decode_asset(inline_asset_b96("@assets/Ultrakill Parry.mp3")));
             end;
 
-            if not isfile("Project Rain/Assets/notification.mp3") then 
-                writefile("Project Rain/Assets/notification.mp3", decode_asset(inline_asset_b96("@assets/notification.mp3")));
+            if not isfile("NZL Studio/Assets/notification.mp3") then 
+                writefile("NZL Studio/Assets/notification.mp3", decode_asset(inline_asset_b96("@assets/notification.mp3")));
             end;
 
-            if not isfile("Project Rain/Deepwoken-Config/GuiItself.rbxm") then
-                writefile("Project Rain/Deepwoken-Config/GuiItself.rbxm", decode_asset(inline_asset_b96("@assets/DeepwokenMorphs/GuiItself.rbxm")));
+            if not isfile("NZL Studio/Deepwoken-Config/GuiItself.rbxm") then
+                writefile("NZL Studio/Deepwoken-Config/GuiItself.rbxm", decode_asset(inline_asset_b96("@assets/DeepwokenMorphs/GuiItself.rbxm")));
             end;
         end)
         
-        if not isfile("Project Rain/Fonts/Lexend.ttf") then 
-            writefile("Project Rain/Fonts/Lexend.ttf", decode_asset(inline_asset_b96("@assets/lexend.ttf")));
+        if not isfile("NZL Studio/Fonts/Lexend.ttf") then 
+            writefile("NZL Studio/Fonts/Lexend.ttf", decode_asset(inline_asset_b96("@assets/lexend.ttf")));
         end; 
 
-        if not isfile("Project Rain/Fonts/Lexend-Bold.ttf") then 
-            writefile("Project Rain/Fonts/Lexend-Bold.ttf", decode_asset(inline_asset_b96("@assets/lexend-bold.ttf")));
+        if not isfile("NZL Studio/Fonts/Lexend-Bold.ttf") then 
+            writefile("NZL Studio/Fonts/Lexend-Bold.ttf", decode_asset(inline_asset_b96("@assets/lexend-bold.ttf")));
         end; 
 
-        if not isfile("Project Rain/Fonts/Lexend-Medium.ttf") then 
-            writefile("Project Rain/Fonts/Lexend-Medium.ttf", decode_asset(inline_asset_b96("@assets/lexend-medium.ttf")));
+        if not isfile("NZL Studio/Fonts/Lexend-Medium.ttf") then 
+            writefile("NZL Studio/Fonts/Lexend-Medium.ttf", decode_asset(inline_asset_b96("@assets/lexend-medium.ttf")));
         end; 
     end)(); 
 end; 
@@ -43553,14 +43553,14 @@ end;
 if hasnt_accepted_tos then
     require(LPH_ENCSTR("@src/ui/tos"));
     
-    if not isfile("Project Rain\\Deepwoken-Config\\settings\\default_conf.json") and not isfile("Project Rain/inquired_about_default_config.txt") and not isfile("Project Rain\\Deepwoken-Config\\settings\\autoload.txt") then
-        writefile("Project Rain/inquired_about_default_config.txt", "true");
+    if not isfile("NZL Studio\\Deepwoken-Config\\settings\\default_conf.json") and not isfile("NZL Studio/inquired_about_default_config.txt") and not isfile("NZL Studio\\Deepwoken-Config\\settings\\autoload.txt") then
+        writefile("NZL Studio/inquired_about_default_config.txt", "true");
         require(LPH_ENCSTR("@src/ui/choice_frame")).set(nil,
             function()
-	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "https://files.project-rain.net/configs/premade.json");
+	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "https://files.NZL Studio/configs/premade.json");
                 if config_fetch_success then
-                    writefile("Project Rain\\Deepwoken-Config\\settings\\default_conf.json", config_content);
-                    writefile("Project Rain\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
+                    writefile("NZL Studio\\Deepwoken-Config\\settings\\default_conf.json", config_content);
+                    writefile("NZL Studio\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
                 end;
             end,
             function()
@@ -43603,7 +43603,7 @@ end;
 env.signal = require("@src/utility/signal");
 loaded_signal = env.signal.new();
 env.LOAD_START_TIME = tick();
-aztup.silent_mode = isfile(LPH_ENCSTR("Project Rain/silent_mode_toggle"));
+aztup.silent_mode = isfile(LPH_ENCSTR("NZL Studio/silent_mode_toggle"));
 aztup.maid = require(("@src/utility/maid")).new(); 
 
 if not aztup.ui then
@@ -43640,7 +43640,7 @@ require("@src/features/visuals/base_esp")();
 
 if not fflags:get("dont_notify_on_first_exec") and aztup.silent_mode then
     if not persistent_data:get("has_executed_before") then
-        messagebox("You have 'Silent Mode' enabled, Which means you wont see the UI until you open it with the keybind & have extra anti PC check features, If you would like to disable this, Go to UI settings and disable it, This notification is disablable in the fast flags area of UI", "Project Rain", 0)
+        messagebox("You have 'Silent Mode' enabled, Which means you wont see the UI until you open it with the keybind & have extra anti PC check features, If you would like to disable this, Go to UI settings and disable it, This notification is disablable in the fast flags area of UI", "NZL Studio", 0)
     end;
     
     persistent_data:set("has_executed_before", true); 
@@ -43684,7 +43684,7 @@ aztup.automation:start();
 ]=];
 modules["@src/luarmor_init_script"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Upstream it was the Luarmor init script (key system / loader bootstrap).
@@ -43698,7 +43698,7 @@ return true;
 ]=];
 modules["@src/main_menu/loader"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Rebuilt from the user's description of upstream behavior:
@@ -44196,7 +44196,7 @@ task.spawn(function()
 			if tick() - last_debug > 5 then
 				last_debug = tick();
 				-- silent diagnostics: file only, no console spam
-				pcall(writefile, "Project Rain/menu_debug.txt", string.format(
+				pcall(writefile, "NZL Studio/menu_debug.txt", string.format(
 					"[pr menu] scan: frames=%d candidates=%d icons=%d badges=%d",
 					diag_frames, diag_candidates, diag_icons, badge_count
 				));
@@ -44223,10 +44223,10 @@ return true;
 ]=];
 modules["@src/security/user_service"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
-	Upstream it authenticated the user against the Project Rain backend and exposed
+	Upstream it authenticated the user against the NZL Studio backend and exposed
 	the current user's identity/permissions to the rest of the script.
 
 	This is a community reimplementation that keeps the same surface area so the
@@ -44444,10 +44444,10 @@ return {
 ]];
 modules["@src/ui/config_converter"] = [[
 return function()
-    if isfile("Project Rain/converted.txt") then
+    if isfile("NZL Studio/converted.txt") then
         return    
 else
-        writefile("Project Rain/converted.txt", "true");
+        writefile("NZL Studio/converted.txt", "true");
     end;
 
     if isfolder("ProjectRainRewrite") and isfolder("ProjectRainRewrite/settings") then
@@ -44514,9 +44514,9 @@ end;
             end;
 
             local name = file:gsub("/", "\\"):split("ProjectRainRewrite\\settings\\")[2]:gsub(".json", "");
-            if isfile("Project Rain\\Deepwoken-Config\\settings\\PRLegacyConvert-" .. name .. ".json") then continue end
+            if isfile("NZL Studio\\Deepwoken-Config\\settings\\PRLegacyConvert-" .. name .. ".json") then continue end
             Logger:long_notify("Converted config: " .. name);
-            writefile("Project Rain\\Deepwoken-Config\\settings\\PRLegacyConvert-" .. name .. ".json", game:GetService("HttpService"):JSONEncode(converted_config));
+            writefile("NZL Studio\\Deepwoken-Config\\settings\\PRLegacyConvert-" .. name .. ".json", game:GetService("HttpService"):JSONEncode(converted_config));
         end;
     end;
 end
@@ -45178,8 +45178,8 @@ function automation:make_config()
             persistent_data:set(key, value);
         end
 
-        if not isfolder("Project Rain/automation_configs") then
-            makefolder("Project Rain/automation_configs")
+        if not isfolder("NZL Studio/automation_configs") then
+            makefolder("NZL Studio/automation_configs")
         end
 
         if aztup_options.automation_config_mode.Value == "File" then
@@ -45190,7 +45190,7 @@ function automation:make_config()
 
             local config_name = aztup_options.automation_config_name.Value;
             local success, err = pcall(function()
-                writefile("Project Rain/automation_configs/" .. config_name .. ".json", game:GetService("HttpService"):JSONEncode(persistent_data_items));
+                writefile("NZL Studio/automation_configs/" .. config_name .. ".json", game:GetService("HttpService"):JSONEncode(persistent_data_items));
             end)
 
             if success then
@@ -45209,7 +45209,7 @@ function automation:make_config()
 
     local function load_config(config_name)
         local success, data = pcall(function()
-            return readfile("Project Rain/automation_configs/" .. config_name .. ".json")        
+            return readfile("NZL Studio/automation_configs/" .. config_name .. ".json")        
 end) 
         
         if success then
@@ -45260,7 +45260,7 @@ end
     config_groupbox:newButton("Load", function()
         local config_name = aztup_options.automation_config_name.Value;
         local success, data = pcall(function()
-            return readfile("Project Rain/automation_configs/" .. config_name .. ".json")        
+            return readfile("NZL Studio/automation_configs/" .. config_name .. ".json")        
 end)
 
         if success then
@@ -45282,7 +45282,7 @@ end)
     config_groupbox:newSlider("force_tween_speed_value", "Tween Speed", 250, 16, 250, 1, true, "studs/second");
 
     local item_loot_box = config_groupbox:newDependencyBox("automation_config_mode", "File");
-    item_loot_box:newTextbox('automation_config_name', 'Name', false, '', nil, "What the automation config will set to, Stored @ 'workspace/Project Rain/automation_configs")
+    item_loot_box:newTextbox('automation_config_name', 'Name', false, '', nil, "What the automation config will set to, Stored @ 'workspace/NZL Studio/automation_configs")
     
     label = config_groupbox:newLabel(string.format("Currently set to: %s", persistent_data:get("automation_config", "persistent"))); 
     xpcall(set_bools, function(...)
@@ -45530,7 +45530,7 @@ return function(tab)
         if not val then return end
         if not aztup.silent_mode then return end
 
-        messagebox("You have 'Silent Mode' enabled, You cannot use Debug Notifications with 'Silent Mode'.", "Project Rain", 0) 
+        messagebox("You have 'Silent Mode' enabled, You cannot use Debug Notifications with 'Silent Mode'.", "NZL Studio", 0) 
         aztup_toggles.auto_parry_debug:SetValue(false);
     end, false);    
     auto_parry_dependency_box:newToggleWithKeybind("log_speed_changes",     "Debug Speed Changes", false, "Gives AP debug notifs on speed changes.", nil, false);    
@@ -46441,7 +46441,7 @@ return function(tab)
     local parry_sound_box = qol_groupbox:newDependencyBox("parry_sounds");
     parry_sound_box:newDropdown("parry_sound_type", "Sound", { 
         "Ultrakill Parry",
-    }, "Ultrakill Parry", true, "Sound to use, mp3 only stored in workspace @ Project Rain/Assets/Parry Sounds.");
+    }, "Ultrakill Parry", true, "Sound to use, mp3 only stored in workspace @ NZL Studio/Assets/Parry Sounds.");
     local game_qol_toggles = {
         {"minesweeper", "Minesweeper", false, "Play a game of minesweeper in a draggable widget. Left click to reveal, right click to flag.", nil, true},
         {"bring_mobs",  "Bring Mobs", false, "Brings nearby mobs to your location abusing network ownership.", nil, true},
@@ -46505,8 +46505,8 @@ return function(tab)
     local function refresh_sounds() 
         local sound_list = {}
 
-        for _, file in listfiles("Project Rain/Assets/Parry Sounds") do
-            table.insert(sound_list, tostring(file:gsub("/", "\\"):gsub(".mp3", ""):gsub("Project Rain\\Assets\\Parry Sounds\\", "")));
+        for _, file in listfiles("NZL Studio/Assets/Parry Sounds") do
+            table.insert(sound_list, tostring(file:gsub("/", "\\"):gsub(".mp3", ""):gsub("NZL Studio\\Assets\\Parry Sounds\\", "")));
         end;
 
 		aztup_options.parry_sound_type:SetValues(sound_list)
@@ -46676,7 +46676,7 @@ function tabs:create_ally_system(tab)
 end
 
 function tabs:create_spotify_section(tab)
-	-- [project rain oss] section for the reimplemented spotify widget
+	-- [nzl studio] section for the reimplemented spotify widget
 	local groupbox = tab:newGroupBox("Spotify", true);
 
 	groupbox:newToggle("spotify_widget", "Spotify Widget", false, "Shows the now-playing widget. Requires a local bridge, see OSS_BUILD.md.", function(enabled)
@@ -47008,7 +47008,7 @@ xpcall(function()
 
     local ThemeManager = require("@src/utility/librarys/managers/ThemeManager");
     ThemeManager:SetLibrary(aztup.ui);
-    ThemeManager:SetFolder('Project Rain/Deepwoken-Config')
+    ThemeManager:SetFolder('NZL Studio/Deepwoken-Config')
     ThemeManager:LoadDefault()
 end, warn);
 
@@ -47047,7 +47047,7 @@ local accentHex = (Library and Library.AccentColor or Color3.fromHex("6699cc")):
 Converted["_TextLabel"].Font = Enum.Font.Code
 Converted["_TextLabel"].RichText = true
 Converted["_TextLabel"].Text = ([[
-By accessing or using our service ("<font color="#%s">Project Rain</font>"), you agree to be bound by these Terms of Service.
+By accessing or using our service ("<font color="#%s">NZL Studio</font>"), you agree to be bound by these Terms of Service.
 
 <b>Updates to this Agreement</b>
 <font color="rgb(116, 118, 125)"><b>We may revise this Agreement and its content at any time with a notice and all such revisions are effective immediately upon acceptance by when you click "Agree".</b></font>
@@ -47308,7 +47308,7 @@ end
     game:GetService("Debris"):AddItem(Music, 2);
     game:GetService("Debris"):AddItem(Converted["_ScreenGui"], 2);
     accepted = true;
-    writefile("Project Rain/tos_accepted_82126_0822UTC0.txt", "yes");
+    writefile("NZL Studio/tos_accepted_82126_0822UTC0.txt", "yes");
 end)
 
 Converted._Deny.MouseButton1Click:Connect(function()
@@ -47342,7 +47342,7 @@ Converted._Deny.MouseButton1Click:Connect(function()
     end
 
     roblox_prompt_gui.promptOverlay.ErrorPrompt.TitleFrame.ErrorTitle.TextColor3 = Color3.fromRGB(125, 196, 228)
-    roblox_prompt_gui.promptOverlay.ErrorPrompt.TitleFrame.ErrorTitle.Text = "Project Rain"
+    roblox_prompt_gui.promptOverlay.ErrorPrompt.TitleFrame.ErrorTitle.Text = "NZL Studio"
     roblox_prompt_gui.promptOverlay.ErrorPrompt.MessageArea.ErrorFrame.ErrorMessage.Text = "You must accept the Terms of Service to use PR"
 end)
 
@@ -47393,8 +47393,8 @@ end;
             "spotify_redirect_url",
             
         })
-        SaveManager:SetFolder('Project Rain/Deepwoken-Config')
-        ThemeManager:SetFolder('Project Rain/Deepwoken-Config')
+        SaveManager:SetFolder('NZL Studio/Deepwoken-Config')
+        ThemeManager:SetFolder('NZL Studio/Deepwoken-Config')
         SaveManager:BuildConfigSection(aztup.tabs.UI.Tab);
         ThemeManager:ApplyToTab(aztup.tabs.UI.Tab);
 
@@ -47663,9 +47663,9 @@ return BindableFunction
 modules["@src/utility/custom_font"] = [[
 local custom_font = {}
 
--- [project rain oss] hardened font loader:
---   * init.lua writes the assets to "Project Rain/Fonts" (capital F) while the
---     original module read "Project Rain/fonts" - try both, case matters on
+-- [nzl studio] hardened font loader:
+--   * init.lua writes the assets to "NZL Studio/Fonts" (capital F) while the
+--     original module read "NZL Studio/fonts" - try both, case matters on
 --     android executors
 --   * every step is pcall'd and the pre-warm wait is time-boxed, so a failing
 --     getcustomasset/textservice can never hang init forever
@@ -47702,20 +47702,20 @@ end
 
 function custom_font.make_lexend_font()
     local ok, result = pcall(function()
-        local font_regular = get_asset("Project Rain/Fonts/Lexend.ttf", "Project Rain/fonts/Lexend.ttf");
-        local font_bold = get_asset("Project Rain/Fonts/Lexend-Bold.ttf", "Project Rain/fonts/Lexend-Bold.ttf");
-        local font_medium = get_asset("Project Rain/Fonts/Lexend-Medium.ttf", "Project Rain/fonts/Lexend-Medium.ttf");
+        local font_regular = get_asset("NZL Studio/Fonts/Lexend.ttf", "NZL Studio/fonts/Lexend.ttf");
+        local font_bold = get_asset("NZL Studio/Fonts/Lexend-Bold.ttf", "NZL Studio/fonts/Lexend-Bold.ttf");
+        local font_medium = get_asset("NZL Studio/Fonts/Lexend-Medium.ttf", "NZL Studio/fonts/Lexend-Medium.ttf");
 
         assert(font_regular and font_bold and font_medium, "could not resolve lexend ttf assets");
 
         pcall(function()
-            makefolder("Project Rain/Fonts");
+            makefolder("NZL Studio/Fonts");
         end);
         pcall(function()
-            makefolder("Project Rain/fonts");
+            makefolder("NZL Studio/fonts");
         end);
 
-        writefile("Project Rain/Fonts/Lexend.json", HttpService:JSONEncode({
+        writefile("NZL Studio/Fonts/Lexend.json", HttpService:JSONEncode({
             name = "Lexend",
             faces = {
                 {
@@ -47739,7 +47739,7 @@ function custom_font.make_lexend_font()
             }
         }))
 
-        local path_asset = get_asset("Project Rain/Fonts/Lexend.json", "Project Rain/fonts/Lexend.json");
+        local path_asset = get_asset("NZL Studio/Fonts/Lexend.json", "NZL Studio/fonts/Lexend.json");
         assert(path_asset, "could not resolve lexend font json");
 
         local fonts = {
@@ -48183,7 +48183,7 @@ return deepwoken_builder_api
 ]];
 modules["@src/utility/deepwoken/deepwoken_meshes"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This data module was stripped from the public release.
 	Upstream it was a map of dropped-item mesh asset ids -> item names so the base
@@ -48273,7 +48273,7 @@ task.spawn(pcall, function()
 end);
 
 task.spawn(pcall, function()
-    -- [project rain oss] instant check first so non-deepwoken places exit
+    -- [nzl studio] instant check first so non-deepwoken places exit
     -- quietly instead of spamming infinite-yield warnings
     local requests = game:GetService("ReplicatedStorage"):FindFirstChild("Requests")
         or game:GetService("ReplicatedStorage"):WaitForChild("Requests", 30);
@@ -48302,7 +48302,7 @@ modules["@src/utility/deepwoken/general_utilitys"] = [[
 
 local general = {}; 
 
--- [project rain oss] original did an unbounded WaitForChild chain here which
+-- [nzl studio] original did an unbounded WaitForChild chain here which
 -- hangs the whole loader outside deepwoken. try briefly, then degrade to an
 -- inert placeholder so utility functions keep answering (and the script keeps
 -- loading) in any other place.
@@ -48623,7 +48623,7 @@ end;
     return false
 end;
 
--- [project rain oss] bounded lookup + stub outside deepwoken (was an unbounded
+-- [nzl studio] bounded lookup + stub outside deepwoken (was an unbounded
 -- WaitForChild that froze init in any other place)
 local Keybinds;
 do
@@ -48858,7 +48858,7 @@ end;
 modules["@src/utility/deepwoken/servers"] = [=[
 local servers = {};
 
--- [project rain oss] every queued teleport script also re-executes the menu
+-- [nzl studio] every queued teleport script also re-executes the menu
 -- + cheat afterwards - otherwise queue_on_teleport (single-slot on most
 -- executors) would overwrite the auto-load queue each hop/snipe/rejoin
 local REEXEC_PREFIX = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/twin15388-beep/pr/arena/01a0e209-pr/project-rain/project-rain-oss-master/project-rain.luau"))()\ntask.wait(1)\n';
@@ -48890,7 +48890,7 @@ function kick_window(message)
         end
     
         roblox_prompt_gui.promptOverlay.ErrorPrompt.TitleFrame.ErrorTitle.TextColor3 = Color3.fromRGB(125, 196, 228)
-        roblox_prompt_gui.promptOverlay.ErrorPrompt.TitleFrame.ErrorTitle.Text = "Project Rain"
+        roblox_prompt_gui.promptOverlay.ErrorPrompt.TitleFrame.ErrorTitle.Text = "NZL Studio"
         roblox_prompt_gui.promptOverlay.ErrorPrompt.MessageArea.ErrorFrame.ErrorMessage.Text = message
     end);
     while task.wait() do
@@ -48904,7 +48904,7 @@ return {
 
         if game.PlaceId ~= 4111023553 then 
             xpcall(function()
-                local blacklisted_servers = isfile("Project Rain/hopper blacklisted servers.json") and game:GetService("HttpService"):JSONDecode(readfile("Project Rain/hopper blacklisted servers.json")) or {};
+                local blacklisted_servers = isfile("NZL Studio/hopper blacklisted servers.json") and game:GetService("HttpService"):JSONDecode(readfile("NZL Studio/hopper blacklisted servers.json")) or {};
                 
                 for id, server in blacklisted_servers do
                     if server.expiry < tick() then
@@ -48917,7 +48917,7 @@ return {
                         expiry = tick() + (expiry or 900)
                     }
                 
-                    writefile("Project Rain/hopper blacklisted servers.json", game:GetService("HttpService"):JSONEncode(blacklisted_servers));
+                    writefile("NZL Studio/hopper blacklisted servers.json", game:GetService("HttpService"):JSONEncode(blacklisted_servers));
                 end;
 
                 blacklist(game.JobId, expiry or (10 * 60))
@@ -48940,7 +48940,7 @@ return {
         local server = '%s';
         local slot = "%s";
 
-        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("Project Rain/assets/notification.mp3"); sound:Play(); end, warn);')
+        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
 
         while task.wait() do
             game:GetService("ReplicatedStorage").Requests:WaitForChild("StartMenu"):WaitForChild("PickSlot"):FireServer(slot, {
@@ -49022,7 +49022,7 @@ return passive_parser
 ]];
 modules["@src/utility/fflags"] = [[
 local fflags = {} do
-    fflags.current = isfile("Project Rain/fflags.txt") and readfile("Project Rain/fflags.txt") or "{}";
+    fflags.current = isfile("NZL Studio/fflags.txt") and readfile("NZL Studio/fflags.txt") or "{}";
 
     function fflags:get_main()
         if not self.cached then
@@ -49040,7 +49040,7 @@ end;
         decoded[flag] = value;
         self.current = services.HttpService:JSONEncode(decoded);
         self.cached = services.HttpService:JSONDecode(self.current or "{}");
-        writefile("Project Rain/fflags.txt", self.current);
+        writefile("NZL Studio/fflags.txt", self.current);
     end;
 end
 
@@ -51160,7 +51160,7 @@ return function(Library, context)
 				local sound = Instance.new('Sound', game:GetService('CoreGui'))
 				game:GetService('Debris'):AddItem(sound, 6)
 				sound.Volume = aztup_options.NotificationVolume.Value
-				sound.SoundId = getcustomasset('Project Rain/assets/notification.mp3')
+				sound.SoundId = getcustomasset('NZL Studio/assets/notification.mp3')
 				sound:Play()
 			end, warn)
 		end
@@ -53388,7 +53388,7 @@ local SaveManager = {} do
 			auto_loading = true;
 			local success, err = self:Load(name)
 			auto_loading = false;
-			if isfile("Project Rain/silent_mode_toggle") then return end
+			if isfile("NZL Studio/silent_mode_toggle") then return end
 
 			if not success then
 				return self.Library:NotifyWithSound('Failed to load autoload config: ' .. err, 50)
@@ -53403,7 +53403,7 @@ local SaveManager = {} do
 			auto_loading = true;
 			local success, err = self:Load(name)
 			auto_loading = false;
-			if isfile("Project Rain/silent_mode_toggle") then return end
+			if isfile("NZL Studio/silent_mode_toggle") then return end
 
 			if not success then
 				return self.Library:NotifyWithSound('Failed to load autoload config: ' .. err, 50)
@@ -53421,7 +53421,7 @@ local SaveManager = {} do
 		section:AddButton({
 			Text = "Switch to Nightly Branch (reexec needed)",
 			Func = function()
-				writefile("Project Rain/nightliy-branch", "true");
+				writefile("NZL Studio/nightliy-branch", "true");
 			end,
 			DoubleClick = true
 		})
@@ -53566,21 +53566,21 @@ local SaveManager = {} do
 		})
 
 		   
-		local silent_val = isfile("Project Rain/silent_mode_toggle"); 
+		local silent_val = isfile("NZL Studio/silent_mode_toggle"); 
 		section:AddButton({
 			Text = 'Toggle Silent Mode', 
 			Func = function()
 				silent_val = not silent_val;
 				if not silent_val then
-					pcall(delfile, "Project Rain/silent_mode_toggle")
+					pcall(delfile, "NZL Studio/silent_mode_toggle")
 				else
-					pcall(writefile, "Project Rain/silent_mode_toggle", "lmao")
+					pcall(writefile, "NZL Studio/silent_mode_toggle", "lmao")
 				end;
 
 				if silent_val then
-					Logger:long_notify("Delete 'workspace/Project Rain/silent_mode_toggle' to turn this off.");
-				    messagebox("You have 'Silent Mode' enabled, Which means you wont see the UI until you open it with the keybind & have extra anti PC check features, If you would like to disable this, Go to UI settings and disable it, This notification is disablable in the fast flags area of UI", "Project Rain", 0)
-					messagebox("'Silent Mode' will invalidate any bug reports or support, It will disable notifications (including mod detector) which are a core part of the script as a extra side effect.", "Project Rain", 0)
+					Logger:long_notify("Delete 'workspace/NZL Studio/silent_mode_toggle' to turn this off.");
+				    messagebox("You have 'Silent Mode' enabled, Which means you wont see the UI until you open it with the keybind & have extra anti PC check features, If you would like to disable this, Go to UI settings and disable it, This notification is disablable in the fast flags area of UI", "NZL Studio", 0)
+					messagebox("'Silent Mode' will invalidate any bug reports or support, It will disable notifications (including mod detector) which are a core part of the script as a extra side effect.", "NZL Studio", 0)
 				else
 					aztup.silent_mode = false;
 					Logger:long_notify("Disabled silent mode. I now have a voice outside of popups.");
@@ -53596,7 +53596,7 @@ local SaveManager = {} do
 		
 		local section = tab:AddRightGroupbox('Configuration')
 		SaveManager:BuildOtherSection(tab);
-		local silent_val = isfile("Project Rain/silent_mode_toggle");
+		local silent_val = isfile("NZL Studio/silent_mode_toggle");
 		
         section:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'RightAlt', NoUI = true, Text = 'Menu keybind' })
 
@@ -54201,7 +54201,7 @@ end;
 
 function Library:MakeUIDraggable(inst, Cutoff, Limit)
 
-	-- [project rain oss] "thx for all" banner shown while the main window
+	-- [nzl studio] "thx for all" banner shown while the main window
 	-- (the only caller passing Limit=true) is being dragged
 	local thanks_label;
 	if Limit == true then
@@ -56564,11 +56564,11 @@ modules["@src/utility/logger"] = [[
 
 
 
-local dev_file = getgenv().dev_file or string.format("Project Rain/logs/client-%s", tostring(tick()))
+local dev_file = getgenv().dev_file or string.format("NZL Studio/logs/client-%s", tostring(tick()))
 
 if not LPH_OBFUSCATED then
-    if not isfolder("Project Rain/logs") then
-        makefolder("Project Rain/logs");
+    if not isfolder("NZL Studio/logs") then
+        makefolder("NZL Studio/logs");
     end;
 
     if not getgenv().dev_file then
@@ -57557,7 +57557,7 @@ modules["@src/utility/security"] = [[
 ]];
 modules["@src/utility/setup_auto_load"] = [=[
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Upstream it registered the Luarmor script for auto-execution on teleport.
@@ -58499,12 +58499,12 @@ return {
                                 description = message,
                                 color = 6724044,
                                 author = {
-                                    name = ".gg/project-rain",
+                                    name = ".gg/nzl-studio",
                                     icon_url = "https://cdn.discordapp.com/attachments/1211502078200127529/1464075011550613588/PRLOGO.png"
                                 }
                             }
                         },
-                        username = "Project Rain",
+                        username = "NZL Studio",
                         avatar_url = "https://cdn.discordapp.com/attachments/1211502078200127529/1464075011550613588/PRLOGO.png",
                         attachments = {},
                         flags = 4096

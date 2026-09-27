@@ -813,7 +813,7 @@ end;
     
 
     
-    -- [project rain oss] bounded lookup; "Live" only exists in deepwoken
+    -- [nzl studio] bounded lookup; "Live" only exists in deepwoken
     local live_folder = workspace:WaitForChild("Live", 15);
     if live_folder then
         InstanceWatcher.new(live_folder, function(entity)

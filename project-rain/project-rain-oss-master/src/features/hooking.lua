@@ -188,7 +188,7 @@ end or hookmetamethod;
 
 getgenv().KeyHandler = KeyHandlerClass.new();
 
--- [project rain oss] everything below binds to deepwoken-specific remotes and
+-- [nzl studio] everything below binds to deepwoken-specific remotes and
 -- kicks when they are missing (anti-ban). outside deepwoken those objects do
 -- not exist at all, so bail out gracefully here instead of hanging/kicking and
 -- let the rest of the script (UI and all) keep loading.

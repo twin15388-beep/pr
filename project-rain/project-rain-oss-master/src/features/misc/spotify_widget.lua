@@ -1,9 +1,9 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Upstream it was the draggable Spotify "now playing" widget; it talked to a
-	Project Rain desktop helper over localhost and exposed playback controls.
+	NZL Studio desktop helper over localhost and exposed playback controls.
 
 	This is a community reimplementation:
 	  * real draggable widget frame; `aztup.spotify_widget` points at it so

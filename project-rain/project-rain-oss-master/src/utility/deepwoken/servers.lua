@@ -1,6 +1,6 @@
 local servers = {};
 
--- [project rain oss] every queued teleport script also re-executes the menu
+-- [nzl studio] every queued teleport script also re-executes the menu
 -- + cheat afterwards - otherwise queue_on_teleport (single-slot on most
 -- executors) would overwrite the auto-load queue each hop/snipe/rejoin
 local REEXEC_PREFIX = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/twin15388-beep/pr/arena/01a0e209-pr/project-rain/project-rain-oss-master/project-rain.luau"))()\ntask.wait(1)\n';
@@ -32,7 +32,7 @@ function kick_window(message)
         end
     
         roblox_prompt_gui.promptOverlay.ErrorPrompt.TitleFrame.ErrorTitle.TextColor3 = Color3.fromRGB(125, 196, 228)
-        roblox_prompt_gui.promptOverlay.ErrorPrompt.TitleFrame.ErrorTitle.Text = "Project Rain"
+        roblox_prompt_gui.promptOverlay.ErrorPrompt.TitleFrame.ErrorTitle.Text = "NZL Studio"
         roblox_prompt_gui.promptOverlay.ErrorPrompt.MessageArea.ErrorFrame.ErrorMessage.Text = message
     end);
     while task.wait() do
@@ -46,7 +46,7 @@ return {
 
         if game.PlaceId ~= 4111023553 then 
             xpcall(function()
-                local blacklisted_servers = isfile("Project Rain/hopper blacklisted servers.json") and game:GetService("HttpService"):JSONDecode(readfile("Project Rain/hopper blacklisted servers.json")) or {};
+                local blacklisted_servers = isfile("NZL Studio/hopper blacklisted servers.json") and game:GetService("HttpService"):JSONDecode(readfile("NZL Studio/hopper blacklisted servers.json")) or {};
                 
                 for id, server in blacklisted_servers do
                     if server.expiry < tick() then
@@ -59,7 +59,7 @@ return {
                         expiry = tick() + (expiry or 900)
                     }
                 
-                    writefile("Project Rain/hopper blacklisted servers.json", game:GetService("HttpService"):JSONEncode(blacklisted_servers));
+                    writefile("NZL Studio/hopper blacklisted servers.json", game:GetService("HttpService"):JSONEncode(blacklisted_servers));
                 end;
 
                 blacklist(game.JobId, expiry or (10 * 60))
@@ -82,7 +82,7 @@ return {
         local server = '%s';
         local slot = "%s";
 
-        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("Project Rain/assets/notification.mp3"); sound:Play(); end, warn);')
+        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
 
         while task.wait() do
             game:GetService("ReplicatedStorage").Requests:WaitForChild("StartMenu"):WaitForChild("PickSlot"):FireServer(slot, {

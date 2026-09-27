@@ -69,7 +69,7 @@ task.spawn(pcall, function()
 end);
 
 task.spawn(pcall, function()
-    -- [project rain oss] instant check first so non-deepwoken places exit
+    -- [nzl studio] instant check first so non-deepwoken places exit
     -- quietly instead of spamming infinite-yield warnings
     local requests = game:GetService("ReplicatedStorage"):FindFirstChild("Requests")
         or game:GetService("ReplicatedStorage"):WaitForChild("Requests", 30);

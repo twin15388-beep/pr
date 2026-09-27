@@ -1,7 +1,7 @@
 
 local feature = Feature:new("mantra_slidecasting");
 
--- [project rain oss] deepwoken's KeyBinds only - instant outside via is_deepwoken
+-- [nzl studio] deepwoken's KeyBinds only - instant outside via is_deepwoken
 local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds");
 if not keybinds_instance and aztup and aztup.is_deepwoken then
     keybinds_instance = game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);

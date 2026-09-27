@@ -1,5 +1,5 @@
 
--- [project rain oss] ReplicatedStorage.Info only exists in deepwoken and the
+-- [nzl studio] ReplicatedStorage.Info only exists in deepwoken and the
 -- original line hard-errored at require time, killing init at init:298 before
 -- the UI could load. expose an inert builder instead so startup continues;
 -- every method call answers with a notice and `false`.

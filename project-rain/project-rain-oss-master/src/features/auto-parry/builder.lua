@@ -1,5 +1,5 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This module was stripped from the public release.
 	Upstream it was the visual timing-builder GUI used by the auto-parry

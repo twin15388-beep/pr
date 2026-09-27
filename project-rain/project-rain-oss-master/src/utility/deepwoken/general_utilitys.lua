@@ -2,7 +2,7 @@
 
 local general = {}; 
 
--- [project rain oss] original did an unbounded WaitForChild chain here which
+-- [nzl studio] original did an unbounded WaitForChild chain here which
 -- hangs the whole loader outside deepwoken. try briefly, then degrade to an
 -- inert placeholder so utility functions keep answering (and the script keeps
 -- loading) in any other place.
@@ -323,7 +323,7 @@ end;
     return false
 end;
 
--- [project rain oss] bounded lookup + stub outside deepwoken (was an unbounded
+-- [nzl studio] bounded lookup + stub outside deepwoken (was an unbounded
 -- WaitForChild that froze init in any other place)
 local Keybinds;
 do

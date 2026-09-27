@@ -1531,7 +1531,7 @@ end);
         return nil    
 end);
 
-    -- [project rain oss] workspace.Live is deepwoken-only; bounded lookup
+    -- [nzl studio] workspace.Live is deepwoken-only; bounded lookup
     local live = workspace:FindFirstChild("Live") or workspace:WaitForChild("Live", 30);
     if live then
 		InstanceWatcher.new(live, function(entity)

@@ -1,4 +1,4 @@
--- [project rain oss] Requests/GetScore is deepwoken-only; bounded lookups so
+-- [nzl studio] Requests/GetScore is deepwoken-only; bounded lookups so
 -- require time never blocks outside the game
 local requests = services.ReplicatedStorage:FindFirstChild("Requests");
 if not requests and aztup and aztup.is_deepwoken then

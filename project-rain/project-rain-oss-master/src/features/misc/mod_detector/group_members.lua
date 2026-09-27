@@ -1,5 +1,5 @@
 --[[
-	[project rain oss]
+	[nzl studio]
 
 	This data module was stripped from the public release.
 	Upstream it was a map of Deepwoken staff member userIds -> staff role, e.g.:
