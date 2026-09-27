@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 17:15:04 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 17:49:12 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 17:15:04 UTC";
+BUILD.id = "2026-09-27 17:49:12 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -43826,13 +43826,20 @@ end;
 
 --#region linoria-styled snipe box above "Characters" ------------------------------------
 
-do
+-- the game's own menu builds asynchronously; retry until the anchor exists
+task.spawn(function()
 	local characters_label;
-	for _, descendant in ipairs(player_gui:GetDescendants()) do
-		if (descendant:IsA("TextLabel") or descendant:IsA("TextButton"))
-			and string.match(descendant.Text or "", "^%s*(.-)%s*$") == "Characters" then
-			characters_label = descendant;
-			break;
+	while not characters_label do
+		for _, descendant in ipairs(player_gui:GetDescendants()) do
+			if (descendant:IsA("TextLabel") or descendant:IsA("TextButton"))
+				and string.match(descendant.Text or "", "^%s*(.-)%s*$") == "Characters" then
+				characters_label = descendant;
+				break;
+			end;
+		end;
+
+		if not characters_label then
+			task.wait(1);
 		end;
 	end;
 
@@ -43948,7 +43955,7 @@ do
 			end);
 		end);
 	end;
-end;
+end)();
 
 --#endregion
 
@@ -44032,11 +44039,32 @@ task.spawn(function()
 					continue;
 				end;
 
+				-- real character names contain letters (filters "200" etc.)
+				if not string.find(name, "%a") then
+					continue;
+				end;
+
 				diag_candidates += 1;
 
 				local pos = frame.AbsolutePosition;
 
 				if not letter_x or letter_x - pos.X > 60 then
+					continue;
+				end;
+
+				-- reject outer containers that hold whole cards inside;
+				-- only the innermost marked frame is the actual card
+				local holds_other_card = false;
+				for _, other in ipairs(frame:GetDescendants()) do
+					if other:IsA("GuiObject") then
+						local o_letter, o_name = frame_card_data(other);
+						if o_letter and o_name and string.find(o_name, "%a") then
+							holds_other_card = true;
+							break;
+						end;
+					end;
+				end;
+				if holds_other_card then
 					continue;
 				end;
 
@@ -44090,13 +44118,33 @@ task.spawn(function()
 					badge_stroke.Transparency = 0.55;
 					badge_stroke.Thickness = 1;
 
-					local badge_icon = Instance.new("ImageLabel", badge);
-					badge_icon.Size = UDim2.fromOffset(18, 18);
-					badge_icon.Position = UDim2.fromOffset(6, 4);
-					badge_icon.BackgroundTransparency = 1;
-					badge_icon.Image = skull and skull.Image or "";
-					badge_icon.ImageColor3 = PURPLE;
-					badge_icon.ZIndex = badge.ZIndex + 1;
+					local badge_icon;
+					if skull and skull.Image ~= "" then
+						badge_icon = Instance.new("ImageLabel", badge);
+						badge_icon.Size = UDim2.fromOffset(18, 18);
+						badge_icon.Position = UDim2.fromOffset(6, 4);
+						badge_icon.BackgroundTransparency = 1;
+						badge_icon.Image = skull.Image;
+						badge_icon.ZIndex = badge.ZIndex + 1;
+					else
+						-- no template image available: bold purple cross so the
+						-- badge always reads as a wipe button, never an empty box
+						badge_icon = Instance.new("TextLabel", badge);
+						badge_icon.Size = UDim2.new(1, 0, 1, 0);
+						badge_icon.BackgroundTransparency = 1;
+						badge_icon.Text = "\u{2716}";
+						badge_icon.TextSize = 14;
+						badge_icon.Font = Enum.Font.GothamBold;
+						badge_icon.ZIndex = badge.ZIndex + 1;
+					end;
+					local set_icon_color = function(color)
+						if badge_icon:IsA("ImageLabel") then
+							badge_icon.ImageColor3 = color;
+						else
+							badge_icon.TextColor3 = color;
+						end;
+					end;
+					set_icon_color(PURPLE);
 
 					purple = badge;
 
@@ -44107,7 +44155,8 @@ task.spawn(function()
 					badge.MouseButton1Click:Connect(function()
 						if tick() < armed_until then
 							armed_until = 0;
-							badge_icon.ImageColor3 = PURPLE;
+							set_icon_color(PURPLE);
+							badge_stroke.Color = Color3.fromRGB(200, 190, 160);
 							badge_stroke.Transparency = 0.55;
 							status("wiping " .. tostring(card_name) .. " (slot " .. card_letter .. ")...");
 							task.spawn(wipe_slot, card_letter);
@@ -44115,12 +44164,12 @@ task.spawn(function()
 						end;
 
 						armed_until = tick() + 4;
-						badge_icon.ImageColor3 = Color3.fromRGB(255, 120, 255);
+						set_icon_color(Color3.fromRGB(255, 120, 255));
 						badge_stroke.Color = Color3.fromRGB(255, 120, 255);
 						badge_stroke.Transparency = 0.1;
 						task.delay(4.2, function()
 							if tick() >= armed_until then
-								badge_icon.ImageColor3 = PURPLE;
+								set_icon_color(PURPLE);
 								badge_stroke.Color = Color3.fromRGB(200, 190, 160);
 								badge_stroke.Transparency = 0.55;
 							end;
@@ -44128,7 +44177,6 @@ task.spawn(function()
 					end);
 
 					purples[frame] = badge;
-					status("purple skull attached: " .. tostring(name) .. " (slot " .. letter .. ")" .. (skull and "" or " [letter fallback]"));
 				else
 					purple.Position = UDim2.fromOffset(rel_x, rel_y);
 					purple.Visible = frame.Visible;
@@ -44147,12 +44195,11 @@ task.spawn(function()
 
 			if tick() - last_debug > 5 then
 				last_debug = tick();
-				local debug_line = string.format(
+				-- silent diagnostics: file only, no console spam
+				pcall(writefile, "Project Rain/menu_debug.txt", string.format(
 					"[pr menu] scan: frames=%d candidates=%d icons=%d badges=%d",
 					diag_frames, diag_candidates, diag_icons, badge_count
-				);
-				status("scan: frames=" .. diag_frames .. " candidates=" .. diag_candidates .. " icons=" .. diag_icons .. " badges=" .. badge_count);
-				pcall(writefile, "Project Rain/menu_debug.txt", debug_line);
+				));
 			end;
 		end);
 
@@ -53991,11 +54038,12 @@ local Library = {
 
 	HudRegistry = {};
 
-	FontColor = Color3.fromHex("d8dee9");
-	MainColor = Color3.fromHex("1b2b34");
-	BackgroundColor = Color3.fromHex("16232a");
-	AccentColor = Color3.fromHex("6699cc");
-	OutlineColor = Color3.fromHex("343d46");
+	-- [nzl studio] default theme tinted to deepwoken's ui (dark olive, beige)
+	FontColor = Color3.fromHex("e8e0cc");
+	MainColor = Color3.fromHex("202316");
+	BackgroundColor = Color3.fromHex("181b12");
+	AccentColor = Color3.fromHex("c8bea0");
+	OutlineColor = Color3.fromHex("474a3a");
 	RiskColor = Color3.fromRGB(255, 50, 50),
 
 	Black = Color3.new(0, 0, 0);
