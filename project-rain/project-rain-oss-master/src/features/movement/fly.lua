@@ -3,7 +3,35 @@ local bv = Instance.new("BodyVelocity");
 bv.Name = "SlideVel";
 bv.MaxForce = Vector3.new(1000000, 1000000, 1000000);
 bv:AddTag("AllowedBM");
-local collision_utils = base_require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("CollisionUtils"));
+-- [project rain oss] deepwoken's Modules.CollisionUtils only - bounded lookup
+-- + inert metatable stub so fly works (without collision spoofing) elsewhere
+local modules_folder = game:GetService("ReplicatedStorage"):FindFirstChild("Modules");
+local collision_utils;
+if modules_folder then
+    local ok_mod, utils_instance = pcall(function()
+        return modules_folder:FindFirstChild("CollisionUtils")
+            or modules_folder:WaitForChild("CollisionUtils", 20)
+            or modules_folder:WaitForChild("collision_utils", 20);
+    end);
+    local ok_req, utils = pcall(function()
+        return ok_mod and utils_instance and base_require(utils_instance);
+    end);
+    if ok_req and utils then
+        collision_utils = utils;
+    end;
+end;
+if not collision_utils then
+    xpcall(function()
+        Logger.log_for_devs("[fly] collision utils unavailable - physics passthrough active");
+    end, warn);
+    collision_utils = setmetatable({}, {
+        __index = function()
+            return function()
+                return nil;
+            end;
+        end,
+    });
+end;
     local spoofing = false;
     local old_y;
 

@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 14:03:28 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 14:18:56 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 14:03:28 UTC";
+BUILD.id = "2026-09-27 14:18:56 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -20872,7 +20872,21 @@ return Weapon
 ]];
 modules["@src/features/auto-parry/defend-action-manager"] = [[
 local Signal = require("@src/utility/signal");
-local Keybinds = base_require(game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds"));
+
+-- [project rain oss] deepwoken's KeyBinds module; bounded + inert stub outside
+-- so require time never blocks/auto-parry just disengages
+local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds")
+    or game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+local ok_keybinds, Keybinds = pcall(function()
+    return keybinds_instance and base_require(keybinds_instance);
+end);
+if not ok_keybinds or not Keybinds then
+    Keybinds = {
+        IsActionHeld = function() return false; end,
+        ForceActionDown = function() end,
+        ForceActionUp = function() end,
+    };
+end;
 
 local DefendActionManager = {} do
     DefendActionManager.actions_to_play_through = {};
@@ -23129,15 +23143,19 @@ end);
         return nil    
 end);
 
-    InstanceWatcher.new(workspace:WaitForChild("Live"), function(entity)
-        local start = tick();
-    
-        repeat task.wait() until entity:FindFirstChild("Animator", true) or tick() - start > 5;
-        return entity:FindFirstChild("Animator", true)    
-end, function(entity)   
-        if not entity:IsA("Model") then return end
-        AnimatorHandler.new(entity);
-    end);
+    -- [project rain oss] workspace.Live is deepwoken-only; bounded lookup
+    local live = workspace:FindFirstChild("Live") or workspace:WaitForChild("Live", 30);
+    if live then
+		InstanceWatcher.new(live, function(entity)
+			local start = tick();
+
+			repeat task.wait() until entity:FindFirstChild("Animator", true) or tick() - start > 5;
+			return entity:FindFirstChild("Animator", true)
+		end, function(entity)
+			if not entity:IsA("Model") then return end
+			AnimatorHandler.new(entity);
+		end);
+	end;
 end)()
 ]];
 modules["@src/features/auto-parry/handlers/anti-ap-breaker"] = [[
@@ -23294,8 +23312,15 @@ return anti_ap_breaker
 modules["@src/features/auto-parry/handlers/effect-handler"] = [[
 local action_builder = require("@src/features/auto-parry/data/effect-action")
 
-local requests = services.ReplicatedStorage:FindFirstChild("Requests") or services.ReplicatedStorage:WaitForChild("Requests");
-local client_effect = requests:FindFirstChild("ClientEffect") or requests:WaitForChild("ClientEffect")
+-- [project rain oss] Requests/ClientEffect are deepwoken-only; bail out with
+-- an inert handler outside instead of unbounded waits at require time
+local requests = services.ReplicatedStorage:FindFirstChild("Requests")
+    or services.ReplicatedStorage:WaitForChild("Requests", 15);
+local client_effect = requests and (requests:FindFirstChild("ClientEffect") or requests:WaitForChild("ClientEffect", 15));
+
+if not client_effect then
+    return {};
+end;
 
 local effect_names = {}
 local effect_data_map = {}
@@ -25432,8 +25457,11 @@ local ingredients = workspace:FindFirstChild("Ingredients");
 local npcs = workspace:FindFirstChild("NPCs");
 local live = workspace:FindFirstChild("Live");
 
-local requests = services.ReplicatedStorage:WaitForChild("Requests");
-local send_dialogue = requests and requests:WaitForChild("SendDialogue");
+-- [project rain oss] deepwoken-only remotes; bounded lookups so require time
+-- never blocks outside the game
+local requests = services.ReplicatedStorage:FindFirstChild("Requests")
+    or services.ReplicatedStorage:WaitForChild("Requests", 15);
+local send_dialogue = requests and (requests:FindFirstChild("SendDialogue") or requests:WaitForChild("SendDialogue", 15));
 
 function safe_tween(tween)
     if aztup.maid.objective_tween then aztup.maid.objective_tween.stop() end
@@ -25444,7 +25472,7 @@ end
 function close_prompt()
     local start = tick();
 
-    while tick() - start < 2 do
+    while tick() - start < 2 and send_dialogue do
         send_dialogue:FireServer({exit=true});
         task.wait();
     end
@@ -26488,7 +26516,20 @@ return self
 modules["@src/features/combat/mantra_rolling"] = [[
 
 local feature = Feature:new("action_rolling");
-local Keybinds = base_require(game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds"));
+
+-- [project rain oss] deepwoken's KeyBinds only - bounded + inert stub outside
+local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds")
+    or game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+local ok_keybinds, Keybinds = pcall(function()
+    return keybinds_instance and base_require(keybinds_instance);
+end);
+if not ok_keybinds or not Keybinds then
+    Keybinds = {
+        IsActionHeld = function() return false; end,
+        ForceActionDown = function() end,
+        ForceActionUp = function() end,
+    };
+end;
 
 function feature:enable()
 	self.on_mantra_req = local_player.tracker.on_mantra_request.Event:Connect(function(mantra)
@@ -26532,7 +26573,20 @@ return feature
 modules["@src/features/combat/mantra_slidecasting"] = [[
 
 local feature = Feature:new("mantra_slidecasting");
-local Keybinds = base_require(game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds"));
+
+-- [project rain oss] deepwoken's KeyBinds only - bounded + inert stub outside
+local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds")
+    or game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+local ok_keybinds, Keybinds = pcall(function()
+    return keybinds_instance and base_require(keybinds_instance);
+end);
+if not ok_keybinds or not Keybinds then
+    Keybinds = {
+        IsActionHeld = function() return false; end,
+        ForceActionDown = function() end,
+        ForceActionUp = function() end,
+    };
+end;
 
 function feature:enable()
 	self.on_mantra_req = local_player.tracker.on_mantra_request.Event:Connect(function(mantra)
@@ -30650,7 +30704,35 @@ local bv = Instance.new("BodyVelocity");
 bv.Name = "SlideVel";
 bv.MaxForce = Vector3.new(1000000, 1000000, 1000000);
 bv:AddTag("AllowedBM");
-local collision_utils = base_require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("CollisionUtils"));
+-- [project rain oss] deepwoken's Modules.CollisionUtils only - bounded lookup
+-- + inert metatable stub so fly works (without collision spoofing) elsewhere
+local modules_folder = game:GetService("ReplicatedStorage"):FindFirstChild("Modules");
+local collision_utils;
+if modules_folder then
+    local ok_mod, utils_instance = pcall(function()
+        return modules_folder:FindFirstChild("CollisionUtils")
+            or modules_folder:WaitForChild("CollisionUtils", 20)
+            or modules_folder:WaitForChild("collision_utils", 20);
+    end);
+    local ok_req, utils = pcall(function()
+        return ok_mod and utils_instance and base_require(utils_instance);
+    end);
+    if ok_req and utils then
+        collision_utils = utils;
+    end;
+end;
+if not collision_utils then
+    xpcall(function()
+        Logger.log_for_devs("[fly] collision utils unavailable - physics passthrough active");
+    end, warn);
+    collision_utils = setmetatable({}, {
+        __index = function()
+            return function()
+                return nil;
+            end;
+        end,
+    });
+end;
     local spoofing = false;
     local old_y;
 
@@ -34764,8 +34846,14 @@ end;
 return feature  
 ]];
 modules["@src/features/removals/no_echo_screen"] = [[
-local get_score = services.ReplicatedStorage:WaitForChild("Requests"):WaitForChild("GetScore");
-local feature = Feature:new("no_echo_screen", is_depths and get_score.OnClientEvent or nil, function() 
+-- [project rain oss] Requests/GetScore is deepwoken-only; bounded lookups so
+-- require time never blocks outside the game
+local requests = services.ReplicatedStorage:FindFirstChild("Requests")
+    or services.ReplicatedStorage:WaitForChild("Requests", 15);
+local get_score = requests and (requests:FindFirstChild("GetScore") or requests:WaitForChild("GetScore", 15));
+
+local feature = Feature:new("no_echo_screen", is_depths and get_score and get_score.OnClientEvent or nil, function()
+	if not get_score then return end;
 	get_score:FireServer();
 
 	local echo_score_screen = local_player.instance:FindFirstChild("EchoScoreScreen", true);
@@ -42951,8 +43039,11 @@ self.font = DrawFont.Register(readfile("Project Rain/fonts/lexend.ttf"), {
     PixelSize = 16
 });
 
-local live: Folder = workspace:WaitForChild("Live");
+-- [project rain oss] workspace.Live is deepwoken-only; bounded lookup, draw
+-- simply skips when absent
+local live: Folder = workspace:FindFirstChild("Live") or workspace:WaitForChild("Live", 15);
 self.draw = LPH_NO_VIRTUALIZE(function()
+	if not live then return end;
     local camera_cframe = workspace.CurrentCamera and workspace.CurrentCamera.CFrame or CFrame.new();
     local left_healthbar = camera_cframe:VectorToWorldSpace(Vector3.new(-4, 3, 0)) 
     local right_healthbar = camera_cframe:VectorToWorldSpace(Vector3.new(-3.5, -3, 0));

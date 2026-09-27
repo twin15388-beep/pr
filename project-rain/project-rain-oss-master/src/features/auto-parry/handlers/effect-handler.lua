@@ -1,7 +1,14 @@
 local action_builder = require("@src/features/auto-parry/data/effect-action")
 
-local requests = services.ReplicatedStorage:FindFirstChild("Requests") or services.ReplicatedStorage:WaitForChild("Requests");
-local client_effect = requests:FindFirstChild("ClientEffect") or requests:WaitForChild("ClientEffect")
+-- [project rain oss] Requests/ClientEffect are deepwoken-only; bail out with
+-- an inert handler outside instead of unbounded waits at require time
+local requests = services.ReplicatedStorage:FindFirstChild("Requests")
+    or services.ReplicatedStorage:WaitForChild("Requests", 15);
+local client_effect = requests and (requests:FindFirstChild("ClientEffect") or requests:WaitForChild("ClientEffect", 15));
+
+if not client_effect then
+    return {};
+end;
 
 local effect_names = {}
 local effect_data_map = {}

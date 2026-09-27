@@ -1531,13 +1531,17 @@ end);
         return nil    
 end);
 
-    InstanceWatcher.new(workspace:WaitForChild("Live"), function(entity)
-        local start = tick();
-    
-        repeat task.wait() until entity:FindFirstChild("Animator", true) or tick() - start > 5;
-        return entity:FindFirstChild("Animator", true)    
-end, function(entity)   
-        if not entity:IsA("Model") then return end
-        AnimatorHandler.new(entity);
-    end);
+    -- [project rain oss] workspace.Live is deepwoken-only; bounded lookup
+    local live = workspace:FindFirstChild("Live") or workspace:WaitForChild("Live", 30);
+    if live then
+		InstanceWatcher.new(live, function(entity)
+			local start = tick();
+
+			repeat task.wait() until entity:FindFirstChild("Animator", true) or tick() - start > 5;
+			return entity:FindFirstChild("Animator", true)
+		end, function(entity)
+			if not entity:IsA("Model") then return end
+			AnimatorHandler.new(entity);
+		end);
+	end;
 end)()

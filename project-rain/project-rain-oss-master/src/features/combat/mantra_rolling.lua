@@ -1,6 +1,19 @@
 
 local feature = Feature:new("action_rolling");
-local Keybinds = base_require(game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds"));
+
+-- [project rain oss] deepwoken's KeyBinds only - bounded + inert stub outside
+local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds")
+    or game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+local ok_keybinds, Keybinds = pcall(function()
+    return keybinds_instance and base_require(keybinds_instance);
+end);
+if not ok_keybinds or not Keybinds then
+    Keybinds = {
+        IsActionHeld = function() return false; end,
+        ForceActionDown = function() end,
+        ForceActionUp = function() end,
+    };
+end;
 
 function feature:enable()
 	self.on_mantra_req = local_player.tracker.on_mantra_request.Event:Connect(function(mantra)

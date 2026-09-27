@@ -2,8 +2,11 @@ local ingredients = workspace:FindFirstChild("Ingredients");
 local npcs = workspace:FindFirstChild("NPCs");
 local live = workspace:FindFirstChild("Live");
 
-local requests = services.ReplicatedStorage:WaitForChild("Requests");
-local send_dialogue = requests and requests:WaitForChild("SendDialogue");
+-- [project rain oss] deepwoken-only remotes; bounded lookups so require time
+-- never blocks outside the game
+local requests = services.ReplicatedStorage:FindFirstChild("Requests")
+    or services.ReplicatedStorage:WaitForChild("Requests", 15);
+local send_dialogue = requests and (requests:FindFirstChild("SendDialogue") or requests:WaitForChild("SendDialogue", 15));
 
 function safe_tween(tween)
     if aztup.maid.objective_tween then aztup.maid.objective_tween.stop() end
@@ -14,7 +17,7 @@ end
 function close_prompt()
     local start = tick();
 
-    while tick() - start < 2 do
+    while tick() - start < 2 and send_dialogue do
         send_dialogue:FireServer({exit=true});
         task.wait();
     end

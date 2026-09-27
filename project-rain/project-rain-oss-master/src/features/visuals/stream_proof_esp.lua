@@ -5,8 +5,11 @@ self.font = DrawFont.Register(readfile("Project Rain/fonts/lexend.ttf"), {
     PixelSize = 16
 });
 
-local live: Folder = workspace:WaitForChild("Live");
+-- [project rain oss] workspace.Live is deepwoken-only; bounded lookup, draw
+-- simply skips when absent
+local live: Folder = workspace:FindFirstChild("Live") or workspace:WaitForChild("Live", 15);
 self.draw = LPH_NO_VIRTUALIZE(function()
+	if not live then return end;
     local camera_cframe = workspace.CurrentCamera and workspace.CurrentCamera.CFrame or CFrame.new();
     local left_healthbar = camera_cframe:VectorToWorldSpace(Vector3.new(-4, 3, 0)) 
     local right_healthbar = camera_cframe:VectorToWorldSpace(Vector3.new(-3.5, -3, 0));
