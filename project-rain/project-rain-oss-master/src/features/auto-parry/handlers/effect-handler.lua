@@ -2,9 +2,12 @@ local action_builder = require("@src/features/auto-parry/data/effect-action")
 
 -- [project rain oss] Requests/ClientEffect are deepwoken-only; bail out with
 -- an inert handler outside instead of unbounded waits at require time
-local requests = services.ReplicatedStorage:FindFirstChild("Requests")
-    or services.ReplicatedStorage:WaitForChild("Requests", 15);
-local client_effect = requests and (requests:FindFirstChild("ClientEffect") or requests:WaitForChild("ClientEffect", 15));
+local requests = services.ReplicatedStorage:FindFirstChild("Requests");
+if not requests and aztup and aztup.is_deepwoken then
+    requests = services.ReplicatedStorage:WaitForChild("Requests", 15);
+end;
+local client_effect = requests
+    and (requests:FindFirstChild("ClientEffect") or (aztup and aztup.is_deepwoken and requests:WaitForChild("ClientEffect", 15) or nil));
 
 if not client_effect then
     return {};

@@ -145,6 +145,22 @@ env.aztup = {
     tabs = {},
 };
 
+-- [project rain oss] global deepwoken detector: whitelisted place ids OR the
+-- game's signature folders. modules use it to skip deepwoken-only waits
+-- INSTANTLY outside the game instead of burning their require timeouts.
+aztup.is_deepwoken = (function()
+    local deepwoken_places = {
+        4111023553, 6032399813, 6473861193, 5735553160, 6832944305, 8668476218, 86761619761103,
+    };
+    for _, place_id in ipairs(deepwoken_places) do
+        if game.PlaceId == place_id then
+            return true;
+        end;
+    end;
+    return game:GetService("ReplicatedStorage"):FindFirstChild("Requests") ~= nil
+        or game:GetService("ReplicatedStorage"):FindFirstChild("Modules") ~= nil;
+end)();
+
 local hasnt_accepted_tos = not isfile("Project Rain/tos_accepted_82126_0822UTC0.txt");
 
 env.persistent_data = require("@src/utility/persistent_data");
@@ -156,14 +172,21 @@ if fflags:get("auto_load") and script_key then
     require("@src/utility/setup_auto_load");
 end
 
-if aztup.automation:should_auto_start() then
-    local requests = services.ReplicatedStorage:WaitForChild("Requests");
-    local start = requests:WaitForChild("StartMenu"):WaitForChild("Start")
-    repeat
-        start:FireServer()
-        task.wait(0.5)
-    until game:GetService("Players").LocalPlayer.Character;
-    task.wait(1);
+if aztup.automation:should_auto_start() and aztup.is_deepwoken then
+    -- [project rain oss] deepwoken-only autostart; skip silently elsewhere
+    local requests = services.ReplicatedStorage:FindFirstChild("Requests")
+        or services.ReplicatedStorage:WaitForChild("Requests", 20);
+    if requests then
+        local start = requests:WaitForChild("StartMenu", 15);
+        start = start and start:WaitForChild("Start", 15);
+        if start then
+            repeat
+                start:FireServer()
+                task.wait(0.5)
+            until game:GetService("Players").LocalPlayer.Character;
+            task.wait(1);
+        end;
+    end;
 end;
 
 local success, result = pcall(function()

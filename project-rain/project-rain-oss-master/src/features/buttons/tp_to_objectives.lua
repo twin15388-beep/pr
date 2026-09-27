@@ -4,9 +4,12 @@ local live = workspace:FindFirstChild("Live");
 
 -- [project rain oss] deepwoken-only remotes; bounded lookups so require time
 -- never blocks outside the game
-local requests = services.ReplicatedStorage:FindFirstChild("Requests")
-    or services.ReplicatedStorage:WaitForChild("Requests", 15);
-local send_dialogue = requests and (requests:FindFirstChild("SendDialogue") or requests:WaitForChild("SendDialogue", 15));
+local requests = services.ReplicatedStorage:FindFirstChild("Requests");
+if not requests and aztup and aztup.is_deepwoken then
+    requests = services.ReplicatedStorage:WaitForChild("Requests", 15);
+end;
+local send_dialogue = requests
+    and (requests:FindFirstChild("SendDialogue") or (aztup and aztup.is_deepwoken and requests:WaitForChild("SendDialogue", 15) or nil));
 
 function safe_tween(tween)
     if aztup.maid.objective_tween then aztup.maid.objective_tween.stop() end

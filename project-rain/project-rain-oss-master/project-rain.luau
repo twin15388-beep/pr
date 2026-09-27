@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 14:22:34 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 14:40:28 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 14:22:34 UTC";
+BUILD.id = "2026-09-27 14:40:28 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -20873,10 +20873,12 @@ return Weapon
 modules["@src/features/auto-parry/defend-action-manager"] = [[
 local Signal = require("@src/utility/signal");
 
--- [project rain oss] deepwoken's KeyBinds module; bounded + inert stub outside
--- so require time never blocks/auto-parry just disengages
-local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds")
-    or game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+-- [project rain oss] deepwoken's KeyBinds module; outside the game the lookup
+-- is instant via aztup.is_deepwoken and an inert stub keeps every caller safe
+local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds");
+if not keybinds_instance and aztup and aztup.is_deepwoken then
+    keybinds_instance = game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+end;
 local ok_keybinds, Keybinds = pcall(function()
     return keybinds_instance and base_require(keybinds_instance);
 end);
@@ -21400,6 +21402,8 @@ end;
     end;
 
     local last = tick();
+    -- [project rain oss] only arm the per-frame defend loop in deepwoken
+    if aztup and aztup.is_deepwoken then
     LPH_NO_VIRTUALIZE(function()
         
         
@@ -21422,6 +21426,11 @@ end
             DefendActionManager:update();
         end));
     end)();
+    else
+        -- [project rain oss] auto-parry runtime loop stays offline outside
+        -- deepwoken (EffectReplicator global only exists there); the module
+        -- itself stays loaded and the toggle harmless
+    end;
 end;
 
 return DefendActionManager
@@ -23314,9 +23323,12 @@ local action_builder = require("@src/features/auto-parry/data/effect-action")
 
 -- [project rain oss] Requests/ClientEffect are deepwoken-only; bail out with
 -- an inert handler outside instead of unbounded waits at require time
-local requests = services.ReplicatedStorage:FindFirstChild("Requests")
-    or services.ReplicatedStorage:WaitForChild("Requests", 15);
-local client_effect = requests and (requests:FindFirstChild("ClientEffect") or requests:WaitForChild("ClientEffect", 15));
+local requests = services.ReplicatedStorage:FindFirstChild("Requests");
+if not requests and aztup and aztup.is_deepwoken then
+    requests = services.ReplicatedStorage:WaitForChild("Requests", 15);
+end;
+local client_effect = requests
+    and (requests:FindFirstChild("ClientEffect") or (aztup and aztup.is_deepwoken and requests:WaitForChild("ClientEffect", 15) or nil));
 
 if not client_effect then
     return {};
@@ -25459,9 +25471,12 @@ local live = workspace:FindFirstChild("Live");
 
 -- [project rain oss] deepwoken-only remotes; bounded lookups so require time
 -- never blocks outside the game
-local requests = services.ReplicatedStorage:FindFirstChild("Requests")
-    or services.ReplicatedStorage:WaitForChild("Requests", 15);
-local send_dialogue = requests and (requests:FindFirstChild("SendDialogue") or requests:WaitForChild("SendDialogue", 15));
+local requests = services.ReplicatedStorage:FindFirstChild("Requests");
+if not requests and aztup and aztup.is_deepwoken then
+    requests = services.ReplicatedStorage:WaitForChild("Requests", 15);
+end;
+local send_dialogue = requests
+    and (requests:FindFirstChild("SendDialogue") or (aztup and aztup.is_deepwoken and requests:WaitForChild("SendDialogue", 15) or nil));
 
 function safe_tween(tween)
     if aztup.maid.objective_tween then aztup.maid.objective_tween.stop() end
@@ -26517,9 +26532,11 @@ modules["@src/features/combat/mantra_rolling"] = [[
 
 local feature = Feature:new("action_rolling");
 
--- [project rain oss] deepwoken's KeyBinds only - bounded + inert stub outside
-local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds")
-    or game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+-- [project rain oss] deepwoken's KeyBinds only - instant outside via is_deepwoken
+local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds");
+if not keybinds_instance and aztup and aztup.is_deepwoken then
+    keybinds_instance = game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+end;
 local ok_keybinds, Keybinds = pcall(function()
     return keybinds_instance and base_require(keybinds_instance);
 end);
@@ -26574,9 +26591,11 @@ modules["@src/features/combat/mantra_slidecasting"] = [[
 
 local feature = Feature:new("mantra_slidecasting");
 
--- [project rain oss] deepwoken's KeyBinds only - bounded + inert stub outside
-local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds")
-    or game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+-- [project rain oss] deepwoken's KeyBinds only - instant outside via is_deepwoken
+local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds");
+if not keybinds_instance and aztup and aztup.is_deepwoken then
+    keybinds_instance = game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+end;
 local ok_keybinds, Keybinds = pcall(function()
     return keybinds_instance and base_require(keybinds_instance);
 end);
@@ -26981,7 +27000,25 @@ modules["@src/features/combat/stored_damage_tracker"] = [[
 
 local feature = Feature:new("show_stored_damage");
 local stored_damage_registry = require("@src/utility/stored_damage_registry");
-local DataReplication = require(services.ReplicatedStorage.Info.DataReplication);
+
+-- [project rain oss] deepwoken's Info.DataReplication only; keep the toggle
+-- registered but inert outside the game (auto_builder pattern)
+local info_folder = services.ReplicatedStorage:FindFirstChild("Info");
+if not info_folder and aztup and aztup.is_deepwoken then
+    info_folder = services.ReplicatedStorage:WaitForChild("Info", 15);
+end;
+local DataReplication;
+if info_folder then
+    local inst = info_folder:FindFirstChild("DataReplication")
+        or (aztup and aztup.is_deepwoken and info_folder:WaitForChild("DataReplication", 20) or nil);
+    if inst then
+        local ok, mod = pcall(require, inst);
+        if ok then DataReplication = mod; end;
+    end;
+end;
+if not DataReplication then
+    return feature;
+end;
 
 local function get_closest(poser_attacker)
 	local value = poser_attacker.Value;
@@ -34860,9 +34897,12 @@ return feature
 modules["@src/features/removals/no_echo_screen"] = [[
 -- [project rain oss] Requests/GetScore is deepwoken-only; bounded lookups so
 -- require time never blocks outside the game
-local requests = services.ReplicatedStorage:FindFirstChild("Requests")
-    or services.ReplicatedStorage:WaitForChild("Requests", 15);
-local get_score = requests and (requests:FindFirstChild("GetScore") or requests:WaitForChild("GetScore", 15));
+local requests = services.ReplicatedStorage:FindFirstChild("Requests");
+if not requests and aztup and aztup.is_deepwoken then
+    requests = services.ReplicatedStorage:WaitForChild("Requests", 15);
+end;
+local get_score = requests
+    and (requests:FindFirstChild("GetScore") or (aztup and aztup.is_deepwoken and requests:WaitForChild("GetScore", 15) or nil));
 
 local feature = Feature:new("no_echo_screen", is_depths and get_score and get_score.OnClientEvent or nil, function()
 	if not get_score then return end;
@@ -43408,6 +43448,22 @@ env.aztup = {
     tabs = {},
 };
 
+-- [project rain oss] global deepwoken detector: whitelisted place ids OR the
+-- game's signature folders. modules use it to skip deepwoken-only waits
+-- INSTANTLY outside the game instead of burning their require timeouts.
+aztup.is_deepwoken = (function()
+    local deepwoken_places = {
+        4111023553, 6032399813, 6473861193, 5735553160, 6832944305, 8668476218, 86761619761103,
+    };
+    for _, place_id in ipairs(deepwoken_places) do
+        if game.PlaceId == place_id then
+            return true;
+        end;
+    end;
+    return game:GetService("ReplicatedStorage"):FindFirstChild("Requests") ~= nil
+        or game:GetService("ReplicatedStorage"):FindFirstChild("Modules") ~= nil;
+end)();
+
 local hasnt_accepted_tos = not isfile("Project Rain/tos_accepted_82126_0822UTC0.txt");
 
 env.persistent_data = require("@src/utility/persistent_data");
@@ -43419,14 +43475,21 @@ if fflags:get("auto_load") and script_key then
     require("@src/utility/setup_auto_load");
 end
 
-if aztup.automation:should_auto_start() then
-    local requests = services.ReplicatedStorage:WaitForChild("Requests");
-    local start = requests:WaitForChild("StartMenu"):WaitForChild("Start")
-    repeat
-        start:FireServer()
-        task.wait(0.5)
-    until game:GetService("Players").LocalPlayer.Character;
-    task.wait(1);
+if aztup.automation:should_auto_start() and aztup.is_deepwoken then
+    -- [project rain oss] deepwoken-only autostart; skip silently elsewhere
+    local requests = services.ReplicatedStorage:FindFirstChild("Requests")
+        or services.ReplicatedStorage:WaitForChild("Requests", 20);
+    if requests then
+        local start = requests:WaitForChild("StartMenu", 15);
+        start = start and start:WaitForChild("Start", 15);
+        if start then
+            repeat
+                start:FireServer()
+                task.wait(0.5)
+            until game:GetService("Players").LocalPlayer.Character;
+            task.wait(1);
+        end;
+    end;
 end;
 
 local success, result = pcall(function()

@@ -1,9 +1,11 @@
 local Signal = require("@src/utility/signal");
 
--- [project rain oss] deepwoken's KeyBinds module; bounded + inert stub outside
--- so require time never blocks/auto-parry just disengages
-local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds")
-    or game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+-- [project rain oss] deepwoken's KeyBinds module; outside the game the lookup
+-- is instant via aztup.is_deepwoken and an inert stub keeps every caller safe
+local keybinds_instance = game:GetService("ReplicatedStorage"):FindFirstChild("KeyBinds");
+if not keybinds_instance and aztup and aztup.is_deepwoken then
+    keybinds_instance = game:GetService("ReplicatedStorage"):WaitForChild("KeyBinds", 15);
+end;
 local ok_keybinds, Keybinds = pcall(function()
     return keybinds_instance and base_require(keybinds_instance);
 end);
@@ -527,6 +529,8 @@ end;
     end;
 
     local last = tick();
+    -- [project rain oss] only arm the per-frame defend loop in deepwoken
+    if aztup and aztup.is_deepwoken then
     LPH_NO_VIRTUALIZE(function()
         
         
@@ -549,6 +553,11 @@ end
             DefendActionManager:update();
         end));
     end)();
+    else
+        -- [project rain oss] auto-parry runtime loop stays offline outside
+        -- deepwoken (EffectReplicator global only exists there); the module
+        -- itself stays loaded and the toggle harmless
+    end;
 end;
 
 return DefendActionManager

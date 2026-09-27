@@ -35,6 +35,9 @@ logic when the game actually provides those objects:
 | `utility/deepwoken/effect_replicator_handler.lua` | background `WaitForChild("Requests")` chain spammed infinite-yield warnings outside Deepwoken | instant `FindFirstChild` first, bounded waits after; silently skips when absent |
 | `features/visuals/base_esp.lua` | 9 unbounded `WaitForChild` folders (`Thrown`, `Live`, `NPCs`, `Shops`, ...) + `MarkerWorkspace` chain hung init after the UI showed | all resolved once in parallel bounded workers; watcher blocks no-op when the folder is absent |
 | `features/visuals/player_esp.lua` | unbounded `WaitForChild("Live")` hung init | 15s bounded lookup, watcher skipped when absent |
+| `init.lua` | no way to know "are we in deepwoken" early; automation autostart hard-waited on `Requests` | `aztup.is_deepwoken` (place-id whitelist OR signature folders) drives instant skips everywhere; autostart gated + bounded |
+| `features/auto-parry/defend-action-manager.lua` | module-level Heartbeat loop crashed every frame outside Deepwoken (`EffectReplicator` global is nil there - 30 errors/sec) | loop only armed when `aztup.is_deepwoken`; KeyBinds lookup instant outside |
+| `features/{combat,buttons,removals,auto-parry}/...` (7 modules) | `WaitForChild` fallbacks burned the full loader timeout (8s each) outside Deepwoken | all deepwoken-only lookups are `FindFirstChild`-instant unless `aztup.is_deepwoken` |
 | `features/loader.lua` (reimplemented) | a single feature hard-waiting at load would freeze startup | every feature require runs in a worker thread, cancelled after 8s (20s for entry points) with a warn instead of a hang |
 | `automation/loader.lua` | farm modules loading serialized; any hard-wait froze startup | parallel workers, one 12s global budget, late/skipped farms reported |
 | bundle runtime | plain sequential `require` | in-flight dedup so parallel workers never double-load a module (cycle-tolerant) |
