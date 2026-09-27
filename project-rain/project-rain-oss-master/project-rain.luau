@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 16:34:15 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 16:43:02 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 16:34:15 UTC";
+BUILD.id = "2026-09-27 16:43:02 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -43953,18 +43953,22 @@ overlay.Parent = (gethui and gethui()) or services.CoreGui;
 
 local function frame_card_data(frame)
 	local letter;
+	local letter_x;
+	local letter_y;
 	local name;
 	for _, descendant in ipairs(frame:GetDescendants()) do
 		if descendant:IsA("TextLabel") then
 			local text = string.match(descendant.Text or "", "^%s*(.-)%s*$");
 			if not letter and string.match(text, "^[ABC]$") then
 				letter = text;
+				letter_x = descendant.AbsolutePosition.X;
+				letter_y = descendant.AbsolutePosition.Y;
 			elseif not name and #text > 3 then
 				name = text;
 			end;
 		end;
 	end;
-	return letter, name;
+	return letter, name, letter_x, letter_y;
 end;
 
 -- gather small square images (the icon strip: coat / sword / bell / skull)
@@ -43981,7 +43985,7 @@ local function refresh_icons()
 		for _, descendant in ipairs(player_gui:GetDescendants()) do
 			if descendant:IsA("ImageLabel") or descendant:IsA("ImageButton") then
 				local size = descendant.AbsoluteSize;
-				if descendant.Image ~= "" and size.X >= 8 and size.X <= 48 and math.abs(size.X - size.Y) <= 12 then
+				if descendant.Image ~= "" and size.X >= 6 and size.X <= 64 and math.abs(size.X - size.Y) <= 18 then
 					table.insert(tiny_icons, descendant);
 				end;
 			end;
@@ -44012,16 +44016,23 @@ task.spawn(function()
 					continue;
 				end;
 
-				local letter, name = frame_card_data(frame);
+				local letter, name, letter_x, letter_y = frame_card_data(frame);
 				if not letter or not name then
+					continue;
+				end;
+
+				local pos = frame.AbsolutePosition;
+
+				-- a real character card has its slot letter on the left edge; the
+				-- news/hotfixes panels fail this test (no more stray skulls)
+				if not letter_x or letter_x - pos.X > 60 then
 					continue;
 				end;
 
 				seen_cards[frame] = true;
 
-				local pos = frame.AbsolutePosition;
-
-				-- the lowest strip icon inside the card's left quarter = red skull
+				-- collect strip icons inside the card's left quarter
+				local card_icons = {};
 				local skull;
 				local skull_y = -math.huge;
 				for _, icon in ipairs(tiny_icons) do
@@ -44031,32 +44042,33 @@ task.spawn(function()
 					local cy = ipos.Y + isize.Y * 0.5;
 					if cx >= pos.X and cx <= pos.X + fsize.X * 0.25
 						and cy >= pos.Y and cy <= pos.Y + fsize.Y then
+						table.insert(card_icons, icon);
 						if cy > skull_y then
 							skull, skull_y = icon, cy;
 						end;
 					end;
+				end
+
+				-- cards always carry their icon strip; skip impostor frames
+				if #card_icons == 0 then
+					continue;
 				end;
 
-				local anchor_x, anchor_y;
-				if skull then
-					anchor_x = skull.AbsolutePosition.X;
-					anchor_y = skull.AbsolutePosition.Y + skull.AbsoluteSize.Y + 4;
-				else
-					-- fallback: bottom-left corner of the card
-					anchor_x = pos.X + 8;
-					anchor_y = pos.Y + fsize.Y - 26;
-				end;
+				local anchor_x = skull.AbsolutePosition.X;
+				local anchor_y = skull.AbsolutePosition.Y + skull.AbsoluteSize.Y + 4;
 
 				local purple = purples[frame];
 				if not purple then
-					purple = Instance.new("TextButton");
+					-- clone the strip icon image tinted purple (the "pink claw"
+					-- look from the tests) - sits right under the red skull
+					purple = Instance.new("ImageButton");
 					purple.Name = "PRPurpleSkull";
-					purple.Size = UDim2.fromOffset(skull and skull.AbsoluteSize.X or 20, skull and skull.AbsoluteSize.Y or 20);
+					purple.Size = UDim2.fromOffset(skull.AbsoluteSize.X, skull.AbsoluteSize.Y);
 					purple.BackgroundTransparency = 1;
-					purple.Text = "\u{1F480}";
-					purple.TextColor3 = PURPLE;
-					purple.Font = Enum.Font.GothamBold;
-					purple.TextSize = skull and math.max(10, math.floor(skull.AbsoluteSize.Y * 0.9)) or 16;
+					purple.Image = skull.Image;
+					purple.ImageColor3 = PURPLE;
+					purple.ImageTransparency = skull.ImageTransparency;
+					purple.ScaleType = skull.ScaleType;
 					purple.ZIndex = 20;
 					purple.Parent = overlay;
 
@@ -44067,23 +44079,23 @@ task.spawn(function()
 					purple.MouseButton1Click:Connect(function()
 						if tick() < armed_until then
 							armed_until = 0;
-							purple.TextColor3 = PURPLE;
+							purple.ImageColor3 = PURPLE;
 							status("wiping " .. tostring(card_name) .. " (slot " .. card_letter .. ")...");
 							task.spawn(wipe_slot, card_letter);
 							return;
 						end;
 
 						armed_until = tick() + 4;
-						purple.TextColor3 = Color3.fromRGB(255, 120, 255);
+						purple.ImageColor3 = Color3.fromRGB(255, 120, 255);
 						task.delay(4.2, function()
 							if tick() >= armed_until then
-								purple.TextColor3 = PURPLE;
+								purple.ImageColor3 = PURPLE;
 							end;
 						end);
 					end);
 
 					purples[frame] = purple;
-					status("purple skull attached: " .. tostring(name) .. " (slot " .. letter .. ")" .. (skull and "" or " [corner fallback]"));
+					status("purple skull attached: " .. tostring(name) .. " (slot " .. letter .. ")");
 				end;
 
 				purple.Position = UDim2.fromOffset(anchor_x, anchor_y);
