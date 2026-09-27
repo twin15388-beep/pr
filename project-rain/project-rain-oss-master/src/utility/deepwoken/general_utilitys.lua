@@ -1,7 +1,41 @@
 
 
 local general = {}; 
-local collision_utils = base_require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("CollisionUtils"));
+
+-- [project rain oss] original did an unbounded WaitForChild chain here which
+-- hangs the whole loader outside deepwoken. try briefly, then degrade to an
+-- inert placeholder so utility functions keep answering (and the script keeps
+-- loading) in any other place.
+local collision_utils;
+do
+    local modules_folder = game:GetService("ReplicatedStorage"):FindFirstChild("Modules");
+    if modules_folder then
+        local module_instance = modules_folder:WaitForChild("CollisionUtils", 15);
+        if module_instance then
+            local ok, result = pcall(function()
+                return base_require(module_instance);
+            end);
+            if ok and result then
+                collision_utils = result;
+            end;
+        end;
+    end;
+end;
+
+if not collision_utils then
+    collision_utils = setmetatable({}, {
+        __index = function()
+            return function()
+                return nil;
+            end;
+        end,
+    });
+
+    xpcall(function()
+        Logger.log_for_devs("[general] CollisionUtils unavailable (not deepwoken?) - using stub");
+    end, warn);
+end;
+
 general.collision_utils = collision_utils;
 
 function general:in_air()

@@ -1,73 +1,129 @@
 local custom_font = {}
 
+-- [project rain oss] hardened font loader:
+--   * init.lua writes the assets to "Project Rain/Fonts" (capital F) while the
+--     original module read "Project Rain/fonts" - try both, case matters on
+--     android executors
+--   * every step is pcall'd and the pre-warm wait is time-boxed, so a failing
+--     getcustomasset/textservice can never hang init forever
+--   * last-resort fallback to the built-in Gotham so the UI always loads
 
+local HttpService = game:GetService("HttpService");
+local TextService = game:GetService("TextService");
 
+local function get_asset(...)
+    for _, path in ipairs({ ... }) do
+        local ok, asset = pcall(getcustomasset, path);
+        if ok and asset and #tostring(asset) > 0 then
+            return asset;
+        end;
+    end;
+    return nil;
+end
+
+local function builtin_fallback()
+    local ok, font = pcall(function()
+        return Font.fromEnum(Enum.Font.Gotham);
+    end);
+
+    if not ok then
+        font = Font.new("rbxasset://fonts/families/GothamSSm.json");
+    end;
+
+    return {
+        regular = font,
+        medium = font,
+        bold = font,
+    };
+end
 
 function custom_font.make_lexend_font()
-    local font_custom_asset = getcustomasset("Project Rain/fonts/Lexend.ttf")
-    local font_custom_asset_bold = getcustomasset("Project Rain/fonts/Lexend-Bold.ttf")
-    local font_custom_asset_medium = getcustomasset("Project Rain/fonts/Lexend-Medium.ttf")
+    local ok, result = pcall(function()
+        local font_regular = get_asset("Project Rain/Fonts/Lexend.ttf", "Project Rain/fonts/Lexend.ttf");
+        local font_bold = get_asset("Project Rain/Fonts/Lexend-Bold.ttf", "Project Rain/fonts/Lexend-Bold.ttf");
+        local font_medium = get_asset("Project Rain/Fonts/Lexend-Medium.ttf", "Project Rain/fonts/Lexend-Medium.ttf");
 
-    writefile("Project Rain/fonts/Lexend.json", game:GetService("HttpService"):JSONEncode({
-        name = "Lexend",
-        faces = {
-            {
-                name = "Regular",
-                weight = 400,      
-                style = "normal",
-                assetId = font_custom_asset
-            },
-            {
-                name = "Medium",
-                weight = 500,
-                style = "normal",
-                assetId = font_custom_asset_medium
-            },
-            {
-                name = "Bold",
-                weight = 700,
-                style = "normal",
-                assetId = font_custom_asset_bold
+        assert(font_regular and font_bold and font_medium, "could not resolve lexend ttf assets");
+
+        pcall(function()
+            makefolder("Project Rain/Fonts");
+        end);
+        pcall(function()
+            makefolder("Project Rain/fonts");
+        end);
+
+        writefile("Project Rain/Fonts/Lexend.json", HttpService:JSONEncode({
+            name = "Lexend",
+            faces = {
+                {
+                    name = "Regular",
+                    weight = 400,
+                    style = "normal",
+                    assetId = font_regular
+                },
+                {
+                    name = "Medium",
+                    weight = 500,
+                    style = "normal",
+                    assetId = font_medium
+                },
+                {
+                    name = "Bold",
+                    weight = 700,
+                    style = "normal",
+                    assetId = font_bold
+                }
             }
-        }
-    }))
+        }))
 
-    local path_asset = getcustomasset("Project Rain/fonts/Lexend.json");
-    local fonts = {
-        regular = Font.new(
-            path_asset,
-            Enum.FontWeight.Regular,
-            Enum.FontStyle.Normal
-        ),
-        medium = Font.new(
-            path_asset,
-            Enum.FontWeight.Medium,
-            Enum.FontStyle.Normal
-        ),
-        bold = Font.new(
-            path_asset,
-            Enum.FontWeight.Bold,
-            Enum.FontStyle.Normal
-        )
-    };
+        local path_asset = get_asset("Project Rain/Fonts/Lexend.json", "Project Rain/fonts/Lexend.json");
+        assert(path_asset, "could not resolve lexend font json");
 
-    
-    
-    local done = 0;
-    for _, font in pairs(fonts) do
-        task.spawn(function()
-            local params = Instance.new("GetTextBoundsParams")
-            params.Text = "Preload"
-            params.Font = font
-            params.Size = 16
-            game:GetService("TextService"):GetTextBoundsAsync(params)
-            params:Destroy()
-            done += 1;
-        end)
-    end
+        local fonts = {
+            regular = Font.new(
+                path_asset,
+                Enum.FontWeight.Regular,
+                Enum.FontStyle.Normal
+            ),
+            medium = Font.new(
+                path_asset,
+                Enum.FontWeight.Medium,
+                Enum.FontStyle.Normal
+            ),
+            bold = Font.new(
+                path_asset,
+                Enum.FontWeight.Bold,
+                Enum.FontStyle.Normal
+            )
+        };
 
-    repeat task.wait() until done == 3;
-    return fonts
+        local done = 0;
+        for _, font in pairs(fonts) do
+            task.spawn(function()
+                pcall(function()
+                    local params = Instance.new("GetTextBoundsParams")
+                    params.Text = "Preload"
+                    params.Font = font
+                    params.Size = 16
+                    TextService:GetTextBoundsAsync(params)
+                    params:Destroy()
+                end);
+                done += 1;
+            end)
+        end
+
+        local start = tick();
+        repeat task.wait() until done == 3 or tick() - start > 5;
+
+        return fonts;
+    end);
+
+    if ok and result then
+        return result;
+    end;
+
+    warn(("[custom_font] lexend unavailable (%s), falling back to Gotham"):format(tostring(result)));
+    return builtin_fallback();
 end
 
 return custom_font.make_lexend_font()

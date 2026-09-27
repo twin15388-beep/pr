@@ -109,8 +109,35 @@ local SEARCH = {
 	"features/auto-loot/*",
 };
 
-function loader.load_module(path)
-	local ok, result = xpcall(require, debug.traceback, path);
+-- [project rain oss] a feature module that hard-waits on deepwoken-only
+-- instances at load time (WaitForChild without a timeout) must never hang the
+-- whole loader: run each require in its own thread and cancel it after a
+-- timeout. in deepwoken loading is instant, so nothing is cancelled there.
+local REQUIRE_TIMEOUT = 8; -- seconds
+local ENTRY_TIMEOUT = 20;  -- entry points create eagerly-awaited folders (Thrown, ...)
+
+function loader.load_module(path, timeout)
+	timeout = timeout or REQUIRE_TIMEOUT;
+
+	local finished = false;
+	local ok = false;
+	local result = nil;
+
+	local thread = task.spawn(function()
+		ok, result = xpcall(require, debug.traceback, path);
+		finished = true;
+	end);
+
+	local started = tick();
+	while not finished and tick() - started < timeout do
+		task.wait(0.05);
+	end;
+
+	if not finished then
+		task.cancel(thread);
+		warn(string.format("[loader] %s did not load within %ds (deepwoken-only module?) - skipped", path, timeout));
+		return false;
+	end;
 
 	if not ok then
 		warn(string.format("[loader] failed to load %s:\n%s", path, tostring(result)));
@@ -123,13 +150,13 @@ function loader.initialize()
 	local loaded, failed = 0, 0;
 	local seen = {};
 
-	local function load(path)
+	local function load(path, timeout)
 		if seen[path] or SKIP[path] then
 			return;
 		end;
 		seen[path] = true;
 
-		if loader.load_module(path) then
+		if loader.load_module(path, timeout) then
 			loaded = loaded + 1;
 		else
 			failed = failed + 1;
@@ -137,7 +164,7 @@ function loader.initialize()
 	end;
 
 	for _, path in ipairs(ENTRY_POINTS) do
-		load(path);
+		load(path, ENTRY_TIMEOUT);
 	end;
 
 	for _, pattern in ipairs(SEARCH) do

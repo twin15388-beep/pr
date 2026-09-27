@@ -18,6 +18,23 @@ runs `src/globals.lua` followed by the original entrypoint `src/init.lua`.
 Module sources compile lazily via `loadstring` on first `require`, chunk names
 are set to their `@src/...` path so tracebacks stay readable.
 
+## Runtime hardening (loads anywhere, not only in Deepwoken)
+
+The upstream init chain hard-waits / hard-kicks on Deepwoken-only objects. The
+build now loads the full UI in any place and only engages Deepwoken-specific
+logic when the game actually provides those objects:
+
+| spot | before | now |
+| --- | --- | --- |
+| `features/hooking.lua` | `WaitForChild("Requests")` hung init forever outside Deepwoken; kicked when ban remotes missing | place whitelist: remote hooks + anti-ban kicks only run in Deepwoken places; `ClientActor` wait is time-boxed |
+| `STR_TBL_SF_INVOKE` | stripped global -> `hooking.lua:17 attempt to call a nil value` kick | passthrough in `globals.lua` (identity, like other obf macros) |
+| `base_require` | stripped global used to require Deepwoken `ModuleScript`s (`CollisionUtils`, `EffectReplicator`, `KeyBinds`, camera Popper, ...) | provided by the bundle runtime as the pristine `require` for instances |
+| `utility/custom_font.lua` | wrong-case asset path + unbounded font prewarm could hang init | both case paths tried, everything pcall'd, 5s cap, Gotham fallback |
+| `utility/deepwoken/general_utilitys.lua` | `WaitForChild("Modules")` hung init outside Deepwoken | 15s bounded lookup, inert `collision_utils` placeholder otherwise |
+| `features/loader.lua` (reimplemented) | a single feature hard-waiting at load would freeze startup | every feature require runs in a worker thread, cancelled after 8s (20s for entry points) with a warn instead of a hang |
+| `automation/loader.lua` | farm modules loading serialized; any hard-wait froze startup | parallel workers, one 12s global budget, late/skipped farms reported |
+| bundle runtime | plain sequential `require` | in-flight dedup so parallel workers never double-load a module (cycle-tolerant) |
+
 ## What was stripped upstream & how it was reimplemented here
 
 | stripped file | replacement |

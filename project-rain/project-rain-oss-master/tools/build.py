@@ -53,10 +53,25 @@ local loaded = BUILD.loaded;
 
 local unpack_ = table.unpack or unpack;
 
+BUILD.inflight = BUILD.inflight or {};
+local inflight = BUILD.inflight;
+
 local function builder_require(path)
 	assert(type(path) == "string", "require: string expected, got " .. type(path));
 
 	local packed = loaded[path];
+	if packed then
+		return unpack_(packed, 1, packed.n);
+	end;
+
+	-- another thread may be requiring the same module right now (loaders use
+	-- bounded worker threads); wait for it instead of double-loading
+	local wait_start = tick();
+	while inflight[path] and tick() - wait_start < 30 do
+		task.wait(0.05);
+	end;
+
+	packed = loaded[path];
 	if packed then
 		return unpack_(packed, 1, packed.n);
 	end;
@@ -71,7 +86,15 @@ local function builder_require(path)
 		error(("[pr] failed to compile %s: %s"):format(tostring(path), tostring(compile_err)), 2);
 	end;
 
-	packed = table.pack(fn());
+	inflight[path] = true;
+	local results = table.pack(xpcall(fn, debug.traceback));
+	inflight[path] = nil;
+
+	if not results[1] then
+		error(tostring(results[2]), 2);
+	end;
+
+	packed = table.pack(select(2, unpack_(results, 1, results.n)));
 	loaded[path] = packed;
 
 	return unpack_(packed, 1, packed.n);
@@ -93,6 +116,16 @@ getgenv().require = function(path, ...)
 end;
 
 getgenv().builder_require = builder_require;
+
+-- [project rain oss] pristine require for ModuleScript instances. upstream
+-- stripped its definition; deepwoken game modules (CollisionUtils,
+-- EffectReplicator, KeyBinds, ...) are pulled in through it.
+getgenv().base_require = function(path, ...)
+	if type(path) == "string" then
+		error(("[pr] base_require only accepts instances (got string %s)"):format(path), 2);
+	end;
+	return old_require(path, ...);
+end;
 
 -- list_modules("ui/tabs/*") -> sorted array of "@src/..." keys, `*` matches one level
 local function list_modules(pattern)

@@ -7,8 +7,10 @@ Logger.log_for_devs("beginning anticheat bypass...");
 
 task.spawn(pcall, function()
     
-
-    local client_manager = game:GetService("Players").LocalPlayer:WaitForChild("PlayerScripts"):WaitForChild("ClientActor"):WaitForChild("ClientManager")
+    local client_actor = game:GetService("Players").LocalPlayer:WaitForChild("PlayerScripts"):WaitForChild("ClientActor", 15)
+    if not client_actor then return end
+    local client_manager = client_actor:WaitForChild("ClientManager", 15)
+    if not client_manager then return end
 
     client_manager.Enabled = false;
     Logger.log_for_devs("disabled client manager/error check (1)");
@@ -186,8 +188,30 @@ end or hookmetamethod;
 
 getgenv().KeyHandler = KeyHandlerClass.new();
 
+-- [project rain oss] everything below binds to deepwoken-specific remotes and
+-- kicks when they are missing (anti-ban). outside deepwoken those objects do
+-- not exist at all, so bail out gracefully here instead of hanging/kicking and
+-- let the rest of the script (UI and all) keep loading.
+local deepwoken_places = {
+    [4111023553] = true, -- main menu
+    [6032399813] = true, -- etrean luminant
+    [6473861193] = true, -- eastern luminant
+    [5735553160] = true, -- the depths
+    [6832944305] = true, -- arena / chime
+    [8668476218] = true, -- dungeon
+    [86761619761103] = true,
+};
 
-local requests = services.ReplicatedStorage:WaitForChild("Requests")
+if not deepwoken_places[game.PlaceId] then
+    Logger.log_for_devs("[hooking] not a deepwoken place - skipping remote hooks");
+    return true
+end;
+
+local requests = services.ReplicatedStorage:WaitForChild("Requests", 30)
+if not requests then
+    Logger.log_for_devs("[hooking] ReplicatedStorage.Requests not found - skipping remote hooks");
+    return true
+end;
 local ban_remotes = 0
 local bans = {};
 

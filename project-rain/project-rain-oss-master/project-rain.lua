@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 10:00:09 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 10:24:24 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 10:00:09 UTC";
+BUILD.id = "2026-09-27 10:24:24 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -18,10 +18,25 @@ local loaded = BUILD.loaded;
 
 local unpack_ = table.unpack or unpack;
 
+BUILD.inflight = BUILD.inflight or {};
+local inflight = BUILD.inflight;
+
 local function builder_require(path)
 	assert(type(path) == "string", "require: string expected, got " .. type(path));
 
 	local packed = loaded[path];
+	if packed then
+		return unpack_(packed, 1, packed.n);
+	end;
+
+	-- another thread may be requiring the same module right now (loaders use
+	-- bounded worker threads); wait for it instead of double-loading
+	local wait_start = tick();
+	while inflight[path] and tick() - wait_start < 30 do
+		task.wait(0.05);
+	end;
+
+	packed = loaded[path];
 	if packed then
 		return unpack_(packed, 1, packed.n);
 	end;
@@ -36,7 +51,15 @@ local function builder_require(path)
 		error(("[pr] failed to compile %s: %s"):format(tostring(path), tostring(compile_err)), 2);
 	end;
 
-	packed = table.pack(fn());
+	inflight[path] = true;
+	local results = table.pack(xpcall(fn, debug.traceback));
+	inflight[path] = nil;
+
+	if not results[1] then
+		error(tostring(results[2]), 2);
+	end;
+
+	packed = table.pack(select(2, unpack_(results, 1, results.n)));
 	loaded[path] = packed;
 
 	return unpack_(packed, 1, packed.n);
@@ -58,6 +81,16 @@ getgenv().require = function(path, ...)
 end;
 
 getgenv().builder_require = builder_require;
+
+-- [project rain oss] pristine require for ModuleScript instances. upstream
+-- stripped its definition; deepwoken game modules (CollisionUtils,
+-- EffectReplicator, KeyBinds, ...) are pulled in through it.
+getgenv().base_require = function(path, ...)
+	if type(path) == "string" then
+		error(("[pr] base_require only accepts instances (got string %s)"):format(path), 2);
+	end;
+	return old_require(path, ...);
+end;
 
 -- list_modules("ui/tabs/*") -> sorted array of "@src/..." keys, `*` matches one level
 local function list_modules(pattern)
@@ -251,12 +284,50 @@ local auto_start_flags = {
     
 local loader = {
     initialize = function()
+        -- [project rain oss] farm modules may hard-wait on deepwoken instances
+        -- at load time. load them all in parallel workers with one global
+        -- budget, so non-deepwoken places finish startup fast either way.
+        local ready = {};
+        local total = 0;
+
         for _, farm in list_modules("automation/persistent_tasks/*") do
-            local farm_module = require(farm);
-    
+            total = total + 1;
+
+            task.spawn(function()
+                local ok, result = xpcall(require, debug.traceback, farm);
+
+                if ok then
+                    ready[farm] = result;
+                else
+                    warn(string.format("[farms] failed to load %s:\n%s", farm, tostring(result)));
+                end;
+
+                ready[farm .. "#done"] = true;
+            end);
+        end;
+
+        local started = tick();
+        local done_count;
+        repeat
+            done_count = 0;
+            for _, farm in list_modules("automation/persistent_tasks/*") do
+                if ready[farm .. "#done"] then
+                    done_count = done_count + 1;
+                end;
+            end;
+
+            task.wait(0.1);
+        until done_count >= total or tick() - started > 12;
+
+        for _, farm in list_modules("automation/persistent_tasks/*") do
+            if not ready[farm .. "#done"] then
+                warn(string.format("[farms] %s still loading (deepwoken-only?) - skipped from startup", farm));
+            end;
+
+            local farm_module = ready[farm];
+
             if farm_module and typeof(farm_module) == "table" and farm_module.persistent_data_flag then
                 aztup.farms[farm_module.id] = farm_module;
-                continue;
             end;
         end;
     end,
@@ -27835,8 +27906,10 @@ Logger.log_for_devs("beginning anticheat bypass...");
 
 task.spawn(pcall, function()
     
-
-    local client_manager = game:GetService("Players").LocalPlayer:WaitForChild("PlayerScripts"):WaitForChild("ClientActor"):WaitForChild("ClientManager")
+    local client_actor = game:GetService("Players").LocalPlayer:WaitForChild("PlayerScripts"):WaitForChild("ClientActor", 15)
+    if not client_actor then return end
+    local client_manager = client_actor:WaitForChild("ClientManager", 15)
+    if not client_manager then return end
 
     client_manager.Enabled = false;
     Logger.log_for_devs("disabled client manager/error check (1)");
@@ -28014,8 +28087,30 @@ end or hookmetamethod;
 
 getgenv().KeyHandler = KeyHandlerClass.new();
 
+-- [project rain oss] everything below binds to deepwoken-specific remotes and
+-- kicks when they are missing (anti-ban). outside deepwoken those objects do
+-- not exist at all, so bail out gracefully here instead of hanging/kicking and
+-- let the rest of the script (UI and all) keep loading.
+local deepwoken_places = {
+    [4111023553] = true, -- main menu
+    [6032399813] = true, -- etrean luminant
+    [6473861193] = true, -- eastern luminant
+    [5735553160] = true, -- the depths
+    [6832944305] = true, -- arena / chime
+    [8668476218] = true, -- dungeon
+    [86761619761103] = true,
+};
 
-local requests = services.ReplicatedStorage:WaitForChild("Requests")
+if not deepwoken_places[game.PlaceId] then
+    Logger.log_for_devs("[hooking] not a deepwoken place - skipping remote hooks");
+    return true
+end;
+
+local requests = services.ReplicatedStorage:WaitForChild("Requests", 30)
+if not requests then
+    Logger.log_for_devs("[hooking] ReplicatedStorage.Requests not found - skipping remote hooks");
+    return true
+end;
 local ban_remotes = 0
 local bans = {};
 
@@ -28462,8 +28557,35 @@ local SEARCH = {
 	"features/auto-loot/*",
 };
 
-function loader.load_module(path)
-	local ok, result = xpcall(require, debug.traceback, path);
+-- [project rain oss] a feature module that hard-waits on deepwoken-only
+-- instances at load time (WaitForChild without a timeout) must never hang the
+-- whole loader: run each require in its own thread and cancel it after a
+-- timeout. in deepwoken loading is instant, so nothing is cancelled there.
+local REQUIRE_TIMEOUT = 8; -- seconds
+local ENTRY_TIMEOUT = 20;  -- entry points create eagerly-awaited folders (Thrown, ...)
+
+function loader.load_module(path, timeout)
+	timeout = timeout or REQUIRE_TIMEOUT;
+
+	local finished = false;
+	local ok = false;
+	local result = nil;
+
+	local thread = task.spawn(function()
+		ok, result = xpcall(require, debug.traceback, path);
+		finished = true;
+	end);
+
+	local started = tick();
+	while not finished and tick() - started < timeout do
+		task.wait(0.05);
+	end;
+
+	if not finished then
+		task.cancel(thread);
+		warn(string.format("[loader] %s did not load within %ds (deepwoken-only module?) - skipped", path, timeout));
+		return false;
+	end;
 
 	if not ok then
 		warn(string.format("[loader] failed to load %s:\n%s", path, tostring(result)));
@@ -28476,13 +28598,13 @@ function loader.initialize()
 	local loaded, failed = 0, 0;
 	local seen = {};
 
-	local function load(path)
+	local function load(path, timeout)
 		if seen[path] or SKIP[path] then
 			return;
 		end;
 		seen[path] = true;
 
-		if loader.load_module(path) then
+		if loader.load_module(path, timeout) then
 			loaded = loaded + 1;
 		else
 			failed = failed + 1;
@@ -28490,7 +28612,7 @@ function loader.initialize()
 	end;
 
 	for _, path in ipairs(ENTRY_POINTS) do
-		load(path);
+		load(path, ENTRY_TIMEOUT);
 	end;
 
 	for _, pattern in ipairs(SEARCH) do
@@ -46787,77 +46909,134 @@ return BindableFunction
 modules["@src/utility/custom_font"] = [[
 local custom_font = {}
 
+-- [project rain oss] hardened font loader:
+--   * init.lua writes the assets to "Project Rain/Fonts" (capital F) while the
+--     original module read "Project Rain/fonts" - try both, case matters on
+--     android executors
+--   * every step is pcall'd and the pre-warm wait is time-boxed, so a failing
+--     getcustomasset/textservice can never hang init forever
+--   * last-resort fallback to the built-in Gotham so the UI always loads
 
+local HttpService = game:GetService("HttpService");
+local TextService = game:GetService("TextService");
 
+local function get_asset(...)
+    for _, path in ipairs({ ... }) do
+        local ok, asset = pcall(getcustomasset, path);
+        if ok and asset and #tostring(asset) > 0 then
+            return asset;
+        end;
+    end;
+    return nil;
+end
+
+local function builtin_fallback()
+    local ok, font = pcall(function()
+        return Font.fromEnum(Enum.Font.Gotham);
+    end);
+
+    if not ok then
+        font = Font.new("rbxasset://fonts/families/GothamSSm.json");
+    end;
+
+    return {
+        regular = font,
+        medium = font,
+        bold = font,
+    };
+end
 
 function custom_font.make_lexend_font()
-    local font_custom_asset = getcustomasset("Project Rain/fonts/Lexend.ttf")
-    local font_custom_asset_bold = getcustomasset("Project Rain/fonts/Lexend-Bold.ttf")
-    local font_custom_asset_medium = getcustomasset("Project Rain/fonts/Lexend-Medium.ttf")
+    local ok, result = pcall(function()
+        local font_regular = get_asset("Project Rain/Fonts/Lexend.ttf", "Project Rain/fonts/Lexend.ttf");
+        local font_bold = get_asset("Project Rain/Fonts/Lexend-Bold.ttf", "Project Rain/fonts/Lexend-Bold.ttf");
+        local font_medium = get_asset("Project Rain/Fonts/Lexend-Medium.ttf", "Project Rain/fonts/Lexend-Medium.ttf");
 
-    writefile("Project Rain/fonts/Lexend.json", game:GetService("HttpService"):JSONEncode({
-        name = "Lexend",
-        faces = {
-            {
-                name = "Regular",
-                weight = 400,      
-                style = "normal",
-                assetId = font_custom_asset
-            },
-            {
-                name = "Medium",
-                weight = 500,
-                style = "normal",
-                assetId = font_custom_asset_medium
-            },
-            {
-                name = "Bold",
-                weight = 700,
-                style = "normal",
-                assetId = font_custom_asset_bold
+        assert(font_regular and font_bold and font_medium, "could not resolve lexend ttf assets");
+
+        pcall(function()
+            makefolder("Project Rain/Fonts");
+        end);
+        pcall(function()
+            makefolder("Project Rain/fonts");
+        end);
+
+        writefile("Project Rain/Fonts/Lexend.json", HttpService:JSONEncode({
+            name = "Lexend",
+            faces = {
+                {
+                    name = "Regular",
+                    weight = 400,
+                    style = "normal",
+                    assetId = font_regular
+                },
+                {
+                    name = "Medium",
+                    weight = 500,
+                    style = "normal",
+                    assetId = font_medium
+                },
+                {
+                    name = "Bold",
+                    weight = 700,
+                    style = "normal",
+                    assetId = font_bold
+                }
             }
-        }
-    }))
+        }))
 
-    local path_asset = getcustomasset("Project Rain/fonts/Lexend.json");
-    local fonts = {
-        regular = Font.new(
-            path_asset,
-            Enum.FontWeight.Regular,
-            Enum.FontStyle.Normal
-        ),
-        medium = Font.new(
-            path_asset,
-            Enum.FontWeight.Medium,
-            Enum.FontStyle.Normal
-        ),
-        bold = Font.new(
-            path_asset,
-            Enum.FontWeight.Bold,
-            Enum.FontStyle.Normal
-        )
-    };
+        local path_asset = get_asset("Project Rain/Fonts/Lexend.json", "Project Rain/fonts/Lexend.json");
+        assert(path_asset, "could not resolve lexend font json");
 
-    
-    
-    local done = 0;
-    for _, font in pairs(fonts) do
-        task.spawn(function()
-            local params = Instance.new("GetTextBoundsParams")
-            params.Text = "Preload"
-            params.Font = font
-            params.Size = 16
-            game:GetService("TextService"):GetTextBoundsAsync(params)
-            params:Destroy()
-            done += 1;
-        end)
-    end
+        local fonts = {
+            regular = Font.new(
+                path_asset,
+                Enum.FontWeight.Regular,
+                Enum.FontStyle.Normal
+            ),
+            medium = Font.new(
+                path_asset,
+                Enum.FontWeight.Medium,
+                Enum.FontStyle.Normal
+            ),
+            bold = Font.new(
+                path_asset,
+                Enum.FontWeight.Bold,
+                Enum.FontStyle.Normal
+            )
+        };
 
-    repeat task.wait() until done == 3;
-    return fonts
+        local done = 0;
+        for _, font in pairs(fonts) do
+            task.spawn(function()
+                pcall(function()
+                    local params = Instance.new("GetTextBoundsParams")
+                    params.Text = "Preload"
+                    params.Font = font
+                    params.Size = 16
+                    TextService:GetTextBoundsAsync(params)
+                    params:Destroy()
+                end);
+                done += 1;
+            end)
+        end
+
+        local start = tick();
+        repeat task.wait() until done == 3 or tick() - start > 5;
+
+        return fonts;
+    end);
+
+    if ok and result then
+        return result;
+    end;
+
+    warn(("[custom_font] lexend unavailable (%s), falling back to Gotham"):format(tostring(result)));
+    return builtin_fallback();
 end
 
 return custom_font.make_lexend_font()
+
 ]];
 modules["@src/utility/deepwoken/action_tracker"] = [[
 local tracker = {};
@@ -47355,7 +47534,41 @@ modules["@src/utility/deepwoken/general_utilitys"] = [[
 
 
 local general = {}; 
-local collision_utils = base_require(game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("CollisionUtils"));
+
+-- [project rain oss] original did an unbounded WaitForChild chain here which
+-- hangs the whole loader outside deepwoken. try briefly, then degrade to an
+-- inert placeholder so utility functions keep answering (and the script keeps
+-- loading) in any other place.
+local collision_utils;
+do
+    local modules_folder = game:GetService("ReplicatedStorage"):FindFirstChild("Modules");
+    if modules_folder then
+        local module_instance = modules_folder:WaitForChild("CollisionUtils", 15);
+        if module_instance then
+            local ok, result = pcall(function()
+                return base_require(module_instance);
+            end);
+            if ok and result then
+                collision_utils = result;
+            end;
+        end;
+    end;
+end;
+
+if not collision_utils then
+    collision_utils = setmetatable({}, {
+        __index = function()
+            return function()
+                return nil;
+            end;
+        end,
+    });
+
+    xpcall(function()
+        Logger.log_for_devs("[general] CollisionUtils unavailable (not deepwoken?) - using stub");
+    end, warn);
+end;
+
 general.collision_utils = collision_utils;
 
 function general:in_air()

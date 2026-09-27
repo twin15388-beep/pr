@@ -23,12 +23,50 @@ local auto_start_flags = {
     
 local loader = {
     initialize = function()
+        -- [project rain oss] farm modules may hard-wait on deepwoken instances
+        -- at load time. load them all in parallel workers with one global
+        -- budget, so non-deepwoken places finish startup fast either way.
+        local ready = {};
+        local total = 0;
+
         for _, farm in list_modules("automation/persistent_tasks/*") do
-            local farm_module = require(farm);
-    
+            total = total + 1;
+
+            task.spawn(function()
+                local ok, result = xpcall(require, debug.traceback, farm);
+
+                if ok then
+                    ready[farm] = result;
+                else
+                    warn(string.format("[farms] failed to load %s:\n%s", farm, tostring(result)));
+                end;
+
+                ready[farm .. "#done"] = true;
+            end);
+        end;
+
+        local started = tick();
+        local done_count;
+        repeat
+            done_count = 0;
+            for _, farm in list_modules("automation/persistent_tasks/*") do
+                if ready[farm .. "#done"] then
+                    done_count = done_count + 1;
+                end;
+            end;
+
+            task.wait(0.1);
+        until done_count >= total or tick() - started > 12;
+
+        for _, farm in list_modules("automation/persistent_tasks/*") do
+            if not ready[farm .. "#done"] then
+                warn(string.format("[farms] %s still loading (deepwoken-only?) - skipped from startup", farm));
+            end;
+
+            local farm_module = ready[farm];
+
             if farm_module and typeof(farm_module) == "table" and farm_module.persistent_data_flag then
                 aztup.farms[farm_module.id] = farm_module;
-                continue;
             end;
         end;
     end,
