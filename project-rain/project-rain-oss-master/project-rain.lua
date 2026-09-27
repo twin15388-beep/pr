@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 18:26:25 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 18:35:07 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 18:26:25 UTC";
+BUILD.id = "2026-09-27 18:35:07 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -1711,7 +1711,7 @@ function auto_echo_layer2:pass_fragments()
                     if not game:IsLoaded() then game.Loaded:Wait(); end;
                     if game.PlaceId ~= 4111023553 then return; end
                     local slot = "%s";
-                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
+                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio Deep/assets/notification.mp3"); sound:Play(); end, warn);')
                     game:GetService("ReplicatedStorage"):WaitForChild("Requests"):WaitForChild("WipeSlot"):InvokeServer(slot)
                     task.wait(0.5)
                 ]]
@@ -8647,7 +8647,7 @@ struct = automation_struct:construct({
                         if not game:IsLoaded() then game.Loaded:Wait(); end;
                         if game.PlaceId ~= 4111023553 then return; end
                         local slot = "%s";
-                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
+                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio Deep/assets/notification.mp3"); sound:Play(); end, warn);')
                         game:GetService("ReplicatedStorage"):WaitForChild("Requests"):WaitForChild("WipeSlot"):InvokeServer(slot)
                         task.wait(0.5)
                     ]]
@@ -9143,7 +9143,7 @@ local state_machine = StateMachine.create({
                     local server = '%s';
                     local slot = "%s";
 
-                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
+                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio Deep/assets/notification.mp3"); sound:Play(); end, warn);')
 
                     local args = {
                         slot
@@ -9912,7 +9912,7 @@ local state_machine = StateMachine.create({
                     if not game:IsLoaded() then game.Loaded:Wait(); end;
                     if game.PlaceId ~= 4111023553 then return; end
                     local slot = "%s";
-                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
+                    queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio Deep/assets/notification.mp3"); sound:Play(); end, warn);')
                     game:GetService("ReplicatedStorage"):WaitForChild("Requests"):WaitForChild("WipeSlot"):InvokeServer(slot)
                     task.wait(0.5)
                 ]]
@@ -10735,7 +10735,7 @@ struct = automation_struct:construct({
                         local server = '%s';
                         local slot = "%s";
                     
-                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
+                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio Deep/assets/notification.mp3"); sound:Play(); end, warn);')
                     
                         local args = {
                             slot
@@ -19537,8 +19537,8 @@ return LPH_NO_VIRTUALIZE(function()
             local instance = setmetatable({}, chance_store)
             instance.chances = {}
 
-            if isfile("NZL Studio/post-rc-260421-parry-chances.json") then
-                local data = game:GetService("HttpService"):JSONDecode(readfile("NZL Studio/post-rc-260421-parry-chances.json"))
+            if isfile("NZL Studio Deep/post-rc-260421-parry-chances.json") then
+                local data = game:GetService("HttpService"):JSONDecode(readfile("NZL Studio Deep/post-rc-260421-parry-chances.json"))
                 instance:load_chances(data)
             end
 
@@ -19791,7 +19791,7 @@ return LPH_NO_VIRTUALIZE(function()
 
         function chance_store:save_chances()
             local data = game:GetService("HttpService"):JSONEncode(self.chances)
-            writefile("NZL Studio/post-rc-260421-parry-chances.json", data)
+            writefile("NZL Studio Deep/post-rc-260421-parry-chances.json", data)
         end
 
         function chance_store:on_load(f)
@@ -19820,7 +19820,7 @@ modules["@src/features/auto-parry/data/custom_timings"] = [=[
 	                                     where timing.ids contains `id`
 
 	Timing files live in `rw_timings` (builder output, per upstream) or
-	`NZL Studio/Timings`. Each file may be:
+	`NZL Studio Deep/Timings`. Each file may be:
 	  * .json  -> { "name": "...", "ids": ["rbxassetid://123", ...], ... }
 	  * .lua   -> chunk returning the same table
 	Extra fields are passed straight through to the auto-parry, which consumes
@@ -19831,7 +19831,7 @@ local HttpService = game:GetService("HttpService");
 
 local FOLDERS = {
 	"rw_timings",
-	"NZL Studio/Timings",
+	"NZL Studio Deep/Timings",
 };
 
 local RESCAN_INTERVAL = 2; -- seconds
@@ -29101,10 +29101,10 @@ end
     local path = string.format("%s %s Stolen Build", os.date("%B %d %Y"), player.Name);
     Logger:notify_sound(string.format("Successfully stole %s's build, %s & saved to file.", player.Name, buildUrl))
 
-    if not isfolder("NZL Studio/Stolen Builds") then
-        makefolder("NZL Studio/Stolen Builds")
+    if not isfolder("NZL Studio Deep/Stolen Builds") then
+        makefolder("NZL Studio Deep/Stolen Builds")
     end
-    writefile("NZL Studio/Stolen Builds/" .. path .. ".txt", string.format([[https://NZL Studio
+    writefile("NZL Studio Deep/Stolen Builds/" .. path .. ".txt", string.format([[NZL Studio
 stolen on %s
 build url: %s
 %s]], os.date("%B %d %Y"), buildUrl, data.content.notes));
@@ -29475,13 +29475,13 @@ end;
 function exit_sound()
     if not aztup.flags.notify_with_sound then return end
     
-    sound.new("NZL Studio/Assets/proximity.mp3", 0.9, aztup.flags.player_proximity_vol, true):play();
+    sound.new("NZL Studio Deep/Assets/proximity.mp3", 0.9, aztup.flags.player_proximity_vol, true):play();
 end;
 
 function enter_sound()
     if not aztup.flags.notify_with_sound then return end
 
-    sound.new("NZL Studio/Assets/proximity.mp3", 1.1, aztup.flags.player_proximity_vol, true):play();
+    sound.new("NZL Studio Deep/Assets/proximity.mp3", 1.1, aztup.flags.player_proximity_vol, true):play();
 end;
 
 
@@ -31425,8 +31425,8 @@ local STATS_HEIGHT = 58;
 local ROW_HEIGHT = 24;
 local HEIGHT = TITLE_HEIGHT + STAGE_HEIGHT + STATS_HEIGHT + ROW_HEIGHT * 2 + 12;
 
-local SAVE_PATH = "NZL Studio/brayden.json";
-local PORTRAIT_PATH = "NZL Studio/Assets/brayden.png";
+local SAVE_PATH = "NZL Studio Deep/brayden.json";
+local PORTRAIT_PATH = "NZL Studio Deep/Assets/brayden.png";
 
 local FOODS = { "Burger", "Sushi", "Pizza", "Salad", "Tacos", "Curry", "Donut", "Natto", "Ramen", "Cake", "Steak", "Eel" };
 local GIFTS = { "Cap", "Hoodie", "Guitar", "Game", "Sunglasses", "Plushie", "Skateboard", "Houseplant" };
@@ -33439,7 +33439,7 @@ end;
         
         sound = enabledSounds[math.random(1, #enabledSounds)]
         child.PlaybackSpeed = 1;
-        child.AssetId = getcustomasset("NZL Studio/Assets/Parry Sounds/" .. sound .. ".mp3")
+        child.AssetId = getcustomasset("NZL Studio Deep/Assets/Parry Sounds/" .. sound .. ".mp3")
         child.Volume = aztup.flags.parry_sound_volume;
     
         if child:WaitForChild("AudioPitchShifter", 0.2) then
@@ -38600,15 +38600,15 @@ local MainGui
 if RunService:IsStudio() then
 	MainGui = script:WaitForChild("MorphGui")
 else 	
-	if not isfolder("NZL Studio/Deepwoken-Config") then
+	if not isfolder("NZL Studio Deep/Deepwoken-Config") then
 		LocalPlayer:Kick("Race Morph Checksum : \nThe Script couldn't find the whole folder, please make sure to set up the files correctly.")
 	end
 
-	if not isfile("NZL Studio/Deepwoken-Config/GuiItself.rbxm") then
+	if not isfile("NZL Studio Deep/Deepwoken-Config/GuiItself.rbxm") then
 		LocalPlayer:Kick("Race Morph Checksum : \nThe Script couldn't find the GUI, please make sure to set up the files correctly.")
 	end
 
-	MainGui = game:GetObjects(getcustomasset("NZL Studio/Deepwoken-Config/GuiItself.rbxm"))[1]
+	MainGui = game:GetObjects(getcustomasset("NZL Studio Deep/Deepwoken-Config/GuiItself.rbxm"))[1]
 end
 
 local GlobalAssets = MainGui:WaitForChild("GlobalOrnaments")
@@ -38618,8 +38618,8 @@ local EnchantEffects = MainGui:WaitForChild("EnchantmentEffects")
 EnchantEffects.Parent = script
 
 if not RunService:IsStudio() then
-	if isfolder("NZL Studio/Deepwoken-Config/CustomEnchantments") then
-		local Files = listfiles("NZL Studio/Deepwoken-Config/CustomEnchantments")
+	if isfolder("NZL Studio Deep/Deepwoken-Config/CustomEnchantments") then
+		local Files = listfiles("NZL Studio Deep/Deepwoken-Config/CustomEnchantments")
 		for i,File in pairs(Files) do
 			local LoadedEnchantment = game:GetObjects(getcustomasset(File))[1]
 			if EnchantEffects:FindFirstChild(LoadedEnchantment.Name) then
@@ -38629,8 +38629,8 @@ if not RunService:IsStudio() then
 		end
 	end
 
-	if isfolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments") then
-		local Files = listfiles("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments")
+	if isfolder("NZL Studio Deep/Deepwoken-Config/CustomGlobalOrnaments") then
+		local Files = listfiles("NZL Studio Deep/Deepwoken-Config/CustomGlobalOrnaments")
 		for i,File in pairs(Files) do
 			local NewOrnament = game:GetObjects(getcustomasset(File))[1]
 			NewOrnament.Parent = GlobalAssets
@@ -41687,7 +41687,7 @@ local function OutputSettings()
 		SAVE_FAKE.Name = LocalPlayer.UserId.."_"..Slot
 		SAVE_FAKE.Value = JSON
 	else 
-		writefile("NZL Studio/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt",JSON)
+		writefile("NZL Studio Deep/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt",JSON)
 	end
 end
 
@@ -41702,8 +41702,8 @@ local function InputSettings()
 			return nil
 		end
 	else 
-		if isfile("NZL Studio/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt") then
-			JSON = readfile("NZL Studio/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt")
+		if isfile("NZL Studio Deep/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt") then
+			JSON = readfile("NZL Studio Deep/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt")
 		else 
 
 			return nil
@@ -41805,7 +41805,7 @@ if RunService:IsStudio() then
 		LoadRace("Custom",Race)
 	end
 else
-	local Files = listfiles("NZL Studio/Deepwoken-Config/CustomRaces")
+	local Files = listfiles("NZL Studio Deep/Deepwoken-Config/CustomRaces")
 	for i,File in pairs(Files) do
 		local LoadedRace = game:GetObjects(getcustomasset(File))[1]
 
@@ -43087,7 +43087,7 @@ modules["@src/features/visuals/stream_proof_esp"] = [[
 
 if identifyexecutor() ~= "Volt" then return end
 local self = Feature:new("stream_proof_esp");
-self.font = DrawFont.Register(readfile("NZL Studio/fonts/lexend.ttf"), {
+self.font = DrawFont.Register(readfile("NZL Studio Deep/fonts/lexend.ttf"), {
     PixelSize = 16
 });
 
@@ -43357,48 +43357,48 @@ if not LPH_OBFUSCATED then
 end; 
 
 xpcall(function()
-    if not isfolder("NZL Studio") then
-        makefolder("NZL Studio");
+    if not isfolder("NZL Studio Deep") then
+        makefolder("NZL Studio Deep");
     end;
     
-    if not isfolder("NZL Studio/Assets") then
-        makefolder("NZL Studio/Assets");
+    if not isfolder("NZL Studio Deep/Assets") then
+        makefolder("NZL Studio Deep/Assets");
     end;
 
-    if not isfolder("NZL Studio/Assets/Hit Sounds") then
-        makefolder("NZL Studio/Assets/Hit Sounds");
+    if not isfolder("NZL Studio Deep/Assets/Hit Sounds") then
+        makefolder("NZL Studio Deep/Assets/Hit Sounds");
     end;
 
-    if not isfolder("NZL Studio/Assets/Parry Sounds") then
-        makefolder("NZL Studio/Assets/Parry Sounds");
+    if not isfolder("NZL Studio Deep/Assets/Parry Sounds") then
+        makefolder("NZL Studio Deep/Assets/Parry Sounds");
     end;
 
-    if not isfolder("NZL Studio/Fonts") then
-        makefolder("NZL Studio/Fonts");
+    if not isfolder("NZL Studio Deep/Fonts") then
+        makefolder("NZL Studio Deep/Fonts");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config") then
-        makefolder("NZL Studio/Deepwoken-Config");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config") then
+        makefolder("NZL Studio Deep/Deepwoken-Config");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments") then
-        makefolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config/CustomGlobalOrnaments") then
+        makefolder("NZL Studio Deep/Deepwoken-Config/CustomGlobalOrnaments");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config/CustomRaces") then
-        makefolder("NZL Studio/Deepwoken-Config/CustomRaces");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config/CustomRaces") then
+        makefolder("NZL Studio Deep/Deepwoken-Config/CustomRaces");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config/Preferences") then
-        makefolder("NZL Studio/Deepwoken-Config/Preferences");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config/Preferences") then
+        makefolder("NZL Studio Deep/Deepwoken-Config/Preferences");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config/CustomEnchantments") then
-        makefolder("NZL Studio/Deepwoken-Config/CustomEnchantments");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config/CustomEnchantments") then
+        makefolder("NZL Studio Deep/Deepwoken-Config/CustomEnchantments");
     end;
 
-    if not isfile("NZL Studio/script_state") then
-        writefile("NZL Studio/script_state", game:GetService("HttpService"):JSONEncode({
+    if not isfile("NZL Studio Deep/script_state") then
+        writefile("NZL Studio Deep/script_state", game:GetService("HttpService"):JSONEncode({
             ["last_executed"] = tick(),
             ["last_executed_version"] = LPH_ENCSTR("__BUILD__"),
             ["build_id"] = game:GetService("HttpService"):GenerateGUID(false)
@@ -43464,7 +43464,7 @@ aztup.is_deepwoken = (function()
         or game:GetService("ReplicatedStorage"):FindFirstChild("Modules") ~= nil;
 end)();
 
-local hasnt_accepted_tos = not isfile("NZL Studio/tos_accepted_82126_0822UTC0.txt");
+local hasnt_accepted_tos = not isfile("NZL Studio Deep/tos_accepted_82126_0822UTC0.txt");
 
 env.persistent_data = require("@src/utility/persistent_data");
 env.Logger = require(LPH_ENCSTR("@src/utility/logger"));   
@@ -43511,33 +43511,33 @@ do
 end;
         
         task.spawn(pcall, function()  
-            if not isfile("NZL Studio/Assets/proximity.mp3") then
-                writefile("NZL Studio/Assets/proximity.mp3", decode_asset(inline_asset_b96("@assets/proximity.mp3")));
+            if not isfile("NZL Studio Deep/Assets/proximity.mp3") then
+                writefile("NZL Studio Deep/Assets/proximity.mp3", decode_asset(inline_asset_b96("@assets/proximity.mp3")));
             end;
 
-            if not isfile("NZL Studio/Assets/Parry Sounds/Ultrakill Parry.mp3") then
-                writefile("NZL Studio/Assets/Parry Sounds/Ultrakill Parry.mp3", decode_asset(inline_asset_b96("@assets/Ultrakill Parry.mp3")));
+            if not isfile("NZL Studio Deep/Assets/Parry Sounds/Ultrakill Parry.mp3") then
+                writefile("NZL Studio Deep/Assets/Parry Sounds/Ultrakill Parry.mp3", decode_asset(inline_asset_b96("@assets/Ultrakill Parry.mp3")));
             end;
 
-            if not isfile("NZL Studio/Assets/notification.mp3") then 
-                writefile("NZL Studio/Assets/notification.mp3", decode_asset(inline_asset_b96("@assets/notification.mp3")));
+            if not isfile("NZL Studio Deep/Assets/notification.mp3") then 
+                writefile("NZL Studio Deep/Assets/notification.mp3", decode_asset(inline_asset_b96("@assets/notification.mp3")));
             end;
 
-            if not isfile("NZL Studio/Deepwoken-Config/GuiItself.rbxm") then
-                writefile("NZL Studio/Deepwoken-Config/GuiItself.rbxm", decode_asset(inline_asset_b96("@assets/DeepwokenMorphs/GuiItself.rbxm")));
+            if not isfile("NZL Studio Deep/Deepwoken-Config/GuiItself.rbxm") then
+                writefile("NZL Studio Deep/Deepwoken-Config/GuiItself.rbxm", decode_asset(inline_asset_b96("@assets/DeepwokenMorphs/GuiItself.rbxm")));
             end;
         end)
         
-        if not isfile("NZL Studio/Fonts/Lexend.ttf") then 
-            writefile("NZL Studio/Fonts/Lexend.ttf", decode_asset(inline_asset_b96("@assets/lexend.ttf")));
+        if not isfile("NZL Studio Deep/Fonts/Lexend.ttf") then 
+            writefile("NZL Studio Deep/Fonts/Lexend.ttf", decode_asset(inline_asset_b96("@assets/lexend.ttf")));
         end; 
 
-        if not isfile("NZL Studio/Fonts/Lexend-Bold.ttf") then 
-            writefile("NZL Studio/Fonts/Lexend-Bold.ttf", decode_asset(inline_asset_b96("@assets/lexend-bold.ttf")));
+        if not isfile("NZL Studio Deep/Fonts/Lexend-Bold.ttf") then 
+            writefile("NZL Studio Deep/Fonts/Lexend-Bold.ttf", decode_asset(inline_asset_b96("@assets/lexend-bold.ttf")));
         end; 
 
-        if not isfile("NZL Studio/Fonts/Lexend-Medium.ttf") then 
-            writefile("NZL Studio/Fonts/Lexend-Medium.ttf", decode_asset(inline_asset_b96("@assets/lexend-medium.ttf")));
+        if not isfile("NZL Studio Deep/Fonts/Lexend-Medium.ttf") then 
+            writefile("NZL Studio Deep/Fonts/Lexend-Medium.ttf", decode_asset(inline_asset_b96("@assets/lexend-medium.ttf")));
         end; 
     end)(); 
 end; 
@@ -43551,16 +43551,15 @@ if not LPH_OBFUSCATED then
 end;
 
 if hasnt_accepted_tos then
-    require(LPH_ENCSTR("@src/ui/tos"));
     
-    if not isfile("NZL Studio\\Deepwoken-Config\\settings\\default_conf.json") and not isfile("NZL Studio/inquired_about_default_config.txt") and not isfile("NZL Studio\\Deepwoken-Config\\settings\\autoload.txt") then
-        writefile("NZL Studio/inquired_about_default_config.txt", "true");
+    if not isfile("NZL Studio Deep\\Deepwoken-Config\\settings\\default_conf.json") and not isfile("NZL Studio Deep/inquired_about_default_config.txt") and not isfile("NZL Studio Deep\\Deepwoken-Config\\settings\\autoload.txt") then
+        writefile("NZL Studio Deep/inquired_about_default_config.txt", "true");
         require(LPH_ENCSTR("@src/ui/choice_frame")).set(nil,
             function()
-	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "https://files.NZL Studio/configs/premade.json");
+	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "nzs://offline" -- [nzl studio] upstream premade-config endpoint is offline in oss);
                 if config_fetch_success then
-                    writefile("NZL Studio\\Deepwoken-Config\\settings\\default_conf.json", config_content);
-                    writefile("NZL Studio\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
+                    writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\default_conf.json", config_content);
+                    writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
                 end;
             end,
             function()
@@ -43603,7 +43602,7 @@ end;
 env.signal = require("@src/utility/signal");
 loaded_signal = env.signal.new();
 env.LOAD_START_TIME = tick();
-aztup.silent_mode = isfile(LPH_ENCSTR("NZL Studio/silent_mode_toggle"));
+aztup.silent_mode = isfile(LPH_ENCSTR("NZL Studio Deep/silent_mode_toggle"));
 aztup.maid = require(("@src/utility/maid")).new(); 
 
 if not aztup.ui then
@@ -44196,7 +44195,7 @@ task.spawn(function()
 			if tick() - last_debug > 5 then
 				last_debug = tick();
 				-- silent diagnostics: file only, no console spam
-				pcall(writefile, "NZL Studio/menu_debug.txt", string.format(
+				pcall(writefile, "NZL Studio Deep/menu_debug.txt", string.format(
 					"[pr menu] scan: frames=%d candidates=%d icons=%d badges=%d",
 					diag_frames, diag_candidates, diag_icons, badge_count
 				));
@@ -44444,10 +44443,10 @@ return {
 ]];
 modules["@src/ui/config_converter"] = [[
 return function()
-    if isfile("NZL Studio/converted.txt") then
+    if isfile("NZL Studio Deep/converted.txt") then
         return    
 else
-        writefile("NZL Studio/converted.txt", "true");
+        writefile("NZL Studio Deep/converted.txt", "true");
     end;
 
     if isfolder("ProjectRainRewrite") and isfolder("ProjectRainRewrite/settings") then
@@ -44514,9 +44513,9 @@ end;
             end;
 
             local name = file:gsub("/", "\\"):split("ProjectRainRewrite\\settings\\")[2]:gsub(".json", "");
-            if isfile("NZL Studio\\Deepwoken-Config\\settings\\PRLegacyConvert-" .. name .. ".json") then continue end
+            if isfile("NZL Studio Deep\\Deepwoken-Config\\settings\\PRLegacyConvert-" .. name .. ".json") then continue end
             Logger:long_notify("Converted config: " .. name);
-            writefile("NZL Studio\\Deepwoken-Config\\settings\\PRLegacyConvert-" .. name .. ".json", game:GetService("HttpService"):JSONEncode(converted_config));
+            writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\PRLegacyConvert-" .. name .. ".json", game:GetService("HttpService"):JSONEncode(converted_config));
         end;
     end;
 end
@@ -45178,8 +45177,8 @@ function automation:make_config()
             persistent_data:set(key, value);
         end
 
-        if not isfolder("NZL Studio/automation_configs") then
-            makefolder("NZL Studio/automation_configs")
+        if not isfolder("NZL Studio Deep/automation_configs") then
+            makefolder("NZL Studio Deep/automation_configs")
         end
 
         if aztup_options.automation_config_mode.Value == "File" then
@@ -45190,7 +45189,7 @@ function automation:make_config()
 
             local config_name = aztup_options.automation_config_name.Value;
             local success, err = pcall(function()
-                writefile("NZL Studio/automation_configs/" .. config_name .. ".json", game:GetService("HttpService"):JSONEncode(persistent_data_items));
+                writefile("NZL Studio Deep/automation_configs/" .. config_name .. ".json", game:GetService("HttpService"):JSONEncode(persistent_data_items));
             end)
 
             if success then
@@ -45209,7 +45208,7 @@ function automation:make_config()
 
     local function load_config(config_name)
         local success, data = pcall(function()
-            return readfile("NZL Studio/automation_configs/" .. config_name .. ".json")        
+            return readfile("NZL Studio Deep/automation_configs/" .. config_name .. ".json")        
 end) 
         
         if success then
@@ -45260,7 +45259,7 @@ end
     config_groupbox:newButton("Load", function()
         local config_name = aztup_options.automation_config_name.Value;
         local success, data = pcall(function()
-            return readfile("NZL Studio/automation_configs/" .. config_name .. ".json")        
+            return readfile("NZL Studio Deep/automation_configs/" .. config_name .. ".json")        
 end)
 
         if success then
@@ -45282,7 +45281,7 @@ end)
     config_groupbox:newSlider("force_tween_speed_value", "Tween Speed", 250, 16, 250, 1, true, "studs/second");
 
     local item_loot_box = config_groupbox:newDependencyBox("automation_config_mode", "File");
-    item_loot_box:newTextbox('automation_config_name', 'Name', false, '', nil, "What the automation config will set to, Stored @ 'workspace/NZL Studio/automation_configs")
+    item_loot_box:newTextbox('automation_config_name', 'Name', false, '', nil, "What the automation config will set to, Stored @ 'workspace/NZL Studio Deep/automation_configs")
     
     label = config_groupbox:newLabel(string.format("Currently set to: %s", persistent_data:get("automation_config", "persistent"))); 
     xpcall(set_bools, function(...)
@@ -46441,7 +46440,7 @@ return function(tab)
     local parry_sound_box = qol_groupbox:newDependencyBox("parry_sounds");
     parry_sound_box:newDropdown("parry_sound_type", "Sound", { 
         "Ultrakill Parry",
-    }, "Ultrakill Parry", true, "Sound to use, mp3 only stored in workspace @ NZL Studio/Assets/Parry Sounds.");
+    }, "Ultrakill Parry", true, "Sound to use, mp3 only stored in workspace @ NZL Studio Deep/Assets/Parry Sounds.");
     local game_qol_toggles = {
         {"minesweeper", "Minesweeper", false, "Play a game of minesweeper in a draggable widget. Left click to reveal, right click to flag.", nil, true},
         {"bring_mobs",  "Bring Mobs", false, "Brings nearby mobs to your location abusing network ownership.", nil, true},
@@ -46505,8 +46504,8 @@ return function(tab)
     local function refresh_sounds() 
         local sound_list = {}
 
-        for _, file in listfiles("NZL Studio/Assets/Parry Sounds") do
-            table.insert(sound_list, tostring(file:gsub("/", "\\"):gsub(".mp3", ""):gsub("NZL Studio\\Assets\\Parry Sounds\\", "")));
+        for _, file in listfiles("NZL Studio Deep/Assets/Parry Sounds") do
+            table.insert(sound_list, tostring(file:gsub("/", "\\"):gsub(".mp3", ""):gsub("NZL Studio Deep\\Assets\\Parry Sounds\\", "")));
         end;
 
 		aztup_options.parry_sound_type:SetValues(sound_list)
@@ -47008,7 +47007,7 @@ xpcall(function()
 
     local ThemeManager = require("@src/utility/librarys/managers/ThemeManager");
     ThemeManager:SetLibrary(aztup.ui);
-    ThemeManager:SetFolder('NZL Studio/Deepwoken-Config')
+    ThemeManager:SetFolder('NZL Studio Deep/Deepwoken-Config')
     ThemeManager:LoadDefault()
 end, warn);
 
@@ -47308,7 +47307,7 @@ end
     game:GetService("Debris"):AddItem(Music, 2);
     game:GetService("Debris"):AddItem(Converted["_ScreenGui"], 2);
     accepted = true;
-    writefile("NZL Studio/tos_accepted_82126_0822UTC0.txt", "yes");
+    writefile("NZL Studio Deep/tos_accepted_82126_0822UTC0.txt", "yes");
 end)
 
 Converted._Deny.MouseButton1Click:Connect(function()
@@ -47393,8 +47392,8 @@ end;
             "spotify_redirect_url",
             
         })
-        SaveManager:SetFolder('NZL Studio/Deepwoken-Config')
-        ThemeManager:SetFolder('NZL Studio/Deepwoken-Config')
+        SaveManager:SetFolder('NZL Studio Deep/Deepwoken-Config')
+        ThemeManager:SetFolder('NZL Studio Deep/Deepwoken-Config')
         SaveManager:BuildConfigSection(aztup.tabs.UI.Tab);
         ThemeManager:ApplyToTab(aztup.tabs.UI.Tab);
 
@@ -47664,8 +47663,8 @@ modules["@src/utility/custom_font"] = [[
 local custom_font = {}
 
 -- [nzl studio] hardened font loader:
---   * init.lua writes the assets to "NZL Studio/Fonts" (capital F) while the
---     original module read "NZL Studio/fonts" - try both, case matters on
+--   * init.lua writes the assets to "NZL Studio Deep/Fonts" (capital F) while the
+--     original module read "NZL Studio Deep/fonts" - try both, case matters on
 --     android executors
 --   * every step is pcall'd and the pre-warm wait is time-boxed, so a failing
 --     getcustomasset/textservice can never hang init forever
@@ -47702,20 +47701,20 @@ end
 
 function custom_font.make_lexend_font()
     local ok, result = pcall(function()
-        local font_regular = get_asset("NZL Studio/Fonts/Lexend.ttf", "NZL Studio/fonts/Lexend.ttf");
-        local font_bold = get_asset("NZL Studio/Fonts/Lexend-Bold.ttf", "NZL Studio/fonts/Lexend-Bold.ttf");
-        local font_medium = get_asset("NZL Studio/Fonts/Lexend-Medium.ttf", "NZL Studio/fonts/Lexend-Medium.ttf");
+        local font_regular = get_asset("NZL Studio Deep/Fonts/Lexend.ttf", "NZL Studio Deep/fonts/Lexend.ttf");
+        local font_bold = get_asset("NZL Studio Deep/Fonts/Lexend-Bold.ttf", "NZL Studio Deep/fonts/Lexend-Bold.ttf");
+        local font_medium = get_asset("NZL Studio Deep/Fonts/Lexend-Medium.ttf", "NZL Studio Deep/fonts/Lexend-Medium.ttf");
 
         assert(font_regular and font_bold and font_medium, "could not resolve lexend ttf assets");
 
         pcall(function()
-            makefolder("NZL Studio/Fonts");
+            makefolder("NZL Studio Deep/Fonts");
         end);
         pcall(function()
-            makefolder("NZL Studio/fonts");
+            makefolder("NZL Studio Deep/fonts");
         end);
 
-        writefile("NZL Studio/Fonts/Lexend.json", HttpService:JSONEncode({
+        writefile("NZL Studio Deep/Fonts/Lexend.json", HttpService:JSONEncode({
             name = "Lexend",
             faces = {
                 {
@@ -47739,7 +47738,7 @@ function custom_font.make_lexend_font()
             }
         }))
 
-        local path_asset = get_asset("NZL Studio/Fonts/Lexend.json", "NZL Studio/fonts/Lexend.json");
+        local path_asset = get_asset("NZL Studio Deep/Fonts/Lexend.json", "NZL Studio Deep/fonts/Lexend.json");
         assert(path_asset, "could not resolve lexend font json");
 
         local fonts = {
@@ -48904,7 +48903,7 @@ return {
 
         if game.PlaceId ~= 4111023553 then 
             xpcall(function()
-                local blacklisted_servers = isfile("NZL Studio/hopper blacklisted servers.json") and game:GetService("HttpService"):JSONDecode(readfile("NZL Studio/hopper blacklisted servers.json")) or {};
+                local blacklisted_servers = isfile("NZL Studio Deep/hopper blacklisted servers.json") and game:GetService("HttpService"):JSONDecode(readfile("NZL Studio Deep/hopper blacklisted servers.json")) or {};
                 
                 for id, server in blacklisted_servers do
                     if server.expiry < tick() then
@@ -48917,7 +48916,7 @@ return {
                         expiry = tick() + (expiry or 900)
                     }
                 
-                    writefile("NZL Studio/hopper blacklisted servers.json", game:GetService("HttpService"):JSONEncode(blacklisted_servers));
+                    writefile("NZL Studio Deep/hopper blacklisted servers.json", game:GetService("HttpService"):JSONEncode(blacklisted_servers));
                 end;
 
                 blacklist(game.JobId, expiry or (10 * 60))
@@ -48940,7 +48939,7 @@ return {
         local server = '%s';
         local slot = "%s";
 
-        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
+        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio Deep/assets/notification.mp3"); sound:Play(); end, warn);')
 
         while task.wait() do
             game:GetService("ReplicatedStorage").Requests:WaitForChild("StartMenu"):WaitForChild("PickSlot"):FireServer(slot, {
@@ -49022,7 +49021,7 @@ return passive_parser
 ]];
 modules["@src/utility/fflags"] = [[
 local fflags = {} do
-    fflags.current = isfile("NZL Studio/fflags.txt") and readfile("NZL Studio/fflags.txt") or "{}";
+    fflags.current = isfile("NZL Studio Deep/fflags.txt") and readfile("NZL Studio Deep/fflags.txt") or "{}";
 
     function fflags:get_main()
         if not self.cached then
@@ -49040,7 +49039,7 @@ end;
         decoded[flag] = value;
         self.current = services.HttpService:JSONEncode(decoded);
         self.cached = services.HttpService:JSONDecode(self.current or "{}");
-        writefile("NZL Studio/fflags.txt", self.current);
+        writefile("NZL Studio Deep/fflags.txt", self.current);
     end;
 end
 
@@ -51160,7 +51159,7 @@ return function(Library, context)
 				local sound = Instance.new('Sound', game:GetService('CoreGui'))
 				game:GetService('Debris'):AddItem(sound, 6)
 				sound.Volume = aztup_options.NotificationVolume.Value
-				sound.SoundId = getcustomasset('NZL Studio/assets/notification.mp3')
+				sound.SoundId = getcustomasset('NZL Studio Deep/assets/notification.mp3')
 				sound:Play()
 			end, warn)
 		end
@@ -53388,7 +53387,7 @@ local SaveManager = {} do
 			auto_loading = true;
 			local success, err = self:Load(name)
 			auto_loading = false;
-			if isfile("NZL Studio/silent_mode_toggle") then return end
+			if isfile("NZL Studio Deep/silent_mode_toggle") then return end
 
 			if not success then
 				return self.Library:NotifyWithSound('Failed to load autoload config: ' .. err, 50)
@@ -53403,7 +53402,7 @@ local SaveManager = {} do
 			auto_loading = true;
 			local success, err = self:Load(name)
 			auto_loading = false;
-			if isfile("NZL Studio/silent_mode_toggle") then return end
+			if isfile("NZL Studio Deep/silent_mode_toggle") then return end
 
 			if not success then
 				return self.Library:NotifyWithSound('Failed to load autoload config: ' .. err, 50)
@@ -53421,7 +53420,7 @@ local SaveManager = {} do
 		section:AddButton({
 			Text = "Switch to Nightly Branch (reexec needed)",
 			Func = function()
-				writefile("NZL Studio/nightliy-branch", "true");
+				writefile("NZL Studio Deep/nightliy-branch", "true");
 			end,
 			DoubleClick = true
 		})
@@ -53566,19 +53565,19 @@ local SaveManager = {} do
 		})
 
 		   
-		local silent_val = isfile("NZL Studio/silent_mode_toggle"); 
+		local silent_val = isfile("NZL Studio Deep/silent_mode_toggle"); 
 		section:AddButton({
 			Text = 'Toggle Silent Mode', 
 			Func = function()
 				silent_val = not silent_val;
 				if not silent_val then
-					pcall(delfile, "NZL Studio/silent_mode_toggle")
+					pcall(delfile, "NZL Studio Deep/silent_mode_toggle")
 				else
-					pcall(writefile, "NZL Studio/silent_mode_toggle", "lmao")
+					pcall(writefile, "NZL Studio Deep/silent_mode_toggle", "lmao")
 				end;
 
 				if silent_val then
-					Logger:long_notify("Delete 'workspace/NZL Studio/silent_mode_toggle' to turn this off.");
+					Logger:long_notify("Delete 'workspace/NZL Studio Deep/silent_mode_toggle' to turn this off.");
 				    messagebox("You have 'Silent Mode' enabled, Which means you wont see the UI until you open it with the keybind & have extra anti PC check features, If you would like to disable this, Go to UI settings and disable it, This notification is disablable in the fast flags area of UI", "NZL Studio", 0)
 					messagebox("'Silent Mode' will invalidate any bug reports or support, It will disable notifications (including mod detector) which are a core part of the script as a extra side effect.", "NZL Studio", 0)
 				else
@@ -53596,7 +53595,7 @@ local SaveManager = {} do
 		
 		local section = tab:AddRightGroupbox('Configuration')
 		SaveManager:BuildOtherSection(tab);
-		local silent_val = isfile("NZL Studio/silent_mode_toggle");
+		local silent_val = isfile("NZL Studio Deep/silent_mode_toggle");
 		
         section:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'RightAlt', NoUI = true, Text = 'Menu keybind' })
 
@@ -56564,11 +56563,11 @@ modules["@src/utility/logger"] = [[
 
 
 
-local dev_file = getgenv().dev_file or string.format("NZL Studio/logs/client-%s", tostring(tick()))
+local dev_file = getgenv().dev_file or string.format("NZL Studio Deep/logs/client-%s", tostring(tick()))
 
 if not LPH_OBFUSCATED then
-    if not isfolder("NZL Studio/logs") then
-        makefolder("NZL Studio/logs");
+    if not isfolder("NZL Studio Deep/logs") then
+        makefolder("NZL Studio Deep/logs");
     end;
 
     if not getgenv().dev_file then

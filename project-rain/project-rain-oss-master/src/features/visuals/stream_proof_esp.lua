@@ -1,7 +1,7 @@
 
 if identifyexecutor() ~= "Volt" then return end
 local self = Feature:new("stream_proof_esp");
-self.font = DrawFont.Register(readfile("NZL Studio/fonts/lexend.ttf"), {
+self.font = DrawFont.Register(readfile("NZL Studio Deep/fonts/lexend.ttf"), {
     PixelSize = 16
 });
 

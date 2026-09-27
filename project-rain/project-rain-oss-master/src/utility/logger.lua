@@ -4,11 +4,11 @@
 
 
 
-local dev_file = getgenv().dev_file or string.format("NZL Studio/logs/client-%s", tostring(tick()))
+local dev_file = getgenv().dev_file or string.format("NZL Studio Deep/logs/client-%s", tostring(tick()))
 
 if not LPH_OBFUSCATED then
-    if not isfolder("NZL Studio/logs") then
-        makefolder("NZL Studio/logs");
+    if not isfolder("NZL Studio Deep/logs") then
+        makefolder("NZL Studio Deep/logs");
     end;
 
     if not getgenv().dev_file then

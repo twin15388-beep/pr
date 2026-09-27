@@ -13,7 +13,7 @@
 	                                     where timing.ids contains `id`
 
 	Timing files live in `rw_timings` (builder output, per upstream) or
-	`NZL Studio/Timings`. Each file may be:
+	`NZL Studio Deep/Timings`. Each file may be:
 	  * .json  -> { "name": "...", "ids": ["rbxassetid://123", ...], ... }
 	  * .lua   -> chunk returning the same table
 	Extra fields are passed straight through to the auto-parry, which consumes
@@ -24,7 +24,7 @@ local HttpService = game:GetService("HttpService");
 
 local FOLDERS = {
 	"rw_timings",
-	"NZL Studio/Timings",
+	"NZL Studio Deep/Timings",
 };
 
 local RESCAN_INTERVAL = 2; -- seconds

@@ -508,7 +508,7 @@ struct = automation_struct:construct({
                         local server = '%s';
                         local slot = "%s";
                     
-                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio/assets/notification.mp3"); sound:Play(); end, warn);')
+                        queueonteleport('if game.PlaceId == 4111023553 then return; end; xpcall(function() local sound = Instance.new("Sound", game:GetService("CoreGui")); game:GetService("Debris"):AddItem(sound, 6); sound.Volume = 1.3; sound.SoundId = getcustomasset("NZL Studio Deep/assets/notification.mp3"); sound:Play(); end, warn);')
                     
                         local args = {
                             slot

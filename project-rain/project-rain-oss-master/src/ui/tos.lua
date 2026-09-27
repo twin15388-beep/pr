@@ -33,7 +33,7 @@ xpcall(function()
 
     local ThemeManager = require("@src/utility/librarys/managers/ThemeManager");
     ThemeManager:SetLibrary(aztup.ui);
-    ThemeManager:SetFolder('NZL Studio/Deepwoken-Config')
+    ThemeManager:SetFolder('NZL Studio Deep/Deepwoken-Config')
     ThemeManager:LoadDefault()
 end, warn);
 
@@ -333,7 +333,7 @@ end
     game:GetService("Debris"):AddItem(Music, 2);
     game:GetService("Debris"):AddItem(Converted["_ScreenGui"], 2);
     accepted = true;
-    writefile("NZL Studio/tos_accepted_82126_0822UTC0.txt", "yes");
+    writefile("NZL Studio Deep/tos_accepted_82126_0822UTC0.txt", "yes");
 end)
 
 Converted._Deny.MouseButton1Click:Connect(function()

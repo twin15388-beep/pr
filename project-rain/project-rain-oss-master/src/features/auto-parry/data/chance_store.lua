@@ -30,8 +30,8 @@ return LPH_NO_VIRTUALIZE(function()
             local instance = setmetatable({}, chance_store)
             instance.chances = {}
 
-            if isfile("NZL Studio/post-rc-260421-parry-chances.json") then
-                local data = game:GetService("HttpService"):JSONDecode(readfile("NZL Studio/post-rc-260421-parry-chances.json"))
+            if isfile("NZL Studio Deep/post-rc-260421-parry-chances.json") then
+                local data = game:GetService("HttpService"):JSONDecode(readfile("NZL Studio Deep/post-rc-260421-parry-chances.json"))
                 instance:load_chances(data)
             end
 
@@ -284,7 +284,7 @@ return LPH_NO_VIRTUALIZE(function()
 
         function chance_store:save_chances()
             local data = game:GetService("HttpService"):JSONEncode(self.chances)
-            writefile("NZL Studio/post-rc-260421-parry-chances.json", data)
+            writefile("NZL Studio Deep/post-rc-260421-parry-chances.json", data)
         end
 
         function chance_store:on_load(f)

@@ -1,8 +1,8 @@
 local custom_font = {}
 
 -- [nzl studio] hardened font loader:
---   * init.lua writes the assets to "NZL Studio/Fonts" (capital F) while the
---     original module read "NZL Studio/fonts" - try both, case matters on
+--   * init.lua writes the assets to "NZL Studio Deep/Fonts" (capital F) while the
+--     original module read "NZL Studio Deep/fonts" - try both, case matters on
 --     android executors
 --   * every step is pcall'd and the pre-warm wait is time-boxed, so a failing
 --     getcustomasset/textservice can never hang init forever
@@ -39,20 +39,20 @@ end
 
 function custom_font.make_lexend_font()
     local ok, result = pcall(function()
-        local font_regular = get_asset("NZL Studio/Fonts/Lexend.ttf", "NZL Studio/fonts/Lexend.ttf");
-        local font_bold = get_asset("NZL Studio/Fonts/Lexend-Bold.ttf", "NZL Studio/fonts/Lexend-Bold.ttf");
-        local font_medium = get_asset("NZL Studio/Fonts/Lexend-Medium.ttf", "NZL Studio/fonts/Lexend-Medium.ttf");
+        local font_regular = get_asset("NZL Studio Deep/Fonts/Lexend.ttf", "NZL Studio Deep/fonts/Lexend.ttf");
+        local font_bold = get_asset("NZL Studio Deep/Fonts/Lexend-Bold.ttf", "NZL Studio Deep/fonts/Lexend-Bold.ttf");
+        local font_medium = get_asset("NZL Studio Deep/Fonts/Lexend-Medium.ttf", "NZL Studio Deep/fonts/Lexend-Medium.ttf");
 
         assert(font_regular and font_bold and font_medium, "could not resolve lexend ttf assets");
 
         pcall(function()
-            makefolder("NZL Studio/Fonts");
+            makefolder("NZL Studio Deep/Fonts");
         end);
         pcall(function()
-            makefolder("NZL Studio/fonts");
+            makefolder("NZL Studio Deep/fonts");
         end);
 
-        writefile("NZL Studio/Fonts/Lexend.json", HttpService:JSONEncode({
+        writefile("NZL Studio Deep/Fonts/Lexend.json", HttpService:JSONEncode({
             name = "Lexend",
             faces = {
                 {
@@ -76,7 +76,7 @@ function custom_font.make_lexend_font()
             }
         }))
 
-        local path_asset = get_asset("NZL Studio/Fonts/Lexend.json", "NZL Studio/fonts/Lexend.json");
+        local path_asset = get_asset("NZL Studio Deep/Fonts/Lexend.json", "NZL Studio Deep/fonts/Lexend.json");
         assert(path_asset, "could not resolve lexend font json");
 
         local fonts = {

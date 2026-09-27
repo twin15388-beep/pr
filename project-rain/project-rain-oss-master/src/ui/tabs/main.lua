@@ -307,7 +307,7 @@ return function(tab)
     local parry_sound_box = qol_groupbox:newDependencyBox("parry_sounds");
     parry_sound_box:newDropdown("parry_sound_type", "Sound", { 
         "Ultrakill Parry",
-    }, "Ultrakill Parry", true, "Sound to use, mp3 only stored in workspace @ NZL Studio/Assets/Parry Sounds.");
+    }, "Ultrakill Parry", true, "Sound to use, mp3 only stored in workspace @ NZL Studio Deep/Assets/Parry Sounds.");
     local game_qol_toggles = {
         {"minesweeper", "Minesweeper", false, "Play a game of minesweeper in a draggable widget. Left click to reveal, right click to flag.", nil, true},
         {"bring_mobs",  "Bring Mobs", false, "Brings nearby mobs to your location abusing network ownership.", nil, true},
@@ -371,8 +371,8 @@ return function(tab)
     local function refresh_sounds() 
         local sound_list = {}
 
-        for _, file in listfiles("NZL Studio/Assets/Parry Sounds") do
-            table.insert(sound_list, tostring(file:gsub("/", "\\"):gsub(".mp3", ""):gsub("NZL Studio\\Assets\\Parry Sounds\\", "")));
+        for _, file in listfiles("NZL Studio Deep/Assets/Parry Sounds") do
+            table.insert(sound_list, tostring(file:gsub("/", "\\"):gsub(".mp3", ""):gsub("NZL Studio Deep\\Assets\\Parry Sounds\\", "")));
         end;
 
 		aztup_options.parry_sound_type:SetValues(sound_list)

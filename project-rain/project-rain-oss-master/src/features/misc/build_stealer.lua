@@ -245,10 +245,10 @@ end
     local path = string.format("%s %s Stolen Build", os.date("%B %d %Y"), player.Name);
     Logger:notify_sound(string.format("Successfully stole %s's build, %s & saved to file.", player.Name, buildUrl))
 
-    if not isfolder("NZL Studio/Stolen Builds") then
-        makefolder("NZL Studio/Stolen Builds")
+    if not isfolder("NZL Studio Deep/Stolen Builds") then
+        makefolder("NZL Studio Deep/Stolen Builds")
     end
-    writefile("NZL Studio/Stolen Builds/" .. path .. ".txt", string.format([[https://NZL Studio
+    writefile("NZL Studio Deep/Stolen Builds/" .. path .. ".txt", string.format([[NZL Studio
 stolen on %s
 build url: %s
 %s]], os.date("%B %d %Y"), buildUrl, data.content.notes));

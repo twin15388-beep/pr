@@ -54,48 +54,48 @@ if not LPH_OBFUSCATED then
 end; 
 
 xpcall(function()
-    if not isfolder("NZL Studio") then
-        makefolder("NZL Studio");
+    if not isfolder("NZL Studio Deep") then
+        makefolder("NZL Studio Deep");
     end;
     
-    if not isfolder("NZL Studio/Assets") then
-        makefolder("NZL Studio/Assets");
+    if not isfolder("NZL Studio Deep/Assets") then
+        makefolder("NZL Studio Deep/Assets");
     end;
 
-    if not isfolder("NZL Studio/Assets/Hit Sounds") then
-        makefolder("NZL Studio/Assets/Hit Sounds");
+    if not isfolder("NZL Studio Deep/Assets/Hit Sounds") then
+        makefolder("NZL Studio Deep/Assets/Hit Sounds");
     end;
 
-    if not isfolder("NZL Studio/Assets/Parry Sounds") then
-        makefolder("NZL Studio/Assets/Parry Sounds");
+    if not isfolder("NZL Studio Deep/Assets/Parry Sounds") then
+        makefolder("NZL Studio Deep/Assets/Parry Sounds");
     end;
 
-    if not isfolder("NZL Studio/Fonts") then
-        makefolder("NZL Studio/Fonts");
+    if not isfolder("NZL Studio Deep/Fonts") then
+        makefolder("NZL Studio Deep/Fonts");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config") then
-        makefolder("NZL Studio/Deepwoken-Config");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config") then
+        makefolder("NZL Studio Deep/Deepwoken-Config");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments") then
-        makefolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config/CustomGlobalOrnaments") then
+        makefolder("NZL Studio Deep/Deepwoken-Config/CustomGlobalOrnaments");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config/CustomRaces") then
-        makefolder("NZL Studio/Deepwoken-Config/CustomRaces");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config/CustomRaces") then
+        makefolder("NZL Studio Deep/Deepwoken-Config/CustomRaces");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config/Preferences") then
-        makefolder("NZL Studio/Deepwoken-Config/Preferences");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config/Preferences") then
+        makefolder("NZL Studio Deep/Deepwoken-Config/Preferences");
     end;
 
-    if not isfolder("NZL Studio/Deepwoken-Config/CustomEnchantments") then
-        makefolder("NZL Studio/Deepwoken-Config/CustomEnchantments");
+    if not isfolder("NZL Studio Deep/Deepwoken-Config/CustomEnchantments") then
+        makefolder("NZL Studio Deep/Deepwoken-Config/CustomEnchantments");
     end;
 
-    if not isfile("NZL Studio/script_state") then
-        writefile("NZL Studio/script_state", game:GetService("HttpService"):JSONEncode({
+    if not isfile("NZL Studio Deep/script_state") then
+        writefile("NZL Studio Deep/script_state", game:GetService("HttpService"):JSONEncode({
             ["last_executed"] = tick(),
             ["last_executed_version"] = LPH_ENCSTR("__BUILD__"),
             ["build_id"] = game:GetService("HttpService"):GenerateGUID(false)
@@ -161,7 +161,7 @@ aztup.is_deepwoken = (function()
         or game:GetService("ReplicatedStorage"):FindFirstChild("Modules") ~= nil;
 end)();
 
-local hasnt_accepted_tos = not isfile("NZL Studio/tos_accepted_82126_0822UTC0.txt");
+local hasnt_accepted_tos = not isfile("NZL Studio Deep/tos_accepted_82126_0822UTC0.txt");
 
 env.persistent_data = require("@src/utility/persistent_data");
 env.Logger = require(LPH_ENCSTR("@src/utility/logger"));   
@@ -208,33 +208,33 @@ do
 end;
         
         task.spawn(pcall, function()  
-            if not isfile("NZL Studio/Assets/proximity.mp3") then
-                writefile("NZL Studio/Assets/proximity.mp3", decode_asset(inline_asset_b96("@assets/proximity.mp3")));
+            if not isfile("NZL Studio Deep/Assets/proximity.mp3") then
+                writefile("NZL Studio Deep/Assets/proximity.mp3", decode_asset(inline_asset_b96("@assets/proximity.mp3")));
             end;
 
-            if not isfile("NZL Studio/Assets/Parry Sounds/Ultrakill Parry.mp3") then
-                writefile("NZL Studio/Assets/Parry Sounds/Ultrakill Parry.mp3", decode_asset(inline_asset_b96("@assets/Ultrakill Parry.mp3")));
+            if not isfile("NZL Studio Deep/Assets/Parry Sounds/Ultrakill Parry.mp3") then
+                writefile("NZL Studio Deep/Assets/Parry Sounds/Ultrakill Parry.mp3", decode_asset(inline_asset_b96("@assets/Ultrakill Parry.mp3")));
             end;
 
-            if not isfile("NZL Studio/Assets/notification.mp3") then 
-                writefile("NZL Studio/Assets/notification.mp3", decode_asset(inline_asset_b96("@assets/notification.mp3")));
+            if not isfile("NZL Studio Deep/Assets/notification.mp3") then 
+                writefile("NZL Studio Deep/Assets/notification.mp3", decode_asset(inline_asset_b96("@assets/notification.mp3")));
             end;
 
-            if not isfile("NZL Studio/Deepwoken-Config/GuiItself.rbxm") then
-                writefile("NZL Studio/Deepwoken-Config/GuiItself.rbxm", decode_asset(inline_asset_b96("@assets/DeepwokenMorphs/GuiItself.rbxm")));
+            if not isfile("NZL Studio Deep/Deepwoken-Config/GuiItself.rbxm") then
+                writefile("NZL Studio Deep/Deepwoken-Config/GuiItself.rbxm", decode_asset(inline_asset_b96("@assets/DeepwokenMorphs/GuiItself.rbxm")));
             end;
         end)
         
-        if not isfile("NZL Studio/Fonts/Lexend.ttf") then 
-            writefile("NZL Studio/Fonts/Lexend.ttf", decode_asset(inline_asset_b96("@assets/lexend.ttf")));
+        if not isfile("NZL Studio Deep/Fonts/Lexend.ttf") then 
+            writefile("NZL Studio Deep/Fonts/Lexend.ttf", decode_asset(inline_asset_b96("@assets/lexend.ttf")));
         end; 
 
-        if not isfile("NZL Studio/Fonts/Lexend-Bold.ttf") then 
-            writefile("NZL Studio/Fonts/Lexend-Bold.ttf", decode_asset(inline_asset_b96("@assets/lexend-bold.ttf")));
+        if not isfile("NZL Studio Deep/Fonts/Lexend-Bold.ttf") then 
+            writefile("NZL Studio Deep/Fonts/Lexend-Bold.ttf", decode_asset(inline_asset_b96("@assets/lexend-bold.ttf")));
         end; 
 
-        if not isfile("NZL Studio/Fonts/Lexend-Medium.ttf") then 
-            writefile("NZL Studio/Fonts/Lexend-Medium.ttf", decode_asset(inline_asset_b96("@assets/lexend-medium.ttf")));
+        if not isfile("NZL Studio Deep/Fonts/Lexend-Medium.ttf") then 
+            writefile("NZL Studio Deep/Fonts/Lexend-Medium.ttf", decode_asset(inline_asset_b96("@assets/lexend-medium.ttf")));
         end; 
     end)(); 
 end; 
@@ -248,16 +248,15 @@ if not LPH_OBFUSCATED then
 end;
 
 if hasnt_accepted_tos then
-    require(LPH_ENCSTR("@src/ui/tos"));
     
-    if not isfile("NZL Studio\\Deepwoken-Config\\settings\\default_conf.json") and not isfile("NZL Studio/inquired_about_default_config.txt") and not isfile("NZL Studio\\Deepwoken-Config\\settings\\autoload.txt") then
-        writefile("NZL Studio/inquired_about_default_config.txt", "true");
+    if not isfile("NZL Studio Deep\\Deepwoken-Config\\settings\\default_conf.json") and not isfile("NZL Studio Deep/inquired_about_default_config.txt") and not isfile("NZL Studio Deep\\Deepwoken-Config\\settings\\autoload.txt") then
+        writefile("NZL Studio Deep/inquired_about_default_config.txt", "true");
         require(LPH_ENCSTR("@src/ui/choice_frame")).set(nil,
             function()
-	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "https://files.NZL Studio/configs/premade.json");
+	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "nzs://offline" -- [nzl studio] upstream premade-config endpoint is offline in oss);
                 if config_fetch_success then
-                    writefile("NZL Studio\\Deepwoken-Config\\settings\\default_conf.json", config_content);
-                    writefile("NZL Studio\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
+                    writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\default_conf.json", config_content);
+                    writefile("NZL Studio Deep\\Deepwoken-Config\\settings\\autoload.txt", "default_conf");
                 end;
             end,
             function()
@@ -300,7 +299,7 @@ end;
 env.signal = require("@src/utility/signal");
 loaded_signal = env.signal.new();
 env.LOAD_START_TIME = tick();
-aztup.silent_mode = isfile(LPH_ENCSTR("NZL Studio/silent_mode_toggle"));
+aztup.silent_mode = isfile(LPH_ENCSTR("NZL Studio Deep/silent_mode_toggle"));
 aztup.maid = require(("@src/utility/maid")).new(); 
 
 if not aztup.ui then

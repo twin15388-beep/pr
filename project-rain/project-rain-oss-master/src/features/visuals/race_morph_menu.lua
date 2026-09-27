@@ -74,15 +74,15 @@ local MainGui
 if RunService:IsStudio() then
 	MainGui = script:WaitForChild("MorphGui")
 else 	
-	if not isfolder("NZL Studio/Deepwoken-Config") then
+	if not isfolder("NZL Studio Deep/Deepwoken-Config") then
 		LocalPlayer:Kick("Race Morph Checksum : \nThe Script couldn't find the whole folder, please make sure to set up the files correctly.")
 	end
 
-	if not isfile("NZL Studio/Deepwoken-Config/GuiItself.rbxm") then
+	if not isfile("NZL Studio Deep/Deepwoken-Config/GuiItself.rbxm") then
 		LocalPlayer:Kick("Race Morph Checksum : \nThe Script couldn't find the GUI, please make sure to set up the files correctly.")
 	end
 
-	MainGui = game:GetObjects(getcustomasset("NZL Studio/Deepwoken-Config/GuiItself.rbxm"))[1]
+	MainGui = game:GetObjects(getcustomasset("NZL Studio Deep/Deepwoken-Config/GuiItself.rbxm"))[1]
 end
 
 local GlobalAssets = MainGui:WaitForChild("GlobalOrnaments")
@@ -92,8 +92,8 @@ local EnchantEffects = MainGui:WaitForChild("EnchantmentEffects")
 EnchantEffects.Parent = script
 
 if not RunService:IsStudio() then
-	if isfolder("NZL Studio/Deepwoken-Config/CustomEnchantments") then
-		local Files = listfiles("NZL Studio/Deepwoken-Config/CustomEnchantments")
+	if isfolder("NZL Studio Deep/Deepwoken-Config/CustomEnchantments") then
+		local Files = listfiles("NZL Studio Deep/Deepwoken-Config/CustomEnchantments")
 		for i,File in pairs(Files) do
 			local LoadedEnchantment = game:GetObjects(getcustomasset(File))[1]
 			if EnchantEffects:FindFirstChild(LoadedEnchantment.Name) then
@@ -103,8 +103,8 @@ if not RunService:IsStudio() then
 		end
 	end
 
-	if isfolder("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments") then
-		local Files = listfiles("NZL Studio/Deepwoken-Config/CustomGlobalOrnaments")
+	if isfolder("NZL Studio Deep/Deepwoken-Config/CustomGlobalOrnaments") then
+		local Files = listfiles("NZL Studio Deep/Deepwoken-Config/CustomGlobalOrnaments")
 		for i,File in pairs(Files) do
 			local NewOrnament = game:GetObjects(getcustomasset(File))[1]
 			NewOrnament.Parent = GlobalAssets
@@ -3161,7 +3161,7 @@ local function OutputSettings()
 		SAVE_FAKE.Name = LocalPlayer.UserId.."_"..Slot
 		SAVE_FAKE.Value = JSON
 	else 
-		writefile("NZL Studio/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt",JSON)
+		writefile("NZL Studio Deep/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt",JSON)
 	end
 end
 
@@ -3176,8 +3176,8 @@ local function InputSettings()
 			return nil
 		end
 	else 
-		if isfile("NZL Studio/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt") then
-			JSON = readfile("NZL Studio/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt")
+		if isfile("NZL Studio Deep/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt") then
+			JSON = readfile("NZL Studio Deep/Deepwoken-Config/Preferences/"..LocalPlayer.UserId.."_"..Slot..".txt")
 		else 
 
 			return nil
@@ -3279,7 +3279,7 @@ if RunService:IsStudio() then
 		LoadRace("Custom",Race)
 	end
 else
-	local Files = listfiles("NZL Studio/Deepwoken-Config/CustomRaces")
+	local Files = listfiles("NZL Studio Deep/Deepwoken-Config/CustomRaces")
 	for i,File in pairs(Files) do
 		local LoadedRace = game:GetObjects(getcustomasset(File))[1]
 
