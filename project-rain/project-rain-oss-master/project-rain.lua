@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 17:01:15 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 17:15:04 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 17:01:15 UTC";
+BUILD.id = "2026-09-27 17:15:04 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -29238,14 +29238,14 @@ aztup.maid:give_task(scheduler:add_task(0.5):Connect(function()
 
     local show_mem_data = aztup_toggles.WatermarkShowsMem and aztup_toggles.WatermarkShowsMem.Value;
 
-    local watermark, raw_watermark = ('NZL Studio <font color=\"#%s\">nextgen</font> %i<font color="#%s">fps</font> %i<font color="#%s">ms</font>'):format(
+    local watermark, raw_watermark = ('NZL <font color=\"#%s\">Studio</font> %i<font color="#%s">fps</font> %i<font color="#%s">ms</font>'):format(
         color_in_hex,
         math.floor(fps),
         color_in_hex,
         math.floor(Latency:get_ping() * 1000),
         color_in_hex
     ), ('%s %ifps %ims'):format(
-        "NZL Studio nextgen",
+        "NZL Studio",
         math.floor(fps),
         math.floor(Latency:get_ping() * 1000)
     );
@@ -43841,10 +43841,10 @@ do
 
 		local panel = Instance.new("Frame");
 		panel.Name = "PRServerSnipe";
-		panel.Size = UDim2.new(characters_label.Size.X.Scale, characters_label.Size.X.Offset, 0, 88);
-		panel.BackgroundColor3 = MAIN;
-		panel.BorderColor3 = OUTLINE;
-		panel.BorderSizePixel = 1;
+		panel.Size = UDim2.new(characters_label.Size.X.Scale, characters_label.Size.X.Offset, 0, 84);
+		panel.BackgroundColor3 = Color3.fromRGB(24, 26, 18);
+		panel.BackgroundTransparency = 0.28;
+		panel.BorderSizePixel = 0;
 
 		local uses_layout = host:FindFirstChildOfClass("UIListLayout") ~= nil;
 		if uses_layout then
@@ -43859,31 +43859,39 @@ do
 		end;
 		panel.Parent = host;
 
-		-- header strip with accent rule, mimicking a groupbox title
+		Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 6);
+
+		local panel_stroke = Instance.new("UIStroke", panel);
+		panel_stroke.Color = Color3.fromRGB(200, 190, 160);
+		panel_stroke.Transparency = 0.65;
+		panel_stroke.Thickness = 1;
+
+		-- subtle header: beige text + thin beige divider, like the game's panels
 		local header = Instance.new("TextLabel");
-		header.Size = UDim2.new(1, -10, 0, 16);
-		header.Position = UDim2.fromOffset(8, 4);
+		header.Size = UDim2.new(1, -10, 0, 15);
+		header.Position = UDim2.fromOffset(10, 4);
 		header.BackgroundTransparency = 1;
 		header.Text = "server snipe";
-		header.TextColor3 = TEXT;
-		header.Font = Enum.Font.GothamBold;
+		header.TextColor3 = Color3.fromRGB(232, 224, 204);
+		header.Font = Enum.Font.Gotham;
 		header.TextSize = 12;
 		header.TextXAlignment = Enum.TextXAlignment.Left;
 		header.Parent = panel;
 
 		local rule = Instance.new("Frame");
-		rule.Size = UDim2.new(1, -10, 0, 1);
-		rule.Position = UDim2.fromOffset(5, 22);
-		rule.BackgroundColor3 = ACCENT;
+		rule.Size = UDim2.new(1, -12, 0, 1);
+		rule.Position = UDim2.fromOffset(6, 21);
+		rule.BackgroundColor3 = Color3.fromRGB(200, 190, 160);
+		rule.BackgroundTransparency = 0.7;
 		rule.BorderSizePixel = 0;
 		rule.Parent = panel;
 
 		local box = Instance.new("TextBox");
-		box.Size = UDim2.new(1, -12, 0, 22);
-		box.Position = UDim2.fromOffset(6, 28);
-		box.BackgroundColor3 = BG_INNER;
-		box.BorderColor3 = OUTLINE;
-		box.BorderSizePixel = 1;
+		box.Size = UDim2.new(1, -12, 0, 21);
+		box.Position = UDim2.fromOffset(6, 26);
+		box.BackgroundColor3 = Color3.fromRGB(30, 33, 28);
+		box.BackgroundTransparency = 0.15;
+		box.BorderSizePixel = 0;
 		box.PlaceholderText = "player name or job id...";
 		box.PlaceholderColor3 = Color3.fromRGB(140, 140, 140);
 		box.Text = "";
@@ -43892,21 +43900,24 @@ do
 		box.TextSize = 11;
 		box.ClearTextOnFocus = false;
 		box.Parent = panel;
+		Instance.new("UICorner", box).CornerRadius = UDim.new(0, 5);
 
 		local button = Instance.new("TextButton");
 		button.Size = UDim2.new(1, -12, 0, 22);
-		button.Position = UDim2.fromOffset(6, 54);
-		button.BackgroundColor3 = ACCENT;
-		button.BorderColor3 = Color3.fromRGB(0, 0, 0);
+		button.Position = UDim2.fromOffset(6, 51);
+		button.BackgroundColor3 = Color3.fromRGB(125, 196, 228);
+		button.BackgroundTransparency = 0.05;
+		button.BorderSizePixel = 0;
 		button.Text = "snipe player";
 		button.TextColor3 = Color3.fromRGB(10, 12, 14);
 		button.Font = Enum.Font.GothamBold;
 		button.TextSize = 11;
 		button.Parent = panel;
+		Instance.new("UICorner", button).CornerRadius = UDim.new(0, 5);
 
 		local status_line = Instance.new("TextLabel");
-		status_line.Size = UDim2.new(1, -12, 0, 10);
-		status_line.Position = UDim2.fromOffset(8, 78);
+		status_line.Size = UDim2.new(1, -12, 0, 9);
+		status_line.Position = UDim2.fromOffset(10, 75);
 		status_line.BackgroundTransparency = 1;
 		status_line.Text = "";
 		status_line.TextColor3 = Color3.fromRGB(170, 215, 170);
@@ -43940,16 +43951,6 @@ do
 end;
 
 --#endregion
-
---#region purple skull buttons under every card's red skull -------------------------------
-
-local overlay = Instance.new("ScreenGui");
-overlay.Name = "PRMenuOverlay";
-overlay.IgnoreGuiInset = true;
-overlay.ResetOnSpawn = false;
-overlay.ZIndexBehavior = Enum.ZIndexBehavior.Global;
-overlay.DisplayOrder = 50;
-overlay.Parent = (gethui and gethui()) or services.CoreGui;
 
 local function frame_card_data(frame)
 	local letter;
@@ -43992,6 +43993,12 @@ local function refresh_icons()
 	end;
 end;
 
+--#region purple wipe badge embedded into each character card ---------------------------
+
+-- parented INTO the game's card frame itself (renders as a first-class child),
+-- positioned relative to the card using the slot letter's absolute position;
+-- if the red skull strip icon can be picked up, the badge snaps exactly under it
+
 local purples = {}; -- card frame -> purple badge
 
 task.spawn(function()
@@ -44029,16 +44036,13 @@ task.spawn(function()
 
 				local pos = frame.AbsolutePosition;
 
-				-- a real character card has its slot letter on the left edge; the
-				-- news/hotfixes panels fail this test (no more stray skulls)
 				if not letter_x or letter_x - pos.X > 60 then
 					continue;
 				end;
 
 				seen_cards[frame] = true;
 
-				-- collect strip icons inside the card's left quarter
-				local card_icons = {};
+				-- optional refinement: lowest strip icon inside the card's left quarter
 				local skull;
 				local skull_y = -math.huge;
 				for _, icon in ipairs(tiny_icons) do
@@ -44048,44 +44052,36 @@ task.spawn(function()
 					local cy = ipos.Y + isize.Y * 0.5;
 					if cx >= pos.X and cx <= pos.X + fsize.X * 0.25
 						and cy >= pos.Y and cy <= pos.Y + fsize.Y then
-						table.insert(card_icons, icon);
 						if cy > skull_y then
 							skull, skull_y = icon, cy;
 						end;
 					end;
 				end
 
-				-- badge centered on the strip column, 6px under the red skull;
-				-- if the game's icons can't be picked up, fall back to the
-				-- estimated strip column derived from the slot letter position
-				local badge_x;
-				local badge_y;
-				local anchor_icon;
-
+				-- card-relative badge offsets: by default under the slot letter's
+				-- strip column; snapped under the red skull when it is visible
+				local rel_x;
+				local rel_y;
 				if skull then
-					anchor_icon = skull;
-					badge_x = skull.AbsolutePosition.X + skull.AbsoluteSize.X * 0.5 - 15;
-					badge_y = skull.AbsolutePosition.Y + skull.AbsoluteSize.Y + 6;
-				elseif letter_x then
-					badge_x = letter_x + 2;
-					badge_y = (letter_y or pos.Y + 20) + 84;
+					rel_x = skull.AbsolutePosition.X + skull.AbsoluteSize.X * 0.5 - 15 - pos.X;
+					rel_y = skull.AbsolutePosition.Y + skull.AbsoluteSize.Y + 6 - pos.Y;
 				else
-					continue;
+					rel_x = letter_x + 2 - pos.X;
+					rel_y = (letter_y or pos.Y + 20) + 84 - pos.Y;
 				end;
 
 				local purple = purples[frame];
 				if not purple then
-					-- tidy clickable badge under the strip: dark rounded pad with
-					-- the purple-tinted icon inside; centered on the strip column
 					local badge = Instance.new("TextButton");
 					badge.Name = "PRPurpleSkull";
 					badge.Size = UDim2.fromOffset(30, 26);
+					badge.Position = UDim2.fromOffset(rel_x, rel_y);
 					badge.BackgroundColor3 = BG;
 					badge.BackgroundTransparency = 0.15;
 					badge.Text = "";
 					badge.AutoButtonColor = false;
-					badge.ZIndex = 20;
-					badge.Parent = overlay;
+					badge.ZIndex = frame.ZIndex + 5;
+					badge.Parent = frame;
 
 					Instance.new("UICorner", badge).CornerRadius = UDim.new(0, 5);
 
@@ -44098,9 +44094,9 @@ task.spawn(function()
 					badge_icon.Size = UDim2.fromOffset(18, 18);
 					badge_icon.Position = UDim2.fromOffset(6, 4);
 					badge_icon.BackgroundTransparency = 1;
-					badge_icon.Image = anchor_icon and anchor_icon.Image or "";
+					badge_icon.Image = skull and skull.Image or "";
 					badge_icon.ImageColor3 = PURPLE;
-					badge_icon.ZIndex = 21;
+					badge_icon.ZIndex = badge.ZIndex + 1;
 
 					purple = badge;
 
@@ -44132,21 +44128,18 @@ task.spawn(function()
 					end);
 
 					purples[frame] = badge;
-					status("purple skull attached: " .. tostring(name) .. " (slot " .. letter .. ")" .. (anchor_icon and "" or " [letter fallback]"));
+					status("purple skull attached: " .. tostring(name) .. " (slot " .. letter .. ")" .. (skull and "" or " [letter fallback]"));
+				else
+					purple.Position = UDim2.fromOffset(rel_x, rel_y);
+					purple.Visible = frame.Visible;
 				end;
-
-				purple.Position = UDim2.fromOffset(badge_x, badge_y);
-
-				local viewport = services.Workspace.CurrentCamera and services.Workspace.CurrentCamera.ViewportSize or Vector2.new(1e9, 1e9);
-				purple.Visible = frame.Visible and badge_x > -40 and badge_y > -40 and badge_x < viewport.X and badge_y < viewport.Y;
 			end;
 
 			-- drop badges whose card is gone
 			local badge_count = 0;
 			for frame, purple in pairs(purples) do
 				if not seen_cards[frame] or not frame.Parent then
-					purple:Destroy();
-					purples[frame] = nil;
+					purples[frame] = nil; -- badge dies with the card (it is parented to it)
 				else
 					badge_count += 1;
 				end;
@@ -44158,7 +44151,7 @@ task.spawn(function()
 					"[pr menu] scan: frames=%d candidates=%d icons=%d badges=%d",
 					diag_frames, diag_candidates, diag_icons, badge_count
 				);
-				status(debug_line:sub(11));
+				status("scan: frames=" .. diag_frames .. " candidates=" .. diag_candidates .. " icons=" .. diag_icons .. " badges=" .. badge_count);
 				pcall(writefile, "Project Rain/menu_debug.txt", debug_line);
 			end;
 		end);
@@ -44172,6 +44165,7 @@ task.spawn(function()
 end);
 
 --#endregion
+
 
 xpcall(function()
 	Logger.log_for_devs("[main menu] oss loader ready: snipe box (linoria style) + purple skulls");
