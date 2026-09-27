@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 16:00:16 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 16:19:38 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 16:00:16 UTC";
+BUILD.id = "2026-09-27 16:19:38 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -43933,6 +43933,74 @@ end;
 
 --#region purple skull on character cards --------------------------------------------
 
+-- locate the card by content (slot letter + character name), then the red skull
+-- as the LOWEST small square icon in the card's left icon strip - no reliance
+-- on asset names/ids, which is why the previous name-matching never fired
+local function count_card_markers(frame)
+	local has_letter = false;
+	local has_name = false;
+
+	for _, descendant in ipairs(frame:GetDescendants()) do
+		if descendant:IsA("TextLabel") then
+			local text = string.match(descendant.Text or "", "^%s*(.-)%s*$");
+			if #text == 1 and string.match(text, "^[ABC]$") then
+				has_letter = true;
+			elseif #text > 3 and not has_name then
+				has_name = descendant.Text;
+			end;
+		end;
+	end;
+
+	return has_letter, has_name;
+end;
+
+local function looks_like_card(frame)
+	if not frame:IsA("GuiObject") then
+		return false;
+	end;
+
+	local has_letter, has_name = count_card_markers(frame);
+	local size = frame.AbsoluteSize;
+	if not (has_letter and has_name) or size.X < 180 or size.Y < 50 then
+		return false;
+	end;
+
+	-- reject parent containers that hold whole cards (only innermost = real card)
+	for _, descendant in ipairs(frame:GetDescendants()) do
+		if descendant:IsA("GuiObject") and descendant ~= frame then
+			local dl, dn = count_card_markers(descendant);
+			if dl and dn then
+				return false;
+			end;
+		end;
+	end;
+
+	return true;
+end;
+
+local function find_strip_skull(card)
+	local best;
+	local best_y = -math.huge;
+	local card_x = card.AbsolutePosition.X;
+	local card_w = card.AbsoluteSize.X;
+
+	for _, descendant in ipairs(card:GetDescendants()) do
+		if (descendant:IsA("ImageLabel") or descendant:IsA("ImageButton")) and descendant.Name ~= "PRPurpleSkull" then
+			local size = descendant.AbsoluteSize;
+			local pos = descendant.AbsolutePosition;
+			if size.X >= 10 and size.X <= 40 and math.abs(size.X - size.Y) <= 10
+				and (pos.X - card_x) < card_w * 0.22
+				and descendant.Image ~= "" then
+				if pos.Y > best_y then
+					best, best_y = descendant, pos.Y;
+				end;
+			end;
+		end;
+	end;
+
+	return best;
+end;
+
 local function find_card_slot_letter(card)
 	for _, descendant in ipairs(card:GetDescendants()) do
 		if descendant:IsA("TextLabel") then
@@ -43945,48 +44013,52 @@ local function find_card_slot_letter(card)
 	return nil;
 end;
 
-local function attach_purple_skull(skull_image)
-	if skull_image.Parent:FindFirstChild("PRPurpleSkull") then
+local function attach_purple_skull(card, red_skull)
+	if red_skull.Parent:FindFirstChild("PRPurpleSkull") then
 		return;
+	end;
+
+	local card_slot = find_card_slot_letter(card) or "A";
+
+	-- grab the card's character name (for status lines); the wipe remote itself
+	-- only needs the slot letter (same call hopper.lua's obliteration makes)
+	local card_name = "?";
+	for _, descendant in ipairs(card:GetDescendants()) do
+		if descendant:IsA("TextLabel") and #string.gsub(descendant.Text or "", "%s+", "") > 3
+			and not string.find(descendant.Text, "Lv%.") and descendant.TextSize >= 12 then
+			card_name = descendant.Text;
+			break;
+		end;
 	end;
 
 	local purple = Instance.new("ImageButton");
 	purple.Name = "PRPurpleSkull";
-	purple.Size = skull_image.Size;
-	purple.Position = skull_image.Position
-		+ UDim2.new(0, 0, skull_image.Size.Y.Scale, skull_image.Size.Y.Offset + 2);
+	purple.Size = red_skull.Size;
+	purple.Position = red_skull.Position
+		+ UDim2.new(0, 0, red_skull.Size.Y.Scale, red_skull.Size.Y.Offset + 2);
 	purple.BackgroundTransparency = 1;
-	purple.Image = skull_image.Image;
+	purple.Image = red_skull.Image;
 	purple.ImageColor3 = PURPLE;
-	purple.ZIndex = (skull_image.ZIndex or 1) + 1;
-	purple.Visible = skull_image.Visible;
-	purple.Parent = skull_image.Parent;
+	purple.ZIndex = (red_skull.ZIndex or 1) + 2;
+	purple.Visible = red_skull.Visible;
+	purple.Parent = red_skull.Parent;
 
 	-- keep it glued if the card layout shifts
-	skull_image:GetPropertyChangedSignal("Position"):Connect(function()
-		purple.Position = skull_image.Position
-			+ UDim2.new(0, 0, skull_image.Size.Y.Scale, skull_image.Size.Y.Offset + 2);
+	red_skull:GetPropertyChangedSignal("Position"):Connect(function()
+		purple.Position = red_skull.Position
+			+ UDim2.new(0, 0, red_skull.Size.Y.Scale, red_skull.Size.Y.Offset + 2);
+	end);
+	red_skull:GetPropertyChangedSignal("Visible"):Connect(function()
+		purple.Visible = red_skull.Visible;
 	end);
 
-	local card_slot = "A";
-	local probe = skull_image;
-	for _ = 1, 4 do
-		if not probe or not probe.Parent then
-			break;
-		end;
-		probe = probe.Parent;
-		local letter = find_card_slot_letter(probe);
-		if letter then
-			card_slot = letter;
-			break;
-		end;
-	end;
-
+	-- two clicks = insta wipe (confirm flash, second click fires immediately)
 	local armed_until = 0;
 	purple.MouseButton1Click:Connect(function()
 		if tick() < armed_until then
 			armed_until = 0;
 			purple.ImageColor3 = PURPLE;
+			status("wiping " .. card_name .. " (slot " .. card_slot .. ")...");
 			task.spawn(wipe_slot, card_slot);
 			return;
 		end;
@@ -44000,23 +44072,27 @@ local function attach_purple_skull(skull_image)
 		end);
 	end);
 
-	status("purple skull attached (slot " .. card_slot .. ")");
+	status("purple skull attached: " .. card_name .. " (slot " .. card_slot .. ")");
 end;
 
 task.spawn(function()
 	while true do
-		pcall(function()
+		local ok = pcall(function()
 			for _, descendant in ipairs(player_gui:GetDescendants()) do
-				if descendant:IsA("ImageLabel") or descendant:IsA("ImageButton") then
-					local name = string.lower(descendant.Name);
-					local image = string.lower(descendant.Image or "");
-					if string.find(name, "skull") or string.find(image, "skull") then
-						attach_purple_skull(descendant);
+				if looks_like_card(descendant) then
+					local red_skull = find_strip_skull(descendant);
+					if red_skull then
+						attach_purple_skull(descendant, red_skull);
 					end;
 				end;
 			end;
 		end);
-		task.wait(0.75);
+
+		if not ok then
+			-- next pass retries
+		end;
+
+		task.wait(1);
 	end;
 end);
 
