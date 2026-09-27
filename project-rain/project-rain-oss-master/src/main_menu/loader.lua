@@ -2,58 +2,60 @@
 	[project rain oss]
 
 	This module was stripped from the public release.
-	Upstream it bootstrapped the script's main-menu (PlaceId 4111023553) support.
+	Rebuilt from the user's description of upstream behavior:
 
-	Community reimplementation (rebuilt from the user's description):
-	  * NO standalone window: everything is pinned into the game's own menu gui
-	  * server snipe box docked ABOVE the "Characters" entry - resolves a target
-	    PLAYER NAME through the public Roblox presence api and joins their exact
-	    server via the game's own PickSlot + PickServer remotes
-	  * a PURPLE SKULL cloned onto every character card next to the game's own
-	    red skull; two clicks -> Requests.WipeSlot:InvokeServer(<that card slot>)
+	  * server snipe box docked ABOVE the game's "Characters" entry, styled like
+	    the main NZL Studio (linoria) ui - dark panel, thin outline, accent rule
+	  * a purple skull emoji button glued UNDER the red skull of every character
+	    card (overlay at absolute coords); two clicks = insta wipe of that slot
+	    (Requests.WipeSlot - the same remote hopper.lua's obliteration fires)
+	  * joins a named player's server via the public presence api, or a pasted
+	    JobId directly, through the game's own PickSlot + PickServer remotes
 ]]
 
 local requests = services.ReplicatedStorage:WaitForChild("Requests", 30);
 local start_menu = requests and requests:WaitForChild("StartMenu", 30);
 
 local ACCENT = Color3.fromRGB(125, 196, 228);
-local PURPLE = Color3.fromRGB(150, 80, 220);
-local BG = Color3.fromRGB(14, 16, 14);
-local TEXT = Color3.fromRGB(232, 224, 204);
+local PURPLE = Color3.fromRGB(170, 100, 255);
+local MAIN = Color3.fromRGB(28, 28, 28);
+local BG_INNER = Color3.fromRGB(19, 19, 19);
+local OUTLINE = Color3.fromRGB(55, 55, 60);
+local TEXT = Color3.fromRGB(230, 230, 230);
 
 local player = services.Players.LocalPlayer;
 local player_gui = player:WaitForChild("PlayerGui", 30);
-
---#region helpers ------------------------------------------------------------------
 
 local function status(line)
 	print("[pr menu] " .. line);
 end;
 
-local function join_server(job_id, slot)
+--#region join / resolve / wipe --------------------------------------------------------
+
+local function join_server(job_id, slot, status_setter)
 	if not start_menu then
-		status("StartMenu remotes missing");
+		if status_setter then status_setter("StartMenu remotes missing", true); end;
 		return;
 	end;
 
-	status("joining " .. string.sub(job_id, 1, 8) .. "... (slot " .. slot .. ")");
+	if status_setter then status_setter("joining " .. string.sub(job_id, 1, 8) .. "...", false); end;
 
 	task.spawn(function()
-		local pick_slot = start_menu:WaitForChild("PickSlot", 15);
-		local pick_server = start_menu:WaitForChild("PickServer", 15);
-		if not pick_slot or not pick_server then
-			status("PickSlot/PickServer missing");
+		local pick_slot_remote = start_menu:WaitForChild("PickSlot", 15);
+		local pick_server_remote = start_menu:WaitForChild("PickServer", 15);
+		if not pick_slot_remote or not pick_server_remote then
+			if status_setter then status_setter("PickSlot/PickServer missing", true); end;
 			return;
 		end;
 
 		local deadline = tick() + 45;
 		while tick() < deadline and task.wait() do
 			pcall(function()
-				pick_slot:FireServer(slot, { PrivateTest = false });
+				pick_slot_remote:FireServer(slot, { PrivateTest = false });
 			end);
 			task.wait(0.4);
 			pcall(function()
-				pick_server:FireServer(job_id);
+				pick_server_remote:FireServer(job_id);
 			end);
 		end;
 	end);
@@ -65,7 +67,6 @@ local http_request = getgenv().request
 	or (getgenv().http and getgenv().http.request);
 
 local function resolve_player_server(name, callback)
-	-- direct JobId paste works too
 	if string.match(name, "^%x+%-%x+%-%x+%-%x+%-%x+$") then
 		callback(name, nil);
 		return;
@@ -124,7 +125,7 @@ end;
 
 --#endregion
 
---#region snipe box above "Characters" -----------------------------------------------
+--#region linoria-styled snipe box above "Characters" ------------------------------------
 
 do
 	local characters_label;
@@ -141,10 +142,10 @@ do
 
 		local panel = Instance.new("Frame");
 		panel.Name = "PRServerSnipe";
-		panel.Size = UDim2.new(characters_label.Size.X.Scale, characters_label.Size.X.Offset, 0, 74);
-		panel.BackgroundColor3 = BG;
-		panel.BackgroundTransparency = 0.25;
-		panel.BorderSizePixel = 0;
+		panel.Size = UDim2.new(characters_label.Size.X.Scale, characters_label.Size.X.Offset, 0, 88);
+		panel.BackgroundColor3 = MAIN;
+		panel.BorderColor3 = OUTLINE;
+		panel.BorderSizePixel = 1;
 
 		local uses_layout = host:FindFirstChildOfClass("UIListLayout") ~= nil;
 		if uses_layout then
@@ -154,48 +155,59 @@ do
 				characters_label.Position.X.Scale,
 				characters_label.Position.X.Offset,
 				characters_label.Position.Y.Scale,
-				characters_label.Position.Y.Offset - 82
+				characters_label.Position.Y.Offset - 96
 			);
 		end;
-
 		panel.Parent = host;
-		Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 4);
 
-		local stroke = Instance.new("UIStroke", panel);
-		stroke.Color = Color3.fromRGB(200, 190, 160);
-		stroke.Transparency = 0.65;
-		stroke.Thickness = 1;
+		-- header strip with accent rule, mimicking a groupbox title
+		local header = Instance.new("TextLabel");
+		header.Size = UDim2.new(1, -10, 0, 16);
+		header.Position = UDim2.fromOffset(8, 4);
+		header.BackgroundTransparency = 1;
+		header.Text = "server snipe";
+		header.TextColor3 = TEXT;
+		header.Font = Enum.Font.GothamBold;
+		header.TextSize = 12;
+		header.TextXAlignment = Enum.TextXAlignment.Left;
+		header.Parent = panel;
+
+		local rule = Instance.new("Frame");
+		rule.Size = UDim2.new(1, -10, 0, 1);
+		rule.Position = UDim2.fromOffset(5, 22);
+		rule.BackgroundColor3 = ACCENT;
+		rule.BorderSizePixel = 0;
+		rule.Parent = panel;
 
 		local box = Instance.new("TextBox");
 		box.Size = UDim2.new(1, -12, 0, 22);
-		box.Position = UDim2.fromOffset(6, 6);
-		box.BackgroundColor3 = Color3.fromRGB(30, 33, 28);
-		box.BackgroundTransparency = 0.1;
-		box.PlaceholderText = "server snipe (player name)...";
-		box.PlaceholderColor3 = Color3.fromRGB(140, 136, 118);
+		box.Position = UDim2.fromOffset(6, 28);
+		box.BackgroundColor3 = BG_INNER;
+		box.BorderColor3 = OUTLINE;
+		box.BorderSizePixel = 1;
+		box.PlaceholderText = "player name or job id...";
+		box.PlaceholderColor3 = Color3.fromRGB(140, 140, 140);
 		box.Text = "";
 		box.TextColor3 = TEXT;
 		box.Font = Enum.Font.Gotham;
 		box.TextSize = 11;
 		box.ClearTextOnFocus = false;
 		box.Parent = panel;
-		Instance.new("UICorner", box).CornerRadius = UDim.new(0, 4);
 
 		local button = Instance.new("TextButton");
 		button.Size = UDim2.new(1, -12, 0, 22);
-		button.Position = UDim2.fromOffset(6, 32);
+		button.Position = UDim2.fromOffset(6, 54);
 		button.BackgroundColor3 = ACCENT;
-		button.BackgroundTransparency = 0.05;
+		button.BorderColor3 = Color3.fromRGB(0, 0, 0);
 		button.Text = "snipe player";
-		button.TextColor3 = Color3.fromRGB(8, 12, 14);
+		button.TextColor3 = Color3.fromRGB(10, 12, 14);
 		button.Font = Enum.Font.GothamBold;
 		button.TextSize = 11;
 		button.Parent = panel;
-		Instance.new("UICorner", button).CornerRadius = UDim.new(0, 4);
 
 		local status_line = Instance.new("TextLabel");
-		status_line.Size = UDim2.new(1, -12, 0, 12);
-		status_line.Position = UDim2.fromOffset(6, 58);
+		status_line.Size = UDim2.new(1, -12, 0, 10);
+		status_line.Position = UDim2.fromOffset(8, 78);
 		status_line.BackgroundTransparency = 1;
 		status_line.Text = "";
 		status_line.TextColor3 = Color3.fromRGB(170, 215, 170);
@@ -204,27 +216,25 @@ do
 		status_line.TextXAlignment = Enum.TextXAlignment.Left;
 		status_line.Parent = panel;
 
+		local function set_line(text, is_error)
+			status_line.Text = text;
+			status_line.TextColor3 = is_error and Color3.fromRGB(220, 120, 120) or Color3.fromRGB(170, 215, 170);
+		end;
+
 		button.MouseButton1Click:Connect(function()
 			local name = string.gsub(box.Text, "^%s*(.-)%s*$", "%1");
 			if #name == 0 then
-				status_line.Text = "enter a player name or job id";
-				status_line.TextColor3 = Color3.fromRGB(220, 170, 90);
+				set_line("enter a player name or job id", true);
 				return;
 			end;
 
-			status_line.Text = "resolving '" .. name .. "'...";
-			status_line.TextColor3 = Color3.fromRGB(170, 215, 170);
-
+			set_line("resolving '" .. name .. "'...", false);
 			resolve_player_server(name, function(job_id, err)
 				if not job_id then
-					status_line.Text = err or "failed";
-					status_line.TextColor3 = Color3.fromRGB(220, 120, 120);
+					set_line(err or "failed", true);
 					return;
 				end;
-
-				status_line.Text = "joining...";
-				status_line.TextColor3 = Color3.fromRGB(170, 215, 170);
-				join_server(job_id, "A");
+				join_server(job_id, "A", set_line);
 			end);
 		end);
 	end;
@@ -232,175 +242,176 @@ end;
 
 --#endregion
 
---#region purple skull on character cards --------------------------------------------
+--#region purple skull buttons under every card's red skull -------------------------------
 
--- locate the card by content (slot letter + character name), then the red skull
--- as the LOWEST small square icon in the card's left icon strip - no reliance
--- on asset names/ids, which is why the previous name-matching never fired
-local function count_card_markers(frame)
-	local has_letter = false;
-	local has_name = false;
+local overlay = Instance.new("ScreenGui");
+overlay.Name = "PRMenuOverlay";
+overlay.IgnoreGuiInset = true;
+overlay.ResetOnSpawn = false;
+overlay.ZIndexBehavior = Enum.ZIndexBehavior.Global;
+overlay.DisplayOrder = 50;
+overlay.Parent = (gethui and gethui()) or services.CoreGui;
 
+local function frame_card_data(frame)
+	local letter;
+	local name;
 	for _, descendant in ipairs(frame:GetDescendants()) do
 		if descendant:IsA("TextLabel") then
 			local text = string.match(descendant.Text or "", "^%s*(.-)%s*$");
-			if #text == 1 and string.match(text, "^[ABC]$") then
-				has_letter = true;
-			elseif #text > 3 and not has_name then
-				has_name = descendant.Text;
+			if not letter and string.match(text, "^[ABC]$") then
+				letter = text;
+			elseif not name and #text > 3 then
+				name = text;
 			end;
 		end;
 	end;
-
-	return has_letter, has_name;
+	return letter, name;
 end;
 
-local function looks_like_card(frame)
-	if not frame:IsA("GuiObject") then
-		return false;
-	end;
-
-	local has_letter, has_name = count_card_markers(frame);
-	local size = frame.AbsoluteSize;
-	if not (has_letter and has_name) or size.X < 180 or size.Y < 50 then
-		return false;
-	end;
-
-	-- reject parent containers that hold whole cards (only innermost = real card)
-	for _, descendant in ipairs(frame:GetDescendants()) do
-		if descendant:IsA("GuiObject") and descendant ~= frame then
-			local dl, dn = count_card_markers(descendant);
-			if dl and dn then
-				return false;
-			end;
+-- gather small square images (the icon strip: coat / sword / bell / skull)
+local tiny_icons = {};
+local function refresh_icons()
+	for i = #tiny_icons, 1, -1 do
+		local icon = tiny_icons[i];
+		if not icon.Parent then
+			table.remove(tiny_icons, i);
 		end;
 	end;
 
-	return true;
-end;
-
-local function find_strip_skull(card)
-	local best;
-	local best_y = -math.huge;
-	local card_x = card.AbsolutePosition.X;
-	local card_w = card.AbsoluteSize.X;
-
-	for _, descendant in ipairs(card:GetDescendants()) do
-		if (descendant:IsA("ImageLabel") or descendant:IsA("ImageButton")) and descendant.Name ~= "PRPurpleSkull" then
-			local size = descendant.AbsoluteSize;
-			local pos = descendant.AbsolutePosition;
-			if size.X >= 10 and size.X <= 40 and math.abs(size.X - size.Y) <= 10
-				and (pos.X - card_x) < card_w * 0.22
-				and descendant.Image ~= "" then
-				if pos.Y > best_y then
-					best, best_y = descendant, pos.Y;
+	local ok = pcall(function()
+		for _, descendant in ipairs(player_gui:GetDescendants()) do
+			if descendant:IsA("ImageLabel") or descendant:IsA("ImageButton") then
+				local size = descendant.AbsoluteSize;
+				if descendant.Image ~= "" and size.X >= 8 and size.X <= 48 and math.abs(size.X - size.Y) <= 12 then
+					table.insert(tiny_icons, descendant);
 				end;
 			end;
 		end;
-	end;
-
-	return best;
-end;
-
-local function find_card_slot_letter(card)
-	for _, descendant in ipairs(card:GetDescendants()) do
-		if descendant:IsA("TextLabel") then
-			local text = string.match(descendant.Text or "", "^%s*(.-)%s*$");
-			if text == "A" or text == "B" or text == "C" then
-				return text;
-			end;
-		end;
-	end;
-	return nil;
-end;
-
-local function attach_purple_skull(card, red_skull)
-	if red_skull.Parent:FindFirstChild("PRPurpleSkull") then
-		return;
-	end;
-
-	local card_slot = find_card_slot_letter(card) or "A";
-
-	-- grab the card's character name (for status lines); the wipe remote itself
-	-- only needs the slot letter (same call hopper.lua's obliteration makes)
-	local card_name = "?";
-	for _, descendant in ipairs(card:GetDescendants()) do
-		if descendant:IsA("TextLabel") and #string.gsub(descendant.Text or "", "%s+", "") > 3
-			and not string.find(descendant.Text, "Lv%.") and descendant.TextSize >= 12 then
-			card_name = descendant.Text;
-			break;
-		end;
-	end;
-
-	local purple = Instance.new("ImageButton");
-	purple.Name = "PRPurpleSkull";
-	purple.Size = red_skull.Size;
-	purple.Position = red_skull.Position
-		+ UDim2.new(0, 0, red_skull.Size.Y.Scale, red_skull.Size.Y.Offset + 2);
-	purple.BackgroundTransparency = 1;
-	purple.Image = red_skull.Image;
-	purple.ImageColor3 = PURPLE;
-	purple.ZIndex = (red_skull.ZIndex or 1) + 2;
-	purple.Visible = red_skull.Visible;
-	purple.Parent = red_skull.Parent;
-
-	-- keep it glued if the card layout shifts
-	red_skull:GetPropertyChangedSignal("Position"):Connect(function()
-		purple.Position = red_skull.Position
-			+ UDim2.new(0, 0, red_skull.Size.Y.Scale, red_skull.Size.Y.Offset + 2);
-	end);
-	red_skull:GetPropertyChangedSignal("Visible"):Connect(function()
-		purple.Visible = red_skull.Visible;
 	end);
 
-	-- two clicks = insta wipe (confirm flash, second click fires immediately)
-	local armed_until = 0;
-	purple.MouseButton1Click:Connect(function()
-		if tick() < armed_until then
-			armed_until = 0;
-			purple.ImageColor3 = PURPLE;
-			status("wiping " .. card_name .. " (slot " .. card_slot .. ")...");
-			task.spawn(wipe_slot, card_slot);
-			return;
-		end;
-
-		armed_until = tick() + 4;
-		purple.ImageColor3 = Color3.fromRGB(255, 90, 255);
-		task.delay(4.2, function()
-			if tick() >= armed_until then
-				purple.ImageColor3 = PURPLE;
-			end;
-		end);
-	end);
-
-	status("purple skull attached: " .. card_name .. " (slot " .. card_slot .. ")");
+	if not ok then
+		table.clear(tiny_icons);
+	end;
 end;
+
+local purples = {}; -- card frame -> purple button
 
 task.spawn(function()
 	while true do
-		local ok = pcall(function()
-			for _, descendant in ipairs(player_gui:GetDescendants()) do
-				if looks_like_card(descendant) then
-					local red_skull = find_strip_skull(descendant);
-					if red_skull then
-						attach_purple_skull(descendant, red_skull);
+		local scan_ok = pcall(function()
+			refresh_icons();
+
+			local seen_cards = {};
+
+			for _, frame in ipairs(player_gui:GetDescendants()) do
+				if not frame:IsA("GuiObject") then
+					continue;
+				end;
+
+				local fsize = frame.AbsoluteSize;
+				if fsize.X < 180 or fsize.Y < 50 then
+					continue;
+				end;
+
+				local letter, name = frame_card_data(frame);
+				if not letter or not name then
+					continue;
+				end;
+
+				seen_cards[frame] = true;
+
+				local pos = frame.AbsolutePosition;
+
+				-- the lowest strip icon inside the card's left quarter = red skull
+				local skull;
+				local skull_y = -math.huge;
+				for _, icon in ipairs(tiny_icons) do
+					local ipos = icon.AbsolutePosition;
+					local isize = icon.AbsoluteSize;
+					local cx = ipos.X + isize.X * 0.5;
+					local cy = ipos.Y + isize.Y * 0.5;
+					if cx >= pos.X and cx <= pos.X + fsize.X * 0.25
+						and cy >= pos.Y and cy <= pos.Y + fsize.Y then
+						if cy > skull_y then
+							skull, skull_y = icon, cy;
+						end;
 					end;
+				end;
+
+				local anchor_x, anchor_y;
+				if skull then
+					anchor_x = skull.AbsolutePosition.X;
+					anchor_y = skull.AbsolutePosition.Y + skull.AbsoluteSize.Y + 4;
+				else
+					-- fallback: bottom-left corner of the card
+					anchor_x = pos.X + 8;
+					anchor_y = pos.Y + fsize.Y - 26;
+				end;
+
+				local purple = purples[frame];
+				if not purple then
+					purple = Instance.new("TextButton");
+					purple.Name = "PRPurpleSkull";
+					purple.Size = UDim2.fromOffset(skull and skull.AbsoluteSize.X or 20, skull and skull.AbsoluteSize.Y or 20);
+					purple.BackgroundTransparency = 1;
+					purple.Text = "\u{1F480}";
+					purple.TextColor3 = PURPLE;
+					purple.Font = Enum.Font.GothamBold;
+					purple.TextSize = skull and math.max(10, math.floor(skull.AbsoluteSize.Y * 0.9)) or 16;
+					purple.ZIndex = 20;
+					purple.Parent = overlay;
+
+					local card_letter = letter;
+					local card_name = name;
+
+					local armed_until = 0;
+					purple.MouseButton1Click:Connect(function()
+						if tick() < armed_until then
+							armed_until = 0;
+							purple.TextColor3 = PURPLE;
+							status("wiping " .. tostring(card_name) .. " (slot " .. card_letter .. ")...");
+							task.spawn(wipe_slot, card_letter);
+							return;
+						end;
+
+						armed_until = tick() + 4;
+						purple.TextColor3 = Color3.fromRGB(255, 120, 255);
+						task.delay(4.2, function()
+							if tick() >= armed_until then
+								purple.TextColor3 = PURPLE;
+							end;
+						end);
+					end);
+
+					purples[frame] = purple;
+					status("purple skull attached: " .. tostring(name) .. " (slot " .. letter .. ")" .. (skull and "" or " [corner fallback]"));
+				end;
+
+				purple.Position = UDim2.fromOffset(anchor_x, anchor_y);
+				purple.Visible = frame.Visible;
+			end;
+
+			-- drop buttons whose card is gone
+			for frame, purple in pairs(purples) do
+				if not seen_cards[frame] or not frame.Parent then
+					purple:Destroy();
+					purples[frame] = nil;
 				end;
 			end;
 		end);
 
-		if not ok then
-			-- next pass retries
+		if not scan_ok then
+			-- retry next pass
 		end;
 
-		task.wait(1);
+		task.wait(0.6);
 	end;
 end);
 
 --#endregion
 
 xpcall(function()
-	Logger.log_for_devs("[main menu] oss loader ready: snipe box above Characters + purple skull per card");
+	Logger.log_for_devs("[main menu] oss loader ready: snipe box (linoria style) + purple skulls");
 end, warn);
 
 return true;

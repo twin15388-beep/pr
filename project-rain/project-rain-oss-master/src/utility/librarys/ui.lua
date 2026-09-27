@@ -193,9 +193,25 @@ function Library:CreateLabel(Properties, IsHud, Font)
 end;
 
 function Library:MakeUIDraggable(inst, Cutoff, Limit)
-	
-	
-	
+
+	-- [project rain oss] "thx for all" banner shown while the main window
+	-- (the only caller passing Limit=true) is being dragged
+	local thanks_label;
+	if Limit == true then
+		thanks_label = Library:CreateLabel({
+			Text = "Thx for all:\n\nUni, TempedOut, Soggy, Hon, Mint, Juan, Joseph, Q/2qrys",
+			TextSize = 22,
+			Position = UDim2.new(0.5, -200, 0, 60),
+			Size = UDim2.new(0, 400, 0, 90),
+			TextXAlignment = Enum.TextXAlignment.Center,
+			TextYAlignment = Enum.TextYAlignment.Top,
+			TextColor3 = Library.FontColor,
+			BackgroundTransparency = 1,
+			ZIndex = 9999,
+			Visible = false,
+			Parent = ScreenGui,
+		}, false);
+	end;
 
 	local M = inst
 	M.Active = true
@@ -252,6 +268,9 @@ function Library:MakeUIDraggable(inst, Cutoff, Limit)
 		X.Size = UDim2.fromOffset(absSize.X - 2, absSize.Y - 1)
 		X.Position = UDim2.fromOffset(absPos.X, absPos.Y)
 		X.Visible = true
+		if thanks_label then
+			thanks_label.Visible = true;
+		end;
 
 		
 		inst.Visible = false
@@ -285,6 +304,9 @@ function Library:MakeUIDraggable(inst, Cutoff, Limit)
 		)
 
 		X.Visible = false
+		if thanks_label then
+			thanks_label.Visible = false;
+		end;
 		if Library.Toggled then
 			inst.Visible = true
 		end
