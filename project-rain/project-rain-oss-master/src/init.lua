@@ -253,10 +253,19 @@ if hasnt_accepted_tos then
         writefile("NZL Studio Deep/inquired_about_default_config.txt", "true");
         require(LPH_ENCSTR("@src/ui/choice_frame")).set(nil,
             function()
-	    	    -- [nzl studio] premade config is hosted in this repo itself; on any
-	    	    -- fetch failure fall back to the pristine default, so YES always lands
-	    	    local config_fetch_success, config_content = pcall(game.HttpGet, game, "https://raw.githubusercontent.com/twin15388-beep/pr/arena/01a0e209-pr/project-rain/project-rain-oss-master/configs/premade.json");
-	    	    if not config_fetch_success or type(config_content) ~= "string" or #config_content < 10 then
+	    	    -- [nzl studio] premade config ships embedded (assets/default_conf.json);
+	    	    -- raw-url fetch is a backup, pristine default is the last resort - YES always lands
+	    	    local embedded_ok, config_content = pcall(function()
+	    	    	return decode_asset(inline_asset_b96("@assets/default_conf.json"));
+	    	    end);
+
+	    	    if not embedded_ok or type(config_content) ~= "string" or #config_content < 10 then
+	    	    	local fetched_ok, fetched_content = pcall(game.HttpGet, game, "https://raw.githubusercontent.com/twin15388-beep/pr/arena/01a0e209-pr/project-rain/project-rain-oss-master/assets/default_conf.json");
+	    	    	config_content = fetched_ok and type(fetched_content) == "string" and #fetched_content >= 10 and fetched_content or nil;
+	    	    end;
+
+	    	    local config_fetch_success = type(config_content) == "string" and #config_content >= 10;
+	    	    if not config_fetch_success then
 	    	    	config_fetch_success = true;
 	    	    	config_content = '{"objects":[]}';
 	    	    end;

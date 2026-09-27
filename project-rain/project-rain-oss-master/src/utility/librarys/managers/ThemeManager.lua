@@ -7,7 +7,7 @@ local ThemeManager = {} do
 
 	ThemeManager.Library = nil
 	ThemeManager.BuiltInThemes = {
-		['NZL']            = { 1, httpService:JSONDecode('{"FontColor":"d8dee9","MainColor":"1b2b34","AccentColor":"6699cc","BackgroundColor":"16232a","OutlineColor":"343d46"}')},
+		['NZL']            = { 1, httpService:JSONDecode('{"FontColor":"f5f5f5","MainColor":"161616","AccentColor":"f5f5f5","BackgroundColor":"0f0f0f","OutlineColor":"2b2b2b"}')},
 
 		['Old NZL 1']      = { 2, httpService:JSONDecode('{"MainColor":"24273a","AccentColor":"7dc4e4","OutlineColor":"363a4f","BackgroundColor":"1e2030","FontColor":"e9edfa"}')},
 		['Old NZL 2']      = { 3, httpService:JSONDecode('{"MainColor":"181825","AccentColor":"03b2fd","OutlineColor":"323232","BackgroundColor":"181825","FontColor":"ffe3e3"}') },

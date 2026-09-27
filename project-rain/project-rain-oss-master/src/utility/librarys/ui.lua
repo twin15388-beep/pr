@@ -32,11 +32,12 @@ local Library = {
 
 	HudRegistry = {};
 
-	FontColor = Color3.fromHex("d8dee9");
-	MainColor = Color3.fromHex("1b2b34");
-	BackgroundColor = Color3.fromHex("16232a");
-	AccentColor = Color3.fromHex("6699cc");
-	OutlineColor = Color3.fromHex("343d46");
+	-- [nzl studio] oblivion-style default: near-black panes, white accents
+	FontColor = Color3.fromHex("f5f5f5");
+	MainColor = Color3.fromHex("161616");
+	BackgroundColor = Color3.fromHex("0f0f0f");
+	AccentColor = Color3.fromHex("f5f5f5");
+	OutlineColor = Color3.fromHex("2b2b2b");
 	RiskColor = Color3.fromRGB(255, 50, 50),
 
 	Black = Color3.new(0, 0, 0);

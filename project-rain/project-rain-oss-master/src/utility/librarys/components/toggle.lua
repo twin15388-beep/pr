@@ -47,6 +47,12 @@ return function(Library, context)
 			BorderColor3 = 'Black';
 		})
 
+		-- [nzl studio] oblivion-style round toggle dot
+		Library:Create('UICorner', {
+			CornerRadius = UDim.new(1, 0);
+			Parent = ToggleOuter;
+		})
+
 		local ToggleInner = Library:Create('Frame', {
 			BackgroundColor3 = Library.MainColor;
 			BorderColor3 = Library.OutlineColor;
@@ -59,6 +65,12 @@ return function(Library, context)
 		Library:AddToRegistry(ToggleInner, {
 			BackgroundColor3 = 'MainColor';
 			BorderColor3 = 'OutlineColor';
+		})
+
+		-- [nzl studio] keep the dot perfectly round
+		Library:Create('UICorner', {
+			CornerRadius = UDim.new(1, 0);
+			Parent = ToggleInner;
 		})
 
 		local ToggleLabel = Library:CreateLabel({
