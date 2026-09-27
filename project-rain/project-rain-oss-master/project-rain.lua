@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 18:25:44 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 18:26:25 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 18:25:44 UTC";
+BUILD.id = "2026-09-27 18:26:25 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -53708,7 +53708,7 @@ local ThemeManager = {} do
 
 	ThemeManager.Library = nil
 	ThemeManager.BuiltInThemes = {
-		['NZL']            = { 1, httpService:JSONDecode('{"FontColor":"d8dee9","MainColor":"1b2b34","AccentColor":"6699cc","BackgroundColor":"16232a","OutlineColor":"343d46"}')},
+		['NZL']            = { 1, httpService:JSONDecode('{"FontColor":"e8e0cc","MainColor":"202316","AccentColor":"c8bea0","BackgroundColor":"181b12","OutlineColor":"474a3a"}')},
 
 		['Old NZL 1']      = { 2, httpService:JSONDecode('{"MainColor":"24273a","AccentColor":"7dc4e4","OutlineColor":"363a4f","BackgroundColor":"1e2030","FontColor":"e9edfa"}')},
 		['Old NZL 2']      = { 3, httpService:JSONDecode('{"MainColor":"181825","AccentColor":"03b2fd","OutlineColor":"323232","BackgroundColor":"181825","FontColor":"ffe3e3"}') },
