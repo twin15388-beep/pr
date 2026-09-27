@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 18:17:19 UTC by tools/build.py (273 modules, 16 assets)
+-- generated 2026-09-27 18:25:44 UTC by tools/build.py (273 modules, 16 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 18:17:19 UTC";
+BUILD.id = "2026-09-27 18:25:44 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -53708,10 +53708,10 @@ local ThemeManager = {} do
 
 	ThemeManager.Library = nil
 	ThemeManager.BuiltInThemes = {
-		['PR']            = { 1, httpService:JSONDecode('{"FontColor":"d8dee9","MainColor":"1b2b34","AccentColor":"6699cc","BackgroundColor":"16232a","OutlineColor":"343d46"}')},
+		['NZL']            = { 1, httpService:JSONDecode('{"FontColor":"d8dee9","MainColor":"1b2b34","AccentColor":"6699cc","BackgroundColor":"16232a","OutlineColor":"343d46"}')},
 
-		['Old PR 1']      = { 2, httpService:JSONDecode('{"MainColor":"24273a","AccentColor":"7dc4e4","OutlineColor":"363a4f","BackgroundColor":"1e2030","FontColor":"e9edfa"}')},
-		['Old PR 2']      = { 3, httpService:JSONDecode('{"MainColor":"181825","AccentColor":"03b2fd","OutlineColor":"323232","BackgroundColor":"181825","FontColor":"ffe3e3"}') },
+		['Old NZL 1']      = { 2, httpService:JSONDecode('{"MainColor":"24273a","AccentColor":"7dc4e4","OutlineColor":"363a4f","BackgroundColor":"1e2030","FontColor":"e9edfa"}')},
+		['Old NZL 2']      = { 3, httpService:JSONDecode('{"MainColor":"181825","AccentColor":"03b2fd","OutlineColor":"323232","BackgroundColor":"181825","FontColor":"ffe3e3"}') },
 		['Linoria']       = { 4, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1c1c1c","AccentColor":"0055ff","BackgroundColor":"141414","OutlineColor":"323232"}') },
 		['BBot']          = { 5, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1e1e1e","AccentColor":"7e48a3","BackgroundColor":"232323","OutlineColor":"141414"}') },
 		['Fatality']      = { 6, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1e1842","AccentColor":"c50754","BackgroundColor":"191335","OutlineColor":"3c355d"}') },
@@ -53795,7 +53795,7 @@ local ThemeManager = {} do
 	end
 
 	function ThemeManager:LoadDefault()		
-		local theme = 'PR'
+		local theme = 'NZL'
 		local content = isfile(self.Folder .. '/themes/default.txt') and readfile(self.Folder .. '/themes/default.txt')
 
 		local isDefault = true
@@ -57814,7 +57814,7 @@ Library:AddToRegistry(Library.WindowLabel, {
 		if custom_name then
 			return string.format(LPH_ENCSTR("%s"), custom_name:gsub("|ACCENT", "<font color=\"#" .. Library.AccentColor:ToHex() .. "\">"))		
 end
-		return string.format(LPH_ENCSTR("pr <font color=\"#%s\">nextgen</font>"), Library.AccentColor:ToHex())
+		return string.format(LPH_ENCSTR("NZL <font color=\"#%s\">Studio</font>"), Library.AccentColor:ToHex())
 	end
 })
 
