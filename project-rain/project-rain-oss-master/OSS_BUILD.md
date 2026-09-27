@@ -52,13 +52,24 @@ logic when the game actually provides those objects:
 | `src/main_menu/loader.lua` | notify-only stub |
 | `src/utility/setup_auto_load.lua` | no-op stub (Luarmor-only upstream) |
 
-> Reimplemented (2026-09-27): `main_menu/loader.lua` is now a full start-screen
-> window (PlaceId 4111023553): draggable frame, A/B/C slot picker, **rejoin**,
-> **server hop**, **server snipe** (paste any JobId), **copy current JobId** —
-> driving the original `utility/deepwoken/servers.lua` primitives.
-> `setup_auto_load.lua` now queues re-execution of this build's raw GitHub url
+> Reimplemented (2026-09-27): `main_menu/loader.lua` now works inside Deepwoken's
+> own start screen (PlaceId 4111023553), no separate windows:
+> - **server snipe** panel (game-styled: translucent olive, thin beige border)
+>   docked above "Characters"; retries until the anchor exists. Resolves a
+>   player via `GetUserIdFromNameAsync` + presence proxy (fallback: raw JobId)
+>   and joins through the game's `Requests.StartMenu.PickSlot`/`PickServer`.
+> - **purple wipe badge** rendered inside each character card under the red
+>   skull (card-relative offsets, ✖ fallback when no strip icon is detectable);
+>   first click arms (magenta flash, 4s), second click calls
+>   `Requests.WipeSlot:InvokeServer(letter)`. Diagnostics land silently in
+>   `Project Rain/menu_debug.txt`.
+> `setup_auto_load.lua` queues re-execution of this build's raw GitHub url
 > through `queue_on_teleport` (no script_key needed), so the UI tab's
 > "auto load" toggle actually re-arms the script after Deepwoken teleports.
+> Every queued script in `utility/deepwoken/servers.lua` also prepends a
+> re-execution loadstring, because the executor queue holds one slot only.
+> Branding: window title + watermark read "NZL Studio"; default theme is the
+> deepwoken palette (dark olive panels, beige text).
 | `src/features/auto-parry/builder.lua` | **working reimplementation**: draggable Timing Builder GUI — loads tracks clicked in the "Timing Logger", timeline with per-action markers, action add/cycle/nudge/delete, saves `rw_timings/<name>.json` in exactly the animator-handler's format and hot-reloads via `getgenv().load_timings()` |
 | `src/features/auto-parry/data/custom_timings.lua` | working reimplementation: reads `.json`/`.lua` timing files from `rw_timings` / `Project Rain/Timings`, `:sync()` iterator + `:lookup(id)` |
 | `src/features/buttons/refresh.lua` | working reimplementation (respawn in place, per the button's own tooltip) |
