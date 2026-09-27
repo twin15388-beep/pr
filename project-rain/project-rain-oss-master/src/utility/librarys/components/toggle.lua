@@ -54,8 +54,8 @@ return function(Library, context)
 		})
 
 		local ToggleInner = Library:Create('Frame', {
-			BackgroundColor3 = Library.MainColor;
-			BorderColor3 = Library.OutlineColor;
+			BackgroundColor3 = Library.BackgroundColor;
+			BorderColor3 = Library.AccentColor;
 			BorderMode = Enum.BorderMode.Inset;
 			Size = UDim2.new(1, 0, 1, 0);
 			ZIndex = 6;
@@ -63,8 +63,8 @@ return function(Library, context)
 		})
 
 		Library:AddToRegistry(ToggleInner, {
-			BackgroundColor3 = 'MainColor';
-			BorderColor3 = 'OutlineColor';
+			BackgroundColor3 = 'BackgroundColor';
+			BorderColor3 = 'AccentColor';
 		})
 
 		-- [nzl studio] keep the dot perfectly round
@@ -112,11 +112,11 @@ return function(Library, context)
 		end
 
 		function Toggle:Display()
-			ToggleInner.BackgroundColor3 = Toggle.Value and Library.AccentColor or Library.MainColor;
-			ToggleInner.BorderColor3 = Toggle.Value and Library.AccentColorDark or Library.OutlineColor;
+			ToggleInner.BackgroundColor3 = Toggle.Value and Library.AccentColor or Library.BackgroundColor;
+			ToggleInner.BorderColor3 = Toggle.Value and Library.AccentColorDark or Library.AccentColor;
 
-			Library.RegistryMap[ToggleInner].Properties.BackgroundColor3 = Toggle.Value and 'AccentColor' or 'MainColor';
-			Library.RegistryMap[ToggleInner].Properties.BorderColor3 = Toggle.Value and 'AccentColorDark' or 'OutlineColor';
+			Library.RegistryMap[ToggleInner].Properties.BackgroundColor3 = Toggle.Value and 'AccentColor' or 'BackgroundColor';
+			Library.RegistryMap[ToggleInner].Properties.BorderColor3 = Toggle.Value and 'AccentColorDark' or 'AccentColor';
 		end;
 		Toggle.__internal = signal.new();
 

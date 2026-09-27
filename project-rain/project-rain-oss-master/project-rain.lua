@@ -1,6 +1,6 @@
 -- ============================================================================
 -- [project rain oss] single-file build
--- generated 2026-09-27 19:11:21 UTC by tools/build.py (273 modules, 17 assets)
+-- generated 2026-09-27 19:16:53 UTC by tools/build.py (273 modules, 17 assets)
 -- based on github.com/project-rain-oss - keep credits intact if you fork/strip
 -- ============================================================================
 
@@ -10,7 +10,7 @@ local BUILD = getgenv().PR_BUILD;
 BUILD.modules = BUILD.modules or {};
 BUILD.assets = BUILD.assets or {};
 BUILD.loaded = BUILD.loaded or {};
-BUILD.id = "2026-09-27 19:11:21 UTC";
+BUILD.id = "2026-09-27 19:16:53 UTC";
 
 local modules = BUILD.modules;
 local assets = BUILD.assets;
@@ -52297,8 +52297,8 @@ return function(Library, context)
 		})
 
 		local ToggleInner = Library:Create('Frame', {
-			BackgroundColor3 = Library.MainColor;
-			BorderColor3 = Library.OutlineColor;
+			BackgroundColor3 = Library.BackgroundColor;
+			BorderColor3 = Library.AccentColor;
 			BorderMode = Enum.BorderMode.Inset;
 			Size = UDim2.new(1, 0, 1, 0);
 			ZIndex = 6;
@@ -52306,8 +52306,8 @@ return function(Library, context)
 		})
 
 		Library:AddToRegistry(ToggleInner, {
-			BackgroundColor3 = 'MainColor';
-			BorderColor3 = 'OutlineColor';
+			BackgroundColor3 = 'BackgroundColor';
+			BorderColor3 = 'AccentColor';
 		})
 
 		-- [nzl studio] keep the dot perfectly round
@@ -52355,11 +52355,11 @@ return function(Library, context)
 		end
 
 		function Toggle:Display()
-			ToggleInner.BackgroundColor3 = Toggle.Value and Library.AccentColor or Library.MainColor;
-			ToggleInner.BorderColor3 = Toggle.Value and Library.AccentColorDark or Library.OutlineColor;
+			ToggleInner.BackgroundColor3 = Toggle.Value and Library.AccentColor or Library.BackgroundColor;
+			ToggleInner.BorderColor3 = Toggle.Value and Library.AccentColorDark or Library.AccentColor;
 
-			Library.RegistryMap[ToggleInner].Properties.BackgroundColor3 = Toggle.Value and 'AccentColor' or 'MainColor';
-			Library.RegistryMap[ToggleInner].Properties.BorderColor3 = Toggle.Value and 'AccentColorDark' or 'OutlineColor';
+			Library.RegistryMap[ToggleInner].Properties.BackgroundColor3 = Toggle.Value and 'AccentColor' or 'BackgroundColor';
+			Library.RegistryMap[ToggleInner].Properties.BorderColor3 = Toggle.Value and 'AccentColorDark' or 'AccentColor';
 		end;
 		Toggle.__internal = signal.new();
 
@@ -53735,6 +53735,7 @@ local ThemeManager = {} do
 	ThemeManager.Library = nil
 	ThemeManager.BuiltInThemes = {
 		['NZL']            = { 1, httpService:JSONDecode('{"FontColor":"f5f5f5","MainColor":"161616","AccentColor":"f5f5f5","BackgroundColor":"0f0f0f","OutlineColor":"2b2b2b"}')},
+		['UI Test 1']      = { 24, httpService:JSONDecode('{"FontColor":"f5f5f5","MainColor":"161616","AccentColor":"f5f5f5","BackgroundColor":"0f0f0f","OutlineColor":"2b2b2b"}')},
 
 		['Old NZL 1']      = { 2, httpService:JSONDecode('{"MainColor":"24273a","AccentColor":"7dc4e4","OutlineColor":"363a4f","BackgroundColor":"1e2030","FontColor":"e9edfa"}')},
 		['Old NZL 2']      = { 3, httpService:JSONDecode('{"MainColor":"181825","AccentColor":"03b2fd","OutlineColor":"323232","BackgroundColor":"181825","FontColor":"ffe3e3"}') },
